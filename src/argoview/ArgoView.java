@@ -16,7 +16,9 @@ public class ArgoView {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Animal gaia = new Animal("Baleine à bosse Gaia",
+                "gaia",
+                "http://argonautica.jason.oceanobs.com/documents/argonautica/2013-2014/gaia.txt");
     }
     
 }

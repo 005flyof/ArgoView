@@ -7,6 +7,7 @@
 package argoview;
 
 import java.util.ArrayList;
+import java.io.*;
 
 /**
  * Objet permettant de gérer les différents animaux
@@ -35,12 +36,102 @@ public class Animal {
     private String nomFichier = new String();
     private String url = new String();
     private ArrayList positions = new ArrayList();
+    private final char separateur = ' ';
 
     /**
      * Permet de lire les données contenus dans "Positions/%nomFichier.txt"
      */
     private void lireDonnees() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int cpt = 0;
+        try {
+            // On ouvre le fichier
+            InputStream inStream = new FileInputStream("Positions\\" + nomFichier + ".txt");
+            InputStreamReader inStreamRead = new InputStreamReader(inStream);
+            BufferedReader buffer = new BufferedReader(inStreamRead);
+            String ligne;
+            
+            // Tant que l'on peut lire une ligne
+            while ( (ligne = buffer.readLine()) != null ) {
+                int i = 0;
+                
+                // Numéro de balise
+                String numBalise = "";
+                while (ligne.charAt(i) != this.separateur) {
+                    numBalise += ligne.charAt(i);
+                    i++;
+                }
+                // On passe aux données suivantes
+                i = donneeSuivante(ligne, i);
+                
+                // Précision
+                String precision = "";
+                while (ligne.charAt(i) != ' ') {
+                    precision += ligne.charAt(i);
+                    i++;
+                }
+                // On passe aux données suivantes
+                i = donneeSuivante(ligne, i);
+                
+                // Date
+                String date = "";
+                while (ligne.charAt(i) != ' ') {
+                    date += ligne.charAt(i);
+                    i++;
+                }
+                // On passe aux données suivantes
+                i = donneeSuivante(ligne, i);
+                
+                // Heure
+                String heure = "";
+                while (ligne.charAt(i) != ' ') {
+                    heure += ligne.charAt(i);
+                    i++;
+                }
+                // On passe aux données suivantes
+                i = donneeSuivante(ligne, i);
+                
+                // Latitude
+                String latitude = "";
+                while (ligne.charAt(i) != ' ') {
+                    latitude += ligne.charAt(i);
+                    i++;
+                }
+                // On passe aux données suivantes
+                i = donneeSuivante(ligne, i);
+                
+                // Longitude
+                String longitude = "";
+                while (ligne.charAt(i) != ' ') {
+                    longitude += ligne.charAt(i);
+                    i++;
+                }
+                
+                // On traite les données
+                if (cpt != 0 && cpt != 1)
+                    positions.add(new DonneeArgos(
+                            numBalise, precision, date, heure, latitude, longitude));
+                System.out.println(numBalise);
+                cpt++;
+                
+            }
+            // On ferme le fichier
+            buffer.close();
+        } catch (Exception e) {
+            // S'il y a eu une erreur, on l'affiche
+            System.out.println( e.toString() );
+        }
+    }
+    
+    /**
+     * Permet de trouver l'id du premier caractère des données suivantes
+     * @param chaine    Chaîne à parcourir
+     * @param i         ID de début de parcours
+     * @return ID du premier caractère des données suivantes
+     */
+    private int donneeSuivante( String chaine, int i ) {
+        while (chaine.charAt(i) == this.separateur)
+            i++;
+        return i;
     }
 
     /**

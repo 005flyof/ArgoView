@@ -37,8 +37,8 @@ public class DonneeArgos {
         
         this.date = new GregorianCalendar(annee, mois, jour, heures, minutes);
         
-        this.latitude  = Integer.parseInt(latitude);
-        this.longitude = Integer.parseInt(longitude);
+        this.latitude  = Double.parseDouble(latitude);
+        this.longitude = Double.parseDouble(longitude);
     }
     
     /*
