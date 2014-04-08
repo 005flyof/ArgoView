@@ -26,10 +26,9 @@ public class Animal {
      * @param nomFichier  Nom de fichier à ouvrir pour lire les positions
      * @param url         Adresse de téléchargement du fichier de position
      */
-    public Animal ( String nom, String nomFichier, String url ) {
+    public Animal ( String nom, String nomFichier ) {
         this.nom = nom;
-        this.nomFichier = "Positions/" + nomFichier + ".txt";
-        this.url = url;
+        this.setNomFichier(nomFichier);
     }
     
     /*
@@ -224,6 +223,13 @@ public class Animal {
     }
 
     /**
+     * @return Renvoie le nom du fichier de position à lire
+     */
+    public String getNomFichier() {
+        return nomFichier;
+    }
+    
+    /**
      * @return Renvoie l'URL de téléchargement des données
      */
     public String getUrl() {
@@ -233,8 +239,9 @@ public class Animal {
     /**
      * @param url URL de téléchargement des données
      */
-    public void setUrl(String url) {
-        this.url = url;
+    public void setNomFichier(String nomFichier) {
+        this.nomFichier = "Positions/" + nomFichier + ".txt";
+        this.url = "argonautica.jason.oceanobs.com/documents/argonautica/2013-2014/" + nomFichier + ".txt";
     }
 
     /**
@@ -242,27 +249,6 @@ public class Animal {
      */
     public ArrayList getPositions() {
         return positions;
-    }
-
-    /**
-     * @param positions Tableau dynamique des positions sucessives
-     */
-    public void setPositions(ArrayList positions) {
-        this.positions = positions;
-    }
-
-    /**
-     * @return Renvoie le nom du fichier de position à lire
-     */
-    public String getNomFichier() {
-        return nomFichier;
-    }
-
-    /**
-     * @param nomFichier Nom du fichier de position à lire
-     */
-    public void setNomFichier(String nomFichier) {
-        this.nomFichier = "Positions/" + nomFichier + ".txt";
     }
 
     /**

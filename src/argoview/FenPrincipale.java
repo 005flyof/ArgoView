@@ -6,6 +6,9 @@
 
 package argoview;
 
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+
 /**
  *
  * @author Florent Fayollas
@@ -17,6 +20,8 @@ public class FenPrincipale extends javax.swing.JFrame {
      */
     public FenPrincipale() {
         initComponents();
+        
+        gaia.lireDonnees();
     }
 
     /**
@@ -528,7 +533,11 @@ public class FenPrincipale extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void boutonGaiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonGaiaActionPerformed
-        // TODO add your handling code here:
+        ptsTable = gaia.getTableau();
+        String[] test = {"entete", "entete2"};
+        Object[][] obj = {{ "test", "aa" }, { "test", "aaa"} };
+        ptsTable = new JTable(obj, test );
+        ptsScroll = new JScrollPanel(ptsTable);
     }//GEN-LAST:event_boutonGaiaActionPerformed
 
     private void boutonIrchadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonIrchadActionPerformed
@@ -564,7 +573,10 @@ public class FenPrincipale extends javax.swing.JFrame {
     }//GEN-LAST:event_boutonArcaiqueActionPerformed
 
     private void majDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_majDonneesActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this,
+                "Téléchargement du fichier de Gaia...",
+                "Téléchargement", JOptionPane.INFORMATION_MESSAGE);
+        gaia.telechargerFichier();
     }//GEN-LAST:event_majDonneesActionPerformed
 
     private void affDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_affDonneesActionPerformed
@@ -615,41 +627,30 @@ public class FenPrincipale extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_boutonVellaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FenPrincipale.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FenPrincipale.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FenPrincipale.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FenPrincipale.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FenPrincipale().setVisible(true);
-            }
-        });
-    }
-
+    /*
+        Variables
+    */
+    Animal gaia         = new Animal("Baleine à bosse Gaia", "gaia");
+    Animal irchad       = new Animal("Baleine à bosse Irchad", "irchad");
+    Animal teria3       = new Animal("Baleine à bosse Teria3", "teria3");
+    Animal aquila       = new Animal("Manchot royal Aquila", "aquila");
+    Animal leloki       = new Animal("Manchot royal Leloki", "leloki");
+    Animal toms         = new Animal("Manchot royal Toms", "toms");
+    Animal victor       = new Animal("Manchot royal Victor", "victor");
+    Animal arcaique     = new Animal("Ours polaire Arcaique", "arcaique");
+    Animal bandido      = new Animal("Ours polaire Bandido", "bandido");
+    Animal flocon       = new Animal("Ours polaire Flocon", "flocon");
+    Animal liriane      = new Animal("Ours polaire Liriane", "liriane");
+    Animal malys        = new Animal("Ours polaire Malys", "malys");
+    Animal neige        = new Animal("Ours polaire Neige", "neige");
+    Animal una          = new Animal("Ours polaire Una", "una");
+    Animal vanille      = new Animal("Ours polaire Vanille", "vanille");
+    Animal ecume        = new Animal("Tortue Ecume", "ecume");
+    Animal aura         = new Animal("Eléphant de mer Aura", "aura");
+    Animal aurore       = new Animal("Eléphant de mer Autore", "aurore");
+    Animal noria        = new Animal("Eléphant de mer Noria", "noria");
+    Animal vella        = new Animal("Eléphant de mer Vella", "vella");
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox affDates;
     private javax.swing.JButton affDonnees;
