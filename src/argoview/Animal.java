@@ -8,6 +8,11 @@ package argoview;
 
 import java.util.ArrayList;
 import java.io.*;
+import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 /**
  * Objet permettant de gérer les différents animaux
@@ -23,10 +28,8 @@ public class Animal {
      */
     public Animal ( String nom, String nomFichier, String url ) {
         this.nom = nom;
-        this.nomFichier = nomFichier;
+        this.nomFichier = "Positions/" + nomFichier + ".txt";
         this.url = url;
-        
-        lireDonnees();
     }
     
     /*
@@ -37,15 +40,16 @@ public class Animal {
     private String url = new String();
     private ArrayList positions = new ArrayList();
     private final char separateur = ' ';
+    private JTable tableau = new JTable();
 
     /**
      * Permet de lire les données contenus dans "Positions/%nomFichier.txt"
      */
-    private void lireDonnees() {
-        int cpt = 0;
+    public void lireDonnees() {
+        int cpt = 0;    // Variable permettant de ne pas enregistrer les deux premières lignes du fichier de position
         try {
             // On ouvre le fichier
-            InputStream inStream = new FileInputStream("Positions\\" + nomFichier + ".txt");
+            InputStream inStream = new FileInputStream(nomFichier);
             InputStreamReader inStreamRead = new InputStreamReader(inStream);
             BufferedReader buffer = new BufferedReader(inStreamRead);
             String ligne;
@@ -118,6 +122,9 @@ public class Animal {
             buffer.close();
         } catch (Exception e) {
             // S'il y a eu une erreur, on l'affiche
+            JOptionPane.showMessageDialog(tableau,
+                    "Impossible d'ouvrir le fichier :\n\tErreur d'entée-sortie",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
             System.out.println( e.toString() );
         }
     }
@@ -134,6 +141,74 @@ public class Animal {
         return i;
     }
 
+    /**
+     * Permet de télécharger le fichier de positions
+     */
+    public void telechargerFichier() {
+        try {
+            // On crée les variables pour télécharger le fichier
+            URL adresse = new URL("http://" + url);
+            URLConnection connexion = adresse.openConnection();
+            int taille = connexion.getContentLength();
+
+            // On crée un flux d’entrée pour le fichier
+            InputStream brut = connexion.getInputStream();
+
+            // Mettre ce flux d’entrée en cache (pour un meilleur transfert, plus sûr et plus régulier).
+            InputStream entree = new BufferedInputStream(brut);
+
+            // Créer une matrice (un tableau) de bytes pour stocker tous les octets du fichier
+            byte[] donnees = new byte[taille];
+
+            // Pour l’instant aucun octet n’a encore été lu
+            int octetsLus = 0;
+
+            // Octets de déplacement, et octets déjà lus.
+            int deplacement = 0; float alreadyRead = 0;
+
+            // Boucle permettant de parcourir tous les octets du fichier à lire
+            while(deplacement < taille)
+            {
+                // utilisation de la methode "read" de la classe InputStream
+                octetsLus = entree.read(donnees, deplacement, donnees.length-deplacement);
+
+                // Petit calcul: mise à jour du nombre total d’octets lus par ajout au nombre d’octets lus au cours des précédents passages au nombre d’octets lus pendant ce passage
+                alreadyRead = alreadyRead + octetsLus;
+
+                // -1 marque par convention la fin d’un fichier, double opérateur "égale": = =
+                if(octetsLus == -1) break;
+
+                // se cadrer à un endroit précis du fichier pour lire les octets suivants, c’est le déplacement
+                deplacement += octetsLus;
+            }
+            // fermer le flux d’entrée.
+            entree.close();
+
+            // Récupérer le nom du fichier
+            String fichier = adresse.getFile();
+            fichier = fichier.substring(fichier.lastIndexOf('/') + 1);
+
+            // Créer un fichier sur le DD afin d’y copier le contenu du fichier téléchargé (par un flux de sortie).
+            FileOutputStream fichierSortie = new FileOutputStream(nomFichier);
+
+            // copier…
+            fichierSortie.write(donnees);
+
+            // vider puis fermer le flux de sortie
+            fichierSortie.flush(); fichierSortie.close();
+        } catch (MalformedURLException ex) {
+            JOptionPane.showMessageDialog(tableau,
+                    "URL de téléchargement mal formée !",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(Animal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(tableau,
+                    "Impossible de télécharger le fichier :\n\tErreur d'entée-sortie",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(Animal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * @return Renvoie le nom de l'animal
      */
@@ -187,6 +262,13 @@ public class Animal {
      * @param nomFichier Nom du fichier de position à lire
      */
     public void setNomFichier(String nomFichier) {
-        this.nomFichier = nomFichier;
+        this.nomFichier = "Positions/" + nomFichier + ".txt";
+    }
+
+    /**
+     * @return Renvoie le tableau contenant les positions
+     */
+    public JTable getTableau() {
+        return tableau;
     }
 }
