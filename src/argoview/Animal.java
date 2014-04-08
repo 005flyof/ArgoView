@@ -24,7 +24,6 @@ public class Animal {
      * Constructeur de l'objet Animal
      * @param nom         Nom de l'animal
      * @param nomFichier  Nom de fichier à ouvrir pour lire les positions
-     * @param url         Adresse de téléchargement du fichier de position
      */
     public Animal ( String nom, String nomFichier ) {
         this.nom = nom;
@@ -122,7 +121,7 @@ public class Animal {
         } catch (Exception e) {
             // S'il y a eu une erreur, on l'affiche
             JOptionPane.showMessageDialog(tableau,
-                    "Impossible d'ouvrir le fichier :\n\tErreur d'entée-sortie",
+                    "Impossible d'ouvrir le fichier : " + nomFichier + "\n\tErreur d'entée-sortie :\n" + e.toString(),
                     "Erreur", JOptionPane.ERROR_MESSAGE);
             System.out.println( e.toString() );
         }
@@ -202,7 +201,7 @@ public class Animal {
             Logger.getLogger(Animal.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(tableau,
-                    "Impossible de télécharger le fichier :\n\tErreur d'entée-sortie",
+                    "Impossible de télécharger le fichier : " + nomFichier + "\n\tErreur d'entée-sortie :\n" + ex.toString(),
                     "Erreur", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(Animal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -237,7 +236,7 @@ public class Animal {
     }
 
     /**
-     * @param url URL de téléchargement des données
+     * @param nomFichier Nom du fichier
      */
     public void setNomFichier(String nomFichier) {
         this.nomFichier = "Positions/" + nomFichier + ".txt";

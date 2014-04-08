@@ -109,7 +109,7 @@
                       <Component id="boutonEcume" alignment="0" min="-2" pref="184" max="-2" attributes="0"/>
                       <Component id="boutonAura" alignment="0" min="-2" pref="184" max="-2" attributes="0"/>
                       <Component id="boutonAurore" alignment="0" min="-2" pref="184" max="-2" attributes="0"/>
-                      <Component id="boutonNoria" alignment="0" min="-2" pref="184" max="-2" attributes="0"/>
+                      <Component id="boutonNora" alignment="0" min="-2" pref="184" max="-2" attributes="0"/>
                       <Component id="boutonMalys" alignment="0" min="-2" pref="184" max="-2" attributes="0"/>
                       <Component id="boutonVella" alignment="0" min="-2" pref="184" max="-2" attributes="0"/>
                   </Group>
@@ -139,7 +139,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="boutonAurore" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="boutonNoria" min="-2" max="-2" attributes="0"/>
+                          <Component id="boutonNora" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Component id="boutonGaia" min="-2" max="-2" attributes="0"/>
@@ -492,12 +492,12 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="boutonNeigeActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="boutonNoria">
+        <Component class="javax.swing.JButton" name="boutonNora">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" id="white" palette="1" red="ff" type="palette"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="El&#xe9;phant de mer Noria"/>
+            <Property name="text" type="java.lang.String" value="El&#xe9;phant de mer Nora"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[200, 23]"/>
             </Property>
@@ -509,7 +509,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="boutonNoriaActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="boutonNoraActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="boutonAura">

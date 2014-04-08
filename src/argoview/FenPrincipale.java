@@ -6,7 +6,9 @@
 
 package argoview;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 /**
@@ -21,9 +23,35 @@ public class FenPrincipale extends javax.swing.JFrame {
     public FenPrincipale() {
         initComponents();
         
-        gaia.lireDonnees();
+        lireDonnees();
     }
 
+    /**
+     * Fonction permettant de charger toutes les positions
+     */
+    private void lireDonnees() {
+        gaia.lireDonnees();
+        irchad.lireDonnees();
+        teria3.lireDonnees();
+        aquila.lireDonnees();
+        leloki.lireDonnees();
+        toms.lireDonnees();
+        victor.lireDonnees();
+        arcaique.lireDonnees();
+        bandido.lireDonnees();
+        flocon.lireDonnees();
+        liriane.lireDonnees();
+        malys.lireDonnees();
+        neige.lireDonnees();
+        una.lireDonnees();
+        vanille.lireDonnees();
+        ecume.lireDonnees();
+        aura.lireDonnees();
+        aurore.lireDonnees();
+        nora.lireDonnees();
+        vella.lireDonnees();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -50,7 +78,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         boutonLiriane = new javax.swing.JButton();
         boutonUna = new javax.swing.JButton();
         boutonNeige = new javax.swing.JButton();
-        boutonNoria = new javax.swing.JButton();
+        boutonNora = new javax.swing.JButton();
         boutonAura = new javax.swing.JButton();
         boutonAurore = new javax.swing.JButton();
         boutonVella = new javax.swing.JButton();
@@ -253,14 +281,14 @@ public class FenPrincipale extends javax.swing.JFrame {
             }
         });
 
-        boutonNoria.setBackground(java.awt.Color.white);
-        boutonNoria.setText("Eléphant de mer Noria");
-        boutonNoria.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonNoria.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonNoria.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonNoria.addActionListener(new java.awt.event.ActionListener() {
+        boutonNora.setBackground(java.awt.Color.white);
+        boutonNora.setText("Eléphant de mer Nora");
+        boutonNora.setMaximumSize(new java.awt.Dimension(200, 23));
+        boutonNora.setMinimumSize(new java.awt.Dimension(200, 23));
+        boutonNora.setPreferredSize(new java.awt.Dimension(200, 23));
+        boutonNora.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonNoriaActionPerformed(evt);
+                boutonNoraActionPerformed(evt);
             }
         });
 
@@ -323,7 +351,7 @@ public class FenPrincipale extends javax.swing.JFrame {
                     .addComponent(boutonEcume, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(boutonAura, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(boutonAurore, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonNoria, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(boutonNora, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(boutonMalys, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(boutonVella, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -350,7 +378,7 @@ public class FenPrincipale extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(boutonAurore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonNoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(boutonNora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(containChoixAnimalLayout.createSequentialGroup()
                         .addComponent(boutonGaia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -537,7 +565,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         String[] test = {"entete", "entete2"};
         Object[][] obj = {{ "test", "aa" }, { "test", "aaa"} };
         ptsTable = new JTable(obj, test );
-        ptsScroll = new JScrollPanel(ptsTable);
+        ptsScroll = new JScrollPane(ptsTable);
     }//GEN-LAST:event_boutonGaiaActionPerformed
 
     private void boutonIrchadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonIrchadActionPerformed
@@ -573,10 +601,40 @@ public class FenPrincipale extends javax.swing.JFrame {
     }//GEN-LAST:event_boutonArcaiqueActionPerformed
 
     private void majDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_majDonneesActionPerformed
-        JOptionPane.showMessageDialog(this,
-                "Téléchargement du fichier de Gaia...",
-                "Téléchargement", JOptionPane.INFORMATION_MESSAGE);
+        majDonnees.setEnabled(false);
+        majDonnees.setBackground(new Color(0, 175, 81));
+
+        // Téléchargement des fichiers
         gaia.telechargerFichier();
+        irchad.telechargerFichier();
+        teria3.telechargerFichier();
+        aquila.telechargerFichier();
+        leloki.telechargerFichier();
+        toms.telechargerFichier();
+        victor.telechargerFichier();
+        arcaique.telechargerFichier();
+        bandido.telechargerFichier();
+        flocon.telechargerFichier();
+        liriane.telechargerFichier();
+        malys.telechargerFichier();
+        neige.telechargerFichier();
+        una.telechargerFichier();
+        vanille.telechargerFichier();
+        ecume.telechargerFichier();
+        aura.telechargerFichier();
+        aurore.telechargerFichier();
+        nora.telechargerFichier();
+        vella.telechargerFichier();
+        
+        JOptionPane.showMessageDialog(this,
+                "Mise à jour des fichiers de positionnement terminé !",
+                "Mise à jour", JOptionPane.INFORMATION_MESSAGE);
+        
+        majDonnees.setEnabled(true);
+        majDonnees.setText("Données à jour !");
+        
+        // Relecture des données
+        lireDonnees();
     }//GEN-LAST:event_majDonneesActionPerformed
 
     private void affDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_affDonneesActionPerformed
@@ -611,9 +669,9 @@ public class FenPrincipale extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_boutonNeigeActionPerformed
 
-    private void boutonNoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNoriaActionPerformed
+    private void boutonNoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNoraActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_boutonNoriaActionPerformed
+    }//GEN-LAST:event_boutonNoraActionPerformed
 
     private void boutonAuraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuraActionPerformed
         // TODO add your handling code here:
@@ -648,7 +706,7 @@ public class FenPrincipale extends javax.swing.JFrame {
     Animal ecume        = new Animal("Tortue Ecume", "ecume");
     Animal aura         = new Animal("Eléphant de mer Aura", "aura");
     Animal aurore       = new Animal("Eléphant de mer Autore", "aurore");
-    Animal noria        = new Animal("Eléphant de mer Noria", "noria");
+    Animal nora         = new Animal("Eléphant de mer Nora", "nora");
     Animal vella        = new Animal("Eléphant de mer Vella", "vella");
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -671,7 +729,7 @@ public class FenPrincipale extends javax.swing.JFrame {
     private javax.swing.JButton boutonLiriane;
     private javax.swing.JButton boutonMalys;
     private javax.swing.JButton boutonNeige;
-    private javax.swing.JButton boutonNoria;
+    private javax.swing.JButton boutonNora;
     private javax.swing.JButton boutonTeria3;
     private javax.swing.JButton boutonToms;
     private javax.swing.JButton boutonUna;
