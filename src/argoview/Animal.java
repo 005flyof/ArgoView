@@ -47,9 +47,9 @@ public class Animal {
         int cpt = 0;    // Variable permettant de ne pas enregistrer les deux premières lignes du fichier de position
         try {
             // On ouvre le fichier
-            InputStream inStream = new FileInputStream(nomFichier);
-            InputStreamReader inStreamRead = new InputStreamReader(inStream);
-            BufferedReader buffer = new BufferedReader(inStreamRead);
+            InputStream flux = new FileInputStream(nomFichier);
+            InputStreamReader fluxEntree = new InputStreamReader(flux);
+            BufferedReader buffer = new BufferedReader(fluxEntree);
             String ligne;
             
             // Tant que l'on peut lire une ligne
@@ -110,15 +110,15 @@ public class Animal {
                 
                 // On traite les données
                 if (cpt != 0 && cpt != 1)
-                    positions.add(new DonneeArgos(
-                            numBalise, precision, date, heure, latitude, longitude));
-                System.out.println(numBalise);
+                    positions.add(new DonneeArgos(numBalise, precision, date, heure, latitude, longitude));
                 cpt++;
                 
             }
             // On ferme le fichier
             buffer.close();
-        } catch (Exception e) {
+            fluxEntree.close();
+            flux.close();
+        } catch (IOException e) {
             // S'il y a eu une erreur, on l'affiche
             JOptionPane.showMessageDialog(tableau,
                     "Impossible d'ouvrir le fichier : " + nomFichier + "\n\tErreur d'entée-sortie :\n" + e.toString(),
@@ -149,51 +149,45 @@ public class Animal {
             URLConnection connexion = adresse.openConnection();
             int taille = connexion.getContentLength();
 
-            // On crée un flux d’entrée pour le fichier
+            // On crée un flux d’entrée pour lire le fichier
             InputStream brut = connexion.getInputStream();
-
-            // Mettre ce flux d’entrée en cache (pour un meilleur transfert, plus sûr et plus régulier).
             InputStream entree = new BufferedInputStream(brut);
 
-            // Créer une matrice (un tableau) de bytes pour stocker tous les octets du fichier
+            // On crée un tableau pour enregistrer les octets bruts
             byte[] donnees = new byte[taille];
-
+            
             // Pour l’instant aucun octet n’a encore été lu
             int octetsLus = 0;
 
             // Octets de déplacement, et octets déjà lus.
-            int deplacement = 0; float alreadyRead = 0;
+            int deplacement = 0;
+            float dejaLu = 0;
 
-            // Boucle permettant de parcourir tous les octets du fichier à lire
+            // On boucle pour lire tous les octets 1 à 1
             while(deplacement < taille)
             {
-                // utilisation de la methode "read" de la classe InputStream
-                octetsLus = entree.read(donnees, deplacement, donnees.length-deplacement);
+                octetsLus = entree.read(donnees, deplacement, donnees.length - deplacement);
 
                 // Petit calcul: mise à jour du nombre total d’octets lus par ajout au nombre d’octets lus au cours des précédents passages au nombre d’octets lus pendant ce passage
-                alreadyRead = alreadyRead + octetsLus;
+                dejaLu = dejaLu + octetsLus;
 
-                // -1 marque par convention la fin d’un fichier, double opérateur "égale": = =
-                if(octetsLus == -1) break;
+                // Si on est à la fin du fichier, on sort de la boucle
+                if  (octetsLus == -1)
+                    break;
 
                 // se cadrer à un endroit précis du fichier pour lire les octets suivants, c’est le déplacement
                 deplacement += octetsLus;
             }
-            // fermer le flux d’entrée.
+            // On ferme le fichier ouvert en ligne
             entree.close();
 
-            // Récupérer le nom du fichier
-            String fichier = adresse.getFile();
-            fichier = fichier.substring(fichier.lastIndexOf('/') + 1);
-
-            // Créer un fichier sur le DD afin d’y copier le contenu du fichier téléchargé (par un flux de sortie).
+            // Enregistrement
             FileOutputStream fichierSortie = new FileOutputStream(nomFichier);
-
-            // copier…
             fichierSortie.write(donnees);
 
-            // vider puis fermer le flux de sortie
-            fichierSortie.flush(); fichierSortie.close();
+            // On ferme les flux de sortie
+            fichierSortie.flush();
+            fichierSortie.close();
         } catch (MalformedURLException ex) {
             JOptionPane.showMessageDialog(tableau,
                     "URL de téléchargement mal formée !",

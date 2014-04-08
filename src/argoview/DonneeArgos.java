@@ -9,7 +9,7 @@ package argoview;
 import java.util.GregorianCalendar;
 
 /**
- * Objet permettant de gérer les données Argos enregistrées pour caque animal
+ * Objet permettant de gérer les données Argos enregistrées pour chaque animal
  * @author Florent Fayollas
  */
 public class DonneeArgos {
