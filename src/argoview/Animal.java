@@ -6,9 +6,9 @@
 
 package argoview;
 
-import java.util.ArrayList;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -28,6 +28,7 @@ public class Animal {
     public Animal ( String nom, String nomFichier ) {
         this.nom = nom;
         this.setNomFichier(nomFichier);
+        this.positions = new ArrayList();
     }
     
     /*
@@ -36,9 +37,9 @@ public class Animal {
     private String nom = new String();
     private String nomFichier = new String();
     private String url = new String();
-    private ArrayList positions = new ArrayList();
+    private ArrayList<DonneeArgos> positions;
     private final char separateur = ' ';
-    private JTable tableau = new JTable();
+    private final JTable tableau = new JTable();
 
     /**
      * Permet de lire les données contenus dans "Positions/%nomFichier.txt"
@@ -110,7 +111,11 @@ public class Animal {
                 
                 // On traite les données
                 if (cpt != 0 && cpt != 1)
-                    positions.add(new DonneeArgos(numBalise, precision, date, heure, latitude, longitude));
+                    this.positions.add(
+                            new DonneeArgos(
+                                    numBalise, precision,
+                                    date, heure,
+                                    latitude, longitude));
                 cpt++;
                 
             }
@@ -118,10 +123,16 @@ public class Animal {
             buffer.close();
             fluxEntree.close();
             flux.close();
-        } catch (IOException e) {
-            // S'il y a eu une erreur, on l'affiche
+        }
+        // S'il y a eu une erreur, on l'affiche
+        catch (IOException e) {
             JOptionPane.showMessageDialog(tableau,
                     "Impossible d'ouvrir le fichier : " + nomFichier + "\n\tErreur d'entée-sortie :\n" + e.toString(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            System.out.println( e.toString() );
+        } catch (IndexOutOfBoundsException e) {
+            JOptionPane.showMessageDialog(tableau,
+                    "Impossible de charger le fichier : " + nomFichier + "\n\tLe fichier n'est pas conforme :\n" + e.toString(),
                     "Erreur", JOptionPane.ERROR_MESSAGE);
             System.out.println( e.toString() );
         }
@@ -240,7 +251,7 @@ public class Animal {
     /**
      * @return Renvoie un tableau dynamique des positions successives
      */
-    public ArrayList getPositions() {
+    public ArrayList<DonneeArgos> getPositions() {
         return positions;
     }
 
