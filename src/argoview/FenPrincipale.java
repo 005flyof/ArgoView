@@ -8,7 +8,11 @@ package argoview;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Calendar;
 import javax.swing.JOptionPane;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -21,6 +25,8 @@ public class FenPrincipale extends javax.swing.JFrame {
      */
     public FenPrincipale() {
         initComponents();
+        
+        this.nomAnimal = "Aucun animal";
         this.positions = new ArrayList();
         this.positions.add(new DonneeArgos("0000000", "NULL", "0000/00/00", "00:00", "0", "0"));
         
@@ -58,7 +64,32 @@ public class FenPrincipale extends javax.swing.JFrame {
      * Fonction permettant de recharger l'affichage du tableau positions
      */
     private void afficherDonnees() {
+        String[] enTetes = new String [] {
+                "Nom de l'animal", "Balise n°", "Précision", "Date", "Heure", "Latitude", "Longitude"
+        };
+        Object[][] contenu = new Object[positions.size()][enTetes.length];
         
+        for (int i = 0; i < positions.size(); i++) {
+            contenu[i][0] = nomAnimal;
+            contenu[i][1] = positions.get(i).getNumBalise();
+            contenu[i][2] = positions.get(i).getPrecision();
+            contenu[i][3] = positions.get(i).getDate().toString();
+            contenu[i][4] = positions.get(i).getDate().get(Calendar.DAY_OF_MONTH);
+            contenu[i][5] = positions.get(i).getLatitude();
+            contenu[i][6] = positions.get(i).getLongitude();
+        }
+        
+        DefaultTableModel modele = new DefaultTableModel(contenu, enTetes) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        };
+        ptsTable.setModel(modele);
     }
     
     /**
@@ -744,6 +775,7 @@ public class FenPrincipale extends javax.swing.JFrame {
     private Animal vella        = new Animal("Eléphant de mer Vella", "vella");
         // Variable contenant les données à afficher sur le carte et affichées dans le tableau
     private ArrayList<DonneeArgos> positions;
+    private String nomAnimal;
         // Diverses couleurs utilisées dans le programme
     private final Color couleurValide = new Color(0, 175, 81);
     
