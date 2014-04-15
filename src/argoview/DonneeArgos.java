@@ -29,16 +29,30 @@ public class DonneeArgos {
         this.numBalise = numBalise;
         this.precision = precision;
         
-        int annee   = Integer.parseInt(date.substring(0, 3));
-        int mois    = Integer.parseInt(date.substring(5, 6));
-        int jour    = Integer.parseInt(date.substring(8, 9));
-        int heures  = Integer.parseInt(heure.substring(0, 1));
-        int minutes = Integer.parseInt(heure.substring(3, 4));
+        int annee = 0;
+        int mois = 0;
+        int jour = 0;
+        int heures = 0;
+        int minutes = 0;
+        
+        try {
+            annee   = Integer.parseInt(date.substring(0, 3));
+            mois    = Integer.parseInt(date.substring(5, 6));
+            jour    = Integer.parseInt(date.substring(8, 9));
+            heures  = Integer.parseInt(heure.substring(0, 1));
+            minutes = Integer.parseInt(heure.substring(3, 4));
+        } catch ( NumberFormatException e ) {
+            System.out.println("Impossible de charger les nombres : " + e.toString());
+        }
         
         this.date = new GregorianCalendar(annee, mois, jour, heures, minutes);
         
-        this.latitude  = Double.parseDouble(latitude);
-        this.longitude = Double.parseDouble(longitude);
+        try {
+            this.latitude  = Double.parseDouble(latitude);
+            this.longitude = Double.parseDouble(longitude);
+        } catch ( NumberFormatException e ) {
+            System.out.println("Impossible de charger les nombres : " + e.toString());
+        }
     }
     
     /*
