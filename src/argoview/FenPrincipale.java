@@ -7,9 +7,8 @@
 package argoview;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 /**
  *
@@ -22,8 +21,11 @@ public class FenPrincipale extends javax.swing.JFrame {
      */
     public FenPrincipale() {
         initComponents();
+        this.positions = new ArrayList();
+        this.positions.add(new DonneeArgos("0000000", "NULL", "0000/00/00", "00:00", "0", "0"));
         
         lireDonnees();
+        afficherDonnees();
     }
 
     /**
@@ -50,6 +52,13 @@ public class FenPrincipale extends javax.swing.JFrame {
         aurore.lireDonnees();
         nora.lireDonnees();
         vella.lireDonnees();
+    }
+    
+    /**
+     * Fonction permettant de recharger l'affichage du tableau positions
+     */
+    private void afficherDonnees() {
+        
     }
     
     /**
@@ -409,15 +418,23 @@ public class FenPrincipale extends javax.swing.JFrame {
 
         ptsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nom de l'animal", "Balise n°", "Précision", "Date", "Heure", "Latitude", "Longitude"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         ptsTable.setFocusable(false);
         ptsScroll.setViewportView(ptsTable);
 
@@ -561,48 +578,52 @@ public class FenPrincipale extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void boutonGaiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonGaiaActionPerformed
-        ptsTable = gaia.getTableau();
-        String[] test = {"entete", "entete2"};
-        Object[][] obj = {{ "test", "aa" }, { "test", "aaa"} };
-        ptsTable = new JTable(obj, test );
-        ptsScroll = new JScrollPane(ptsTable);
+        positions = gaia.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonGaiaActionPerformed
 
     private void boutonIrchadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonIrchadActionPerformed
-        // TODO add your handling code here:
+        positions = irchad.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonIrchadActionPerformed
 
     private void boutonTeria3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonTeria3ActionPerformed
-        // TODO add your handling code here:
+        positions = teria3.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonTeria3ActionPerformed
 
     private void boutonAquilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAquilaActionPerformed
-        // TODO add your handling code here:
+        positions = aquila.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonAquilaActionPerformed
 
     private void boutonLelokiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonLelokiActionPerformed
-        // TODO add your handling code here:
+        positions = leloki.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonLelokiActionPerformed
 
     private void boutonTomsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonTomsActionPerformed
-        // TODO add your handling code here:
+        positions = toms.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonTomsActionPerformed
 
     private void boutonVictorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVictorActionPerformed
-        // TODO add your handling code here:
+        positions = victor.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonVictorActionPerformed
 
     private void boutonBandidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonBandidoActionPerformed
-        // TODO add your handling code here:
+        positions = bandido.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonBandidoActionPerformed
 
     private void boutonArcaiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonArcaiqueActionPerformed
-        // TODO add your handling code here:
+        positions = arcaique.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonArcaiqueActionPerformed
 
     private void majDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_majDonneesActionPerformed
         majDonnees.setEnabled(false);
-        majDonnees.setBackground(new Color(0, 175, 81));
 
         // Téléchargement des fichiers
         gaia.telechargerFichier();
@@ -630,84 +651,101 @@ public class FenPrincipale extends javax.swing.JFrame {
                 "Mise à jour des fichiers de positionnement terminé !",
                 "Mise à jour", JOptionPane.INFORMATION_MESSAGE);
         
-        majDonnees.setEnabled(true);
+        majDonnees.setBackground(couleurValide);
         majDonnees.setText("Données à jour !");
+        majDonnees.setEnabled(true);
         
         // Relecture des données
         lireDonnees();
     }//GEN-LAST:event_majDonneesActionPerformed
 
     private void affDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_affDonneesActionPerformed
-        // TODO add your handling code here:
+        // Appel de la carte
     }//GEN-LAST:event_affDonneesActionPerformed
 
     private void boutonFloconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonFloconActionPerformed
-        // TODO add your handling code here:
+        positions = flocon.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonFloconActionPerformed
 
     private void boutonMalysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonMalysActionPerformed
-        // TODO add your handling code here:
+        positions = malys.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonMalysActionPerformed
 
     private void boutonEcumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonEcumeActionPerformed
-        // TODO add your handling code here:
+        positions = ecume.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonEcumeActionPerformed
 
     private void boutonVanilleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVanilleActionPerformed
-        // TODO add your handling code here:
+        positions = vanille.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonVanilleActionPerformed
 
     private void boutonLirianeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonLirianeActionPerformed
-        // TODO add your handling code here:
+        positions = liriane.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonLirianeActionPerformed
 
     private void boutonUnaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonUnaActionPerformed
-        // TODO add your handling code here:
+        positions = una.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonUnaActionPerformed
 
     private void boutonNeigeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNeigeActionPerformed
-        // TODO add your handling code here:
+        positions = neige.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonNeigeActionPerformed
 
     private void boutonNoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNoraActionPerformed
-        // TODO add your handling code here:
+        positions = nora.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonNoraActionPerformed
 
     private void boutonAuraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuraActionPerformed
-        // TODO add your handling code here:
+        positions = aura.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonAuraActionPerformed
 
     private void boutonAuroreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuroreActionPerformed
-        // TODO add your handling code here:
+        positions = aurore.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonAuroreActionPerformed
 
     private void boutonVellaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVellaActionPerformed
-        // TODO add your handling code here:
+        positions = vella.getPositions();
+        afficherDonnees();
     }//GEN-LAST:event_boutonVellaActionPerformed
 
     /*
         Variables
     */
-    Animal gaia         = new Animal("Baleine à bosse Gaia", "gaia");
-    Animal irchad       = new Animal("Baleine à bosse Irchad", "irchad");
-    Animal teria3       = new Animal("Baleine à bosse Teria3", "teria3");
-    Animal aquila       = new Animal("Manchot royal Aquila", "aquila");
-    Animal leloki       = new Animal("Manchot royal Leloki", "leloki");
-    Animal toms         = new Animal("Manchot royal Toms", "toms");
-    Animal victor       = new Animal("Manchot royal Victor", "victor");
-    Animal arcaique     = new Animal("Ours polaire Arcaique", "arcaique");
-    Animal bandido      = new Animal("Ours polaire Bandido", "bandido");
-    Animal flocon       = new Animal("Ours polaire Flocon", "flocon");
-    Animal liriane      = new Animal("Ours polaire Liriane", "liriane");
-    Animal malys        = new Animal("Ours polaire Malys", "malys");
-    Animal neige        = new Animal("Ours polaire Neige", "neige");
-    Animal una          = new Animal("Ours polaire Una", "una");
-    Animal vanille      = new Animal("Ours polaire Vanille", "vanille");
-    Animal ecume        = new Animal("Tortue Ecume", "ecume");
-    Animal aura         = new Animal("Eléphant de mer Aura", "aura");
-    Animal aurore       = new Animal("Eléphant de mer Autore", "aurore");
-    Animal nora         = new Animal("Eléphant de mer Nora", "nora");
-    Animal vella        = new Animal("Eléphant de mer Vella", "vella");
+        // Variables contenant les animaux
+    private Animal gaia         = new Animal("Baleine à bosse Gaia", "gaia");
+    private Animal irchad       = new Animal("Baleine à bosse Irchad", "irchad");
+    private Animal teria3       = new Animal("Baleine à bosse Teria3", "teria3");
+    private Animal aquila       = new Animal("Manchot royal Aquila", "aquila");
+    private Animal leloki       = new Animal("Manchot royal Leloki", "leloki");
+    private Animal toms         = new Animal("Manchot royal Toms", "toms");
+    private Animal victor       = new Animal("Manchot royal Victor", "victor");
+    private Animal arcaique     = new Animal("Ours polaire Arcaique", "arcaique");
+    private Animal bandido      = new Animal("Ours polaire Bandido", "bandido");
+    private Animal flocon       = new Animal("Ours polaire Flocon", "flocon");
+    private Animal liriane      = new Animal("Ours polaire Liriane", "liriane");
+    private Animal malys        = new Animal("Ours polaire Malys", "malys");
+    private Animal neige        = new Animal("Ours polaire Neige", "neige");
+    private Animal una          = new Animal("Ours polaire Una", "una");
+    private Animal vanille      = new Animal("Ours polaire Vanille", "vanille");
+    private Animal ecume        = new Animal("Tortue Ecume", "ecume");
+    private Animal aura         = new Animal("Eléphant de mer Aura", "aura");
+    private Animal aurore       = new Animal("Eléphant de mer Autore", "aurore");
+    private Animal nora         = new Animal("Eléphant de mer Nora", "nora");
+    private Animal vella        = new Animal("Eléphant de mer Vella", "vella");
+        // Variable contenant les données à afficher sur le carte et affichées dans le tableau
+    private ArrayList<DonneeArgos> positions;
+        // Diverses couleurs utilisées dans le programme
+    private final Color couleurValide = new Color(0, 175, 81);
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox affDates;
