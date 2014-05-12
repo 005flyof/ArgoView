@@ -7,10 +7,15 @@
 package argoview;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -27,9 +32,12 @@ public class FenPrincipale extends javax.swing.JFrame {
         this.nomAnimal = "Aucun animal";
         this.positions = new ArrayList();
         this.positions.add(new DonneeArgos("0000000", "NULL", "0000/00/00", "00:00", "0", "0"));
-        
+        nbrPointsAff = sliderNbrPoints.getValue()+1;
+        nbrPointsAffiche = Double.toString(nbrPointsAff);
+        jLabel5.setText(nbrPointsAffiche);
         lireDonnees();
         afficherDonnees();
+        initialFolder();
     }
 
     /**
@@ -71,57 +79,8 @@ public class FenPrincipale extends javax.swing.JFrame {
             contenu[i][0] = nomAnimal;
             contenu[i][1] = positions.get(i).getNumBalise();
             contenu[i][2] = positions.get(i).getPrecision();
-            String date = (positions.get(i).getDate().get(Calendar.DAY_OF_MONTH) < 10 ? "0" : "")
-                    + positions.get(i).getDate().get(Calendar.DAY_OF_MONTH) + " ";
-            switch ( positions.get(i).getDate().get(Calendar.MONTH) ) {
-                case Calendar.JANUARY:
-                    date += "janvier";
-                    break;
-                case Calendar.FEBRUARY:
-                    date += "février";
-                    break;
-                case Calendar.MARCH:
-                    date += "mars";
-                    break;
-                case Calendar.APRIL:
-                    date += "avril";
-                    break;
-                case Calendar.MAY:
-                    date += "mai";
-                    break;
-                case Calendar.JUNE:
-                    date += "juin";
-                    break;
-                case Calendar.JULY:
-                    date += "juillet";
-                    break;
-                case Calendar.AUGUST:
-                    date += "aoüt";
-                    break;
-                case Calendar.SEPTEMBER:
-                    date += "septembre";
-                    break;
-                case Calendar.OCTOBER:
-                    date += "octobre";
-                    break;
-                case Calendar.NOVEMBER:
-                    date += "novembre";
-                    break;
-                case Calendar.DECEMBER:
-                    date += "décembre";
-                    break;
-                default:
-                    date += "mois";
-                    break;
-            }
-            date += " ";
-            date += positions.get(i).getDate().get(Calendar.YEAR);
-            contenu[i][3] = date;
-            contenu[i][4] = (positions.get(i).getDate().get(Calendar.HOUR_OF_DAY) < 10 ? "0" : "")
-                    + positions.get(i).getDate().get(Calendar.HOUR_OF_DAY)
-                    + ":"
-                    + (positions.get(i).getDate().get(Calendar.MINUTE) < 10 ? "0" : "")
-                    + positions.get(i).getDate().get(Calendar.MINUTE);
+            contenu[i][3] = positions.get(i).getDate().toString();
+            contenu[i][4] = positions.get(i).getDate().get(Calendar.DAY_OF_MONTH);
             contenu[i][5] = positions.get(i).getLatitude();
             contenu[i][6] = positions.get(i).getLongitude();
         }
@@ -137,6 +96,56 @@ public class FenPrincipale extends javax.swing.JFrame {
             }
         };
         ptsTable.setModel(modele);
+    }
+    /**
+     * Fonction qui permet de créer le dossier contenant les images
+     */
+    private void initialFolder() {
+        File file = new File("img");
+        boolean success = file.delete();
+        String dirName = "img";
+        File dir = new File(dirName);
+        boolean isCreated = dir.mkdirs();
+    }
+    /**
+     * Fonction qui permet de calculer la moyenne des latitudes
+     */
+    private double calcMLat () {
+       double add = 0;double result = 0;
+       for (int i = 0; i<nbrPoints; i++) {
+           add = add+positions.get(i).getLatitude();
+       }
+       result = add/nbrPoints;
+       return (result);
+    }
+    /**
+     * Fonction qui permet de calculer la moyenne des longitudes
+     */
+    private double calcMLon () {
+       double add = 0;double result = 0;
+       for (int i = 0; i<nbrPoints; i++) {
+           add = add+positions.get(i).getLongitude();
+       }
+       result = add/nbrPoints;
+       return (result);
+    }
+    /**
+     * Fonction qui permet de définir le type de carte à afficher
+     */
+    private String map () {
+        if (mapType == 0){
+            map ="roadmap";
+        }
+        else if (mapType == 1){
+            map = "terrain";
+        }
+        else if (mapType == 2){
+            map = "satellite";
+        }
+        else if (mapType == 3){
+            map = "hybrid";
+        }
+        return (map);
     }
     
     /**
@@ -178,9 +187,17 @@ public class FenPrincipale extends javax.swing.JFrame {
         containActsDonnees = new javax.swing.JPanel();
         affTrace = new javax.swing.JCheckBox();
         affPts = new javax.swing.JCheckBox();
-        affNumPts = new javax.swing.JCheckBox();
         affDates = new javax.swing.JCheckBox();
-        affFct = new javax.swing.JCheckBox();
+        sliderZoom = new javax.swing.JSlider();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        list = new javax.swing.JList();
+        sliderNbrPoints = new javax.swing.JSlider();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ArgoView");
@@ -488,7 +505,7 @@ public class FenPrincipale extends javax.swing.JFrame {
                         .addGroup(containChoixAnimalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(boutonFlocon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(boutonVella, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 34, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         containAnimal.setBorder(javax.swing.BorderFactory.createTitledBorder("Données de positionnement relatives à l'animal"));
@@ -520,11 +537,13 @@ public class FenPrincipale extends javax.swing.JFrame {
         containAnimal.setLayout(containAnimalLayout);
         containAnimalLayout.setHorizontalGroup(
             containAnimalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ptsScroll)
+            .addGroup(containAnimalLayout.createSequentialGroup()
+                .addComponent(ptsScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 645, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         containAnimalLayout.setVerticalGroup(
             containAnimalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ptsScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+            .addComponent(ptsScroll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
         );
 
         containActs.setBorder(javax.swing.BorderFactory.createTitledBorder("Actions sur les données"));
@@ -578,47 +597,123 @@ public class FenPrincipale extends javax.swing.JFrame {
 
         affTrace.setText("Afficher le tracé");
         affTrace.setBorderPaintedFlat(true);
+        affTrace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                affTraceActionPerformed(evt);
+            }
+        });
 
         affPts.setText("Afficher les points");
         affPts.setBorderPaintedFlat(true);
-
-        affNumPts.setText("Afficher les numéros des points");
-        affNumPts.setBorderPaintedFlat(true);
+        affPts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                affPtsActionPerformed(evt);
+            }
+        });
 
         affDates.setText("Afficher les dates");
         affDates.setBorderPaintedFlat(true);
 
-        affFct.setText("Fonction non implémentée");
-        affFct.setBorderPaintedFlat(true);
+        sliderZoom.setMaximum(11);
+        sliderZoom.setMinimum(1);
+        sliderZoom.setValue(6);
+
+        jLabel1.setText("option Zoom");
+
+        jLabel2.setText("0");
+
+        jLabel3.setText("11");
+
+        list.setBackground(new java.awt.Color(240, 240, 240));
+        list.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        list.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "carte", "terrain", "satellite", "satellite et routes" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        list.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(list);
+
+        sliderNbrPoints.setMaximum(3);
+        sliderNbrPoints.setValue(0);
+        sliderNbrPoints.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sliderNbrPointsStateChanged(evt);
+            }
+        });
+
+        jLabel4.setText("afficher tous les");
+
+        jLabel6.setText("points");
 
         javax.swing.GroupLayout containActsDonneesLayout = new javax.swing.GroupLayout(containActsDonnees);
         containActsDonnees.setLayout(containActsDonneesLayout);
         containActsDonneesLayout.setHorizontalGroup(
             containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containActsDonneesLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(containActsDonneesLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel4))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containActsDonneesLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel6)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(sliderNbrPoints, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(containActsDonneesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(affTrace)
-                    .addComponent(affPts)
-                    .addComponent(affNumPts)
-                    .addComponent(affDates)
-                    .addComponent(affFct))
-                .addContainerGap(23, Short.MAX_VALUE))
+                    .addGroup(containActsDonneesLayout.createSequentialGroup()
+                        .addComponent(sliderZoom, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(containActsDonneesLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18))
+                    .addGroup(containActsDonneesLayout.createSequentialGroup()
+                        .addGroup(containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(affTrace)
+                            .addComponent(affPts)
+                            .addComponent(affDates))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         containActsDonneesLayout.setVerticalGroup(
             containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containActsDonneesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(affTrace)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(affPts)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(affNumPts)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(affDates)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(affFct)
-                .addContainerGap())
+                .addComponent(sliderZoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(containActsDonneesLayout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(sliderNbrPoints, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -627,15 +722,17 @@ public class FenPrincipale extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(containAnimal, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(containAnimal, javax.swing.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(containChoixAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(containActs, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(containActsDonnees, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(containActsDonnees, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -645,8 +742,8 @@ public class FenPrincipale extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(containActs, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(containActsDonnees, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
-                    .addComponent(containChoixAnimal, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
+                        .addComponent(containActsDonnees, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
+                    .addComponent(containChoixAnimal, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(containAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -657,55 +754,73 @@ public class FenPrincipale extends javax.swing.JFrame {
 
     private void boutonGaiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonGaiaActionPerformed
         positions = gaia.getPositions();
-        nomAnimal = gaia.getNom();
+        nomAnimal = "gaia";
+        this.latitude = gaia.getPositions().get(0).getLatitude();
+        this.longitude = gaia.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonGaiaActionPerformed
 
     private void boutonIrchadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonIrchadActionPerformed
         positions = irchad.getPositions();
-        nomAnimal = irchad.getNom();
+        nomAnimal = "irchad";
+        this.latitude = irchad.getPositions().get(0).getLatitude();
+        this.longitude = irchad.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonIrchadActionPerformed
 
     private void boutonTeria3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonTeria3ActionPerformed
         positions = teria3.getPositions();
-        nomAnimal = teria3.getNom();
+        nomAnimal = "teria3";
+        this.latitude = teria3.getPositions().get(0).getLatitude();
+        this.longitude = teria3.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonTeria3ActionPerformed
 
     private void boutonAquilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAquilaActionPerformed
         positions = aquila.getPositions();
-        nomAnimal = aquila.getNom();
+        nomAnimal = "aquila";
+        this.latitude = aquila.getPositions().get(0).getLatitude();
+        this.longitude = aquila.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonAquilaActionPerformed
 
     private void boutonLelokiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonLelokiActionPerformed
         positions = leloki.getPositions();
-        nomAnimal = leloki.getNom();
+        nomAnimal = "leloki";
+        this.latitude = leloki.getPositions().get(0).getLatitude();
+        this.longitude = leloki.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonLelokiActionPerformed
 
     private void boutonTomsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonTomsActionPerformed
         positions = toms.getPositions();
-        nomAnimal = toms.getNom();
+        nomAnimal = "toms";
+        this.latitude = toms.getPositions().get(0).getLatitude();
+        this.longitude = toms.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonTomsActionPerformed
 
     private void boutonVictorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVictorActionPerformed
         positions = victor.getPositions();
-        nomAnimal = victor.getNom();
+        nomAnimal = "victor";
+        this.latitude = victor.getPositions().get(0).getLatitude();
+        this.longitude = victor.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonVictorActionPerformed
 
     private void boutonBandidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonBandidoActionPerformed
         positions = bandido.getPositions();
-        nomAnimal = bandido.getNom();
+        nomAnimal = "bandido";
+        this.latitude = bandido.getPositions().get(0).getLatitude();
+        this.longitude = bandido.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonBandidoActionPerformed
 
     private void boutonArcaiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonArcaiqueActionPerformed
         positions = arcaique.getPositions();
-        nomAnimal = arcaique.getNom();
+        nomAnimal = "arcaique";
+        this.latitude = arcaique.getPositions().get(0).getLatitude();
+        this.longitude = arcaique.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonArcaiqueActionPerformed
 
@@ -745,76 +860,182 @@ public class FenPrincipale extends javax.swing.JFrame {
         // Relecture des données
         lireDonnees();
     }//GEN-LAST:event_majDonneesActionPerformed
-
+    
     private void affDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_affDonneesActionPerformed
-        // Appel de la carte
+        //nombre d'image à enregister
+        j++; 
+        //définition des variables
+        String url = new String();
+        double latitude,longitude;
+        // On limite le nombre de positions pour réduir le lien URL
+        if (positions.size() > 30){ nbrPoints = 30;}
+        else if (positions.size() <= 30){ nbrPoints = positions.size();}
+        //on définit la moyenne des coordonnées
+        latitude = calcMLat();
+        longitude = calcMLon();
+        //on définit le type de carte à afficher
+        mapType = list.getSelectedIndex();
+        map = map();
+        //puis on définit l'url avec tous les parametres
+            url = "http://maps.googleapis.com/maps/api/staticmap?center="
+                    +Double.toString(latitude)
+                    +","+Double.toString(longitude)
+                    +"&zoom="+sliderZoom.getValue()
+                    +"&size=512x512&maptype=";
+            url = url+map;
+        /**
+         * Fonction qui ajoute des markers dans l'url
+         */
+        if (points == true){
+            for(int i = 0; (i < nbrPoints*nbrPointsAff)&&(i<positions.size()); i=i+nbrPointsAff){
+                    url = url+"&markers=color:red|label:"+(i/nbrPointsAff)+"|"+positions.get(i).getLatitude()
+                    +","+positions.get(i).getLongitude();
+                    System.out.println(i);
+                    }
+					
+                    System.out.println(url);
+        
+        }
+        /**
+         * fonction qui ajoute une trace entre chaque markers
+         */
+        if (trace == true) {
+            url = url+"&path=color:red";
+            for (int i = 0; (i < nbrPoints*nbrPointsAff)&&(i<positions.size()); i=i+nbrPointsAff){
+                url = url+"|"+positions.get(i).getLatitude()
+                         +","+positions.get(i).getLongitude();
+            }
+        }
+        //on ferme l'url
+        url = url+"&sensor=false";
+        //on envoit url et le nombre d'image à 'carte' avant de l'afficher
+        Carte fen = new Carte(url,j);
+        fen.show();
     }//GEN-LAST:event_affDonneesActionPerformed
-
+    
     private void boutonFloconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonFloconActionPerformed
         positions = flocon.getPositions();
-        nomAnimal = flocon.getNom();
+        nomAnimal = "flocon";
+        this.latitude = flocon.getPositions().get(0).getLatitude();
+        this.longitude = flocon.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonFloconActionPerformed
 
     private void boutonMalysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonMalysActionPerformed
         positions = malys.getPositions();
-        nomAnimal = malys.getNom();
+        nomAnimal = "malys";
+        this.latitude = malys.getPositions().get(0).getLatitude();
+        this.longitude = malys.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonMalysActionPerformed
 
     private void boutonEcumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonEcumeActionPerformed
         positions = ecume.getPositions();
-        nomAnimal = ecume.getNom();
+        nomAnimal = "ecume";
+        this.latitude = ecume.getPositions().get(0).getLatitude();
+        this.longitude = ecume.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonEcumeActionPerformed
 
     private void boutonVanilleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVanilleActionPerformed
         positions = vanille.getPositions();
-        nomAnimal = vanille.getNom();
+        nomAnimal = "vanille";
+        this.latitude = vanille.getPositions().get(0).getLatitude();
+        this.longitude = vanille.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonVanilleActionPerformed
 
     private void boutonLirianeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonLirianeActionPerformed
         positions = liriane.getPositions();
-        nomAnimal = liriane.getNom();
+        nomAnimal = "liriane";
+        this.latitude = liriane.getPositions().get(0).getLatitude();
+        this.longitude = liriane.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonLirianeActionPerformed
 
     private void boutonUnaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonUnaActionPerformed
         positions = una.getPositions();
-        nomAnimal = una.getNom();
+        nomAnimal = "una";
+        this.latitude = una.getPositions().get(0).getLatitude();
+        this.longitude = una.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonUnaActionPerformed
 
     private void boutonNeigeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNeigeActionPerformed
         positions = neige.getPositions();
-        nomAnimal = neige.getNom();
+        nomAnimal = "neige";
+        this.latitude = neige.getPositions().get(0).getLatitude();
+        this.longitude = neige.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonNeigeActionPerformed
 
     private void boutonNoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNoraActionPerformed
         positions = nora.getPositions();
-        nomAnimal = nora.getNom();
+        nomAnimal = "nora";
+        this.latitude = nora.getPositions().get(0).getLatitude();
+        this.longitude = nora.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonNoraActionPerformed
 
     private void boutonAuraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuraActionPerformed
         positions = aura.getPositions();
-        nomAnimal = aura.getNom();
+        nomAnimal = "aura";
+        this.latitude = aura.getPositions().get(0).getLatitude();
+        this.longitude = aura.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonAuraActionPerformed
 
     private void boutonAuroreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuroreActionPerformed
         positions = aurore.getPositions();
-        nomAnimal = aurore.getNom();
+        nomAnimal = "aurore";
+        this.latitude = aurore.getPositions().get(0).getLatitude();
+        this.longitude = aurore.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonAuroreActionPerformed
 
     private void boutonVellaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVellaActionPerformed
         positions = vella.getPositions();
-        nomAnimal = vella.getNom();
+        nomAnimal = "vella";
+        this.latitude = vella.getPositions().get(0).getLatitude();
+        this.longitude = vella.getPositions().get(0).getLongitude();
         afficherDonnees();
     }//GEN-LAST:event_boutonVellaActionPerformed
+
+    private void affPtsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_affPtsActionPerformed
+        if(points == false){
+            points = true;
+        }
+        else if (points == true){
+            points = false;
+        }
+    }//GEN-LAST:event_affPtsActionPerformed
+
+    private void affTraceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_affTraceActionPerformed
+        if (trace == false){
+            trace = true;
+        }
+        else if (trace == true){
+            trace = false;
+        }
+    }//GEN-LAST:event_affTraceActionPerformed
+
+    private void sliderNbrPointsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderNbrPointsStateChanged
+        if (sliderNbrPoints.getValue() == 0){
+            nbrPointsAff = sliderNbrPoints.getValue()+1;
+        }                                             
+        if (sliderNbrPoints.getValue() == 1){
+            nbrPointsAff = sliderNbrPoints.getValue()+1;
+        }                                             
+        if (sliderNbrPoints.getValue() == 2){
+            nbrPointsAff = sliderNbrPoints.getValue()+3;
+        }                                             
+        if (sliderNbrPoints.getValue() == 3){
+            nbrPointsAff = sliderNbrPoints.getValue()+7;
+        }
+        
+        nbrPointsAffiche = Double.toString(nbrPointsAff);
+        jLabel5.setText(nbrPointsAffiche);
+    }//GEN-LAST:event_sliderNbrPointsStateChanged
 
     /*
         Variables
@@ -843,14 +1064,22 @@ public class FenPrincipale extends javax.swing.JFrame {
         // Variable contenant les données à afficher sur le carte et affichées dans le tableau
     private ArrayList<DonneeArgos> positions;
     private String nomAnimal;
+    public double latitude;
+    public double longitude;
+    public int j=0;//nombre d'images
+    public boolean points = false;//afficher les points sur la carte
+    public boolean trace = false;//afficher le tracer sur la carte
+    public int mapType = 3;//type de map choisi par l'utilisateur, default=hybrid
+    public String map;//mapType en string
+    public int nbrPoints = 0;//nombre de points à afficher
+    public int nbrPointsAff = 1;
+    public String nbrPointsAffiche = " ";
         // Diverses couleurs utilisées dans le programme
     private final Color couleurValide = new Color(0, 175, 81);
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox affDates;
     private javax.swing.JButton affDonnees;
-    private javax.swing.JCheckBox affFct;
-    private javax.swing.JCheckBox affNumPts;
     private javax.swing.JCheckBox affPts;
     private javax.swing.JCheckBox affTrace;
     private javax.swing.JButton boutonAquila;
@@ -877,8 +1106,18 @@ public class FenPrincipale extends javax.swing.JFrame {
     private javax.swing.JPanel containActsDonnees;
     private javax.swing.JPanel containAnimal;
     private javax.swing.JPanel containChoixAnimal;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList list;
     private javax.swing.JButton majDonnees;
     private javax.swing.JScrollPane ptsScroll;
     private javax.swing.JTable ptsTable;
+    private javax.swing.JSlider sliderNbrPoints;
+    private javax.swing.JSlider sliderZoom;
     // End of variables declaration//GEN-END:variables
 }
