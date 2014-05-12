@@ -10,9 +10,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -73,8 +71,57 @@ public class FenPrincipale extends javax.swing.JFrame {
             contenu[i][0] = nomAnimal;
             contenu[i][1] = positions.get(i).getNumBalise();
             contenu[i][2] = positions.get(i).getPrecision();
-            contenu[i][3] = positions.get(i).getDate().toString();
-            contenu[i][4] = positions.get(i).getDate().get(Calendar.DAY_OF_MONTH);
+            String date = (positions.get(i).getDate().get(Calendar.DAY_OF_MONTH) < 10 ? "0" : "")
+                    + positions.get(i).getDate().get(Calendar.DAY_OF_MONTH) + " ";
+            switch ( positions.get(i).getDate().get(Calendar.MONTH) ) {
+                case Calendar.JANUARY:
+                    date += "janvier";
+                    break;
+                case Calendar.FEBRUARY:
+                    date += "février";
+                    break;
+                case Calendar.MARCH:
+                    date += "mars";
+                    break;
+                case Calendar.APRIL:
+                    date += "avril";
+                    break;
+                case Calendar.MAY:
+                    date += "mai";
+                    break;
+                case Calendar.JUNE:
+                    date += "juin";
+                    break;
+                case Calendar.JULY:
+                    date += "juillet";
+                    break;
+                case Calendar.AUGUST:
+                    date += "aoüt";
+                    break;
+                case Calendar.SEPTEMBER:
+                    date += "septembre";
+                    break;
+                case Calendar.OCTOBER:
+                    date += "octobre";
+                    break;
+                case Calendar.NOVEMBER:
+                    date += "novembre";
+                    break;
+                case Calendar.DECEMBER:
+                    date += "décembre";
+                    break;
+                default:
+                    date += "mois";
+                    break;
+            }
+            date += " ";
+            date += positions.get(i).getDate().get(Calendar.YEAR);
+            contenu[i][3] = date;
+            contenu[i][4] = (positions.get(i).getDate().get(Calendar.HOUR_OF_DAY) < 10 ? "0" : "")
+                    + positions.get(i).getDate().get(Calendar.HOUR_OF_DAY)
+                    + ":"
+                    + (positions.get(i).getDate().get(Calendar.MINUTE) < 10 ? "0" : "")
+                    + positions.get(i).getDate().get(Calendar.MINUTE);
             contenu[i][5] = positions.get(i).getLatitude();
             contenu[i][6] = positions.get(i).getLongitude();
         }
@@ -610,46 +657,55 @@ public class FenPrincipale extends javax.swing.JFrame {
 
     private void boutonGaiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonGaiaActionPerformed
         positions = gaia.getPositions();
+        nomAnimal = gaia.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonGaiaActionPerformed
 
     private void boutonIrchadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonIrchadActionPerformed
         positions = irchad.getPositions();
+        nomAnimal = irchad.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonIrchadActionPerformed
 
     private void boutonTeria3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonTeria3ActionPerformed
         positions = teria3.getPositions();
+        nomAnimal = teria3.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonTeria3ActionPerformed
 
     private void boutonAquilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAquilaActionPerformed
         positions = aquila.getPositions();
+        nomAnimal = aquila.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonAquilaActionPerformed
 
     private void boutonLelokiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonLelokiActionPerformed
         positions = leloki.getPositions();
+        nomAnimal = leloki.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonLelokiActionPerformed
 
     private void boutonTomsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonTomsActionPerformed
         positions = toms.getPositions();
+        nomAnimal = toms.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonTomsActionPerformed
 
     private void boutonVictorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVictorActionPerformed
         positions = victor.getPositions();
+        nomAnimal = victor.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonVictorActionPerformed
 
     private void boutonBandidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonBandidoActionPerformed
         positions = bandido.getPositions();
+        nomAnimal = bandido.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonBandidoActionPerformed
 
     private void boutonArcaiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonArcaiqueActionPerformed
         positions = arcaique.getPositions();
+        nomAnimal = arcaique.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonArcaiqueActionPerformed
 
@@ -696,56 +752,67 @@ public class FenPrincipale extends javax.swing.JFrame {
 
     private void boutonFloconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonFloconActionPerformed
         positions = flocon.getPositions();
+        nomAnimal = flocon.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonFloconActionPerformed
 
     private void boutonMalysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonMalysActionPerformed
         positions = malys.getPositions();
+        nomAnimal = malys.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonMalysActionPerformed
 
     private void boutonEcumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonEcumeActionPerformed
         positions = ecume.getPositions();
+        nomAnimal = ecume.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonEcumeActionPerformed
 
     private void boutonVanilleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVanilleActionPerformed
         positions = vanille.getPositions();
+        nomAnimal = vanille.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonVanilleActionPerformed
 
     private void boutonLirianeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonLirianeActionPerformed
         positions = liriane.getPositions();
+        nomAnimal = liriane.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonLirianeActionPerformed
 
     private void boutonUnaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonUnaActionPerformed
         positions = una.getPositions();
+        nomAnimal = una.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonUnaActionPerformed
 
     private void boutonNeigeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNeigeActionPerformed
         positions = neige.getPositions();
+        nomAnimal = neige.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonNeigeActionPerformed
 
     private void boutonNoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNoraActionPerformed
         positions = nora.getPositions();
+        nomAnimal = nora.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonNoraActionPerformed
 
     private void boutonAuraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuraActionPerformed
         positions = aura.getPositions();
+        nomAnimal = aura.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonAuraActionPerformed
 
     private void boutonAuroreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuroreActionPerformed
         positions = aurore.getPositions();
+        nomAnimal = aurore.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonAuroreActionPerformed
 
     private void boutonVellaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVellaActionPerformed
         positions = vella.getPositions();
+        nomAnimal = vella.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonVellaActionPerformed
 

@@ -36,12 +36,12 @@ public class DonneeArgos {
         int minutes = 0;
         
         try {
-            annee   = Integer.parseInt(date.substring(0, 3));
-            mois    = Integer.parseInt(date.substring(5, 6));
-            jour    = Integer.parseInt(date.substring(8, 9));
-            heures  = Integer.parseInt(heure.substring(0, 1));
-            minutes = Integer.parseInt(heure.substring(3, 4));
-        } catch ( NumberFormatException e ) {
+            annee   = Integer.parseInt(date.substring(0, 4));
+            mois    = Integer.parseInt(date.substring(5, 7)) - 1;
+            jour    = Integer.parseInt(date.substring(8, 10));
+            heures  = Integer.parseInt(heure.substring(0, 2));
+            minutes = Integer.parseInt(heure.substring(3, 5));
+        } catch ( NumberFormatException | IndexOutOfBoundsException e ) {
             System.out.println("Impossible de charger les nombres : " + e.toString());
         }
         
