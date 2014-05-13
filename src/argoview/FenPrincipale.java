@@ -8,14 +8,10 @@ package argoview;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -64,6 +60,13 @@ public class FenPrincipale extends javax.swing.JFrame {
         aurore.lireDonnees();
         nora.lireDonnees();
         vella.lireDonnees();
+    }
+    
+    /**
+     * Fonction permettant de modifier le nom de l'animal sélectionné
+     */
+    private void setNom() {
+        
     }
     
     /**
@@ -152,50 +155,51 @@ public class FenPrincipale extends javax.swing.JFrame {
      * Fonction qui permet de créer le dossier contenant les images
      */
     private void initialFolder() {
-        File file = new File("img");
-        boolean success = file.delete();
         String dirName = "img";
         File dir = new File(dirName);
+        boolean success = dir.delete();
         boolean isCreated = dir.mkdirs();
     }
+    
     /**
      * Fonction qui permet de calculer la moyenne des latitudes
      */
     private double calcMLat () {
-       double add = 0;double result = 0;
-       for (int i = 0; i<nbrPoints; i++) {
-           add = add+positions.get(i).getLatitude();
+       double add = 0;
+       double result = 0;
+       for (int i = 0; i < nbrPoints; i++) {
+           add = add + positions.get(i).getLatitude();
        }
-       result = add/nbrPoints;
+       result = add / nbrPoints;
        return (result);
     }
+    
     /**
      * Fonction qui permet de calculer la moyenne des longitudes
      */
     private double calcMLon () {
-       double add = 0;double result = 0;
-       for (int i = 0; i<nbrPoints; i++) {
-           add = add+positions.get(i).getLongitude();
+       double add = 0;
+       double result = 0;
+       for (int i = 0; i < nbrPoints; i++) {
+           add = add + positions.get(i).getLongitude();
        }
-       result = add/nbrPoints;
+       result = add / nbrPoints;
        return (result);
     }
+    
     /**
      * Fonction qui permet de définir le type de carte à afficher
      */
     private String map () {
-        if (mapType == 0){
+        if (mapType == 0)
             map ="roadmap";
-        }
-        else if (mapType == 1){
+        else if (mapType == 1)
             map = "terrain";
-        }
-        else if (mapType == 2){
+        else if (mapType == 2)
             map = "satellite";
-        }
-        else if (mapType == 3){
+        else if (mapType == 3)
             map = "hybrid";
-        }
+        
         return (map);
     }
     
@@ -235,7 +239,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         containActs = new javax.swing.JPanel();
         majDonnees = new javax.swing.JButton();
         affDonnees = new javax.swing.JButton();
-        containActsDonnees = new javax.swing.JPanel();
+        containAff = new javax.swing.JPanel();
         affTrace = new javax.swing.JCheckBox();
         affPts = new javax.swing.JCheckBox();
         affDates = new javax.swing.JCheckBox();
@@ -641,8 +645,8 @@ public class FenPrincipale extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        containActsDonnees.setBorder(javax.swing.BorderFactory.createTitledBorder("Actions sur les données"));
-        containActsDonnees.setPreferredSize(new java.awt.Dimension(200, 0));
+        containAff.setBorder(javax.swing.BorderFactory.createTitledBorder("Actions sur les données"));
+        containAff.setPreferredSize(new java.awt.Dimension(200, 0));
 
         affTrace.setText("Afficher le tracé");
         affTrace.setBorderPaintedFlat(true);
@@ -667,7 +671,8 @@ public class FenPrincipale extends javax.swing.JFrame {
         sliderZoom.setMinimum(1);
         sliderZoom.setValue(6);
 
-        jLabel1.setText("option Zoom");
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Zoom");
 
         jLabel2.setText("0");
 
@@ -676,7 +681,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         list.setBackground(new java.awt.Color(240, 240, 240));
         list.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         list.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "carte", "terrain", "satellite", "satellite et routes" };
+            String[] strings = { "Carte", "Terrain", "Satellite", "Satellite et routes" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -691,46 +696,46 @@ public class FenPrincipale extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("afficher tous les");
+        jLabel4.setText("Afficher tous les");
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         jLabel6.setText("points");
 
-        javax.swing.GroupLayout containActsDonneesLayout = new javax.swing.GroupLayout(containActsDonnees);
-        containActsDonnees.setLayout(containActsDonneesLayout);
-        containActsDonneesLayout.setHorizontalGroup(
-            containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout containAffLayout = new javax.swing.GroupLayout(containAff);
+        containAff.setLayout(containAffLayout);
+        containAffLayout.setHorizontalGroup(
+            containAffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator2)
             .addComponent(jSeparator3)
             .addComponent(jSeparator1)
-            .addGroup(containActsDonneesLayout.createSequentialGroup()
+            .addGroup(containAffLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(containActsDonneesLayout.createSequentialGroup()
+                .addGroup(containAffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(affPts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(affDates, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(affTrace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sliderNbrPoints, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                    .addGroup(containAffLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(69, 69, 69)
+                        .addComponent(jLabel3))
+                    .addComponent(sliderZoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(containAffLayout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(containActsDonneesLayout.createSequentialGroup()
-                        .addGroup(containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(affPts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(affDates, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(affTrace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(sliderNbrPoints, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                            .addGroup(containActsDonneesLayout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3))
-                            .addComponent(sliderZoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
-        containActsDonneesLayout.setVerticalGroup(
-            containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(containActsDonneesLayout.createSequentialGroup()
+        containAffLayout.setVerticalGroup(
+            containAffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(containAffLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(affPts)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -744,7 +749,7 @@ public class FenPrincipale extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(containAffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
@@ -753,7 +758,7 @@ public class FenPrincipale extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(containActsDonneesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(containAffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jLabel6)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -775,7 +780,7 @@ public class FenPrincipale extends javax.swing.JFrame {
                             .addComponent(containActs, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(containChoixAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(containActsDonnees, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)))
+                        .addComponent(containAff, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -787,86 +792,68 @@ public class FenPrincipale extends javax.swing.JFrame {
                         .addComponent(containChoixAnimal, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(containActs, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(containActsDonnees, javax.swing.GroupLayout.PREFERRED_SIZE, 408, Short.MAX_VALUE))
+                    .addComponent(containAff, javax.swing.GroupLayout.PREFERRED_SIZE, 408, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(containAnimal, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        containActsDonnees.getAccessibleContext().setAccessibleName("Affichage des données sur les données");
+        containAff.getAccessibleContext().setAccessibleName("Affichage des données sur les données");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void boutonGaiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonGaiaActionPerformed
         positions = gaia.getPositions();
-        nomAnimal = "gaia";
-        this.latitude = gaia.getPositions().get(0).getLatitude();
-        this.longitude = gaia.getPositions().get(0).getLongitude();
+        nomAnimal = gaia.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonGaiaActionPerformed
 
     private void boutonIrchadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonIrchadActionPerformed
         positions = irchad.getPositions();
-        nomAnimal = "irchad";
-        this.latitude = irchad.getPositions().get(0).getLatitude();
-        this.longitude = irchad.getPositions().get(0).getLongitude();
+        nomAnimal = irchad.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonIrchadActionPerformed
 
     private void boutonTeria3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonTeria3ActionPerformed
         positions = teria3.getPositions();
-        nomAnimal = "teria3";
-        this.latitude = teria3.getPositions().get(0).getLatitude();
-        this.longitude = teria3.getPositions().get(0).getLongitude();
+        nomAnimal = teria3.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonTeria3ActionPerformed
 
     private void boutonAquilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAquilaActionPerformed
         positions = aquila.getPositions();
-        nomAnimal = "aquila";
-        this.latitude = aquila.getPositions().get(0).getLatitude();
-        this.longitude = aquila.getPositions().get(0).getLongitude();
+        nomAnimal = aquila.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonAquilaActionPerformed
 
     private void boutonLelokiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonLelokiActionPerformed
         positions = leloki.getPositions();
-        nomAnimal = "leloki";
-        this.latitude = leloki.getPositions().get(0).getLatitude();
-        this.longitude = leloki.getPositions().get(0).getLongitude();
+        nomAnimal = leloki.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonLelokiActionPerformed
 
     private void boutonTomsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonTomsActionPerformed
         positions = toms.getPositions();
-        nomAnimal = "toms";
-        this.latitude = toms.getPositions().get(0).getLatitude();
-        this.longitude = toms.getPositions().get(0).getLongitude();
+        nomAnimal = toms.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonTomsActionPerformed
 
     private void boutonVictorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVictorActionPerformed
         positions = victor.getPositions();
-        nomAnimal = "victor";
-        this.latitude = victor.getPositions().get(0).getLatitude();
-        this.longitude = victor.getPositions().get(0).getLongitude();
+        nomAnimal = victor.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonVictorActionPerformed
 
     private void boutonBandidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonBandidoActionPerformed
         positions = bandido.getPositions();
-        nomAnimal = "bandido";
-        this.latitude = bandido.getPositions().get(0).getLatitude();
-        this.longitude = bandido.getPositions().get(0).getLongitude();
+        nomAnimal = bandido.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonBandidoActionPerformed
 
     private void boutonArcaiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonArcaiqueActionPerformed
         positions = arcaique.getPositions();
-        nomAnimal = "arcaique";
-        this.latitude = arcaique.getPositions().get(0).getLatitude();
-        this.longitude = arcaique.getPositions().get(0).getLongitude();
+        nomAnimal = arcaique.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonArcaiqueActionPerformed
 
@@ -961,89 +948,67 @@ public class FenPrincipale extends javax.swing.JFrame {
     
     private void boutonFloconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonFloconActionPerformed
         positions = flocon.getPositions();
-        nomAnimal = "flocon";
-        this.latitude = flocon.getPositions().get(0).getLatitude();
-        this.longitude = flocon.getPositions().get(0).getLongitude();
+        nomAnimal = flocon.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonFloconActionPerformed
 
     private void boutonMalysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonMalysActionPerformed
         positions = malys.getPositions();
-        nomAnimal = "malys";
-        this.latitude = malys.getPositions().get(0).getLatitude();
-        this.longitude = malys.getPositions().get(0).getLongitude();
+        nomAnimal = malys.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonMalysActionPerformed
 
     private void boutonEcumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonEcumeActionPerformed
         positions = ecume.getPositions();
-        nomAnimal = "ecume";
-        this.latitude = ecume.getPositions().get(0).getLatitude();
-        this.longitude = ecume.getPositions().get(0).getLongitude();
+        nomAnimal = ecume.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonEcumeActionPerformed
 
     private void boutonVanilleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVanilleActionPerformed
         positions = vanille.getPositions();
-        nomAnimal = "vanille";
-        this.latitude = vanille.getPositions().get(0).getLatitude();
-        this.longitude = vanille.getPositions().get(0).getLongitude();
+        nomAnimal = vanille.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonVanilleActionPerformed
 
     private void boutonLirianeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonLirianeActionPerformed
         positions = liriane.getPositions();
-        nomAnimal = "liriane";
-        this.latitude = liriane.getPositions().get(0).getLatitude();
-        this.longitude = liriane.getPositions().get(0).getLongitude();
+        nomAnimal = liriane.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonLirianeActionPerformed
 
     private void boutonUnaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonUnaActionPerformed
         positions = una.getPositions();
-        nomAnimal = "una";
-        this.latitude = una.getPositions().get(0).getLatitude();
-        this.longitude = una.getPositions().get(0).getLongitude();
+        nomAnimal = una.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonUnaActionPerformed
 
     private void boutonNeigeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNeigeActionPerformed
         positions = neige.getPositions();
-        nomAnimal = "neige";
-        this.latitude = neige.getPositions().get(0).getLatitude();
-        this.longitude = neige.getPositions().get(0).getLongitude();
+        nomAnimal = neige.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonNeigeActionPerformed
 
     private void boutonNoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNoraActionPerformed
         positions = nora.getPositions();
-        nomAnimal = "nora";
-        this.latitude = nora.getPositions().get(0).getLatitude();
-        this.longitude = nora.getPositions().get(0).getLongitude();
+        nomAnimal = nora.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonNoraActionPerformed
 
     private void boutonAuraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuraActionPerformed
         positions = aura.getPositions();
-        nomAnimal = "aura";
-        this.latitude = aura.getPositions().get(0).getLatitude();
-        this.longitude = aura.getPositions().get(0).getLongitude();
+        nomAnimal = aura.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonAuraActionPerformed
 
     private void boutonAuroreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuroreActionPerformed
         positions = aurore.getPositions();
-        nomAnimal = "aurore";
-        this.latitude = aurore.getPositions().get(0).getLatitude();
-        this.longitude = aurore.getPositions().get(0).getLongitude();
+        nomAnimal = aurore.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonAuroreActionPerformed
 
     private void boutonVellaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVellaActionPerformed
         positions = vella.getPositions();
-        nomAnimal = "vella";
-        this.latitude = vella.getPositions().get(0).getLatitude();
-        this.longitude = vella.getPositions().get(0).getLongitude();
+        nomAnimal = vella.getNom();
         afficherDonnees();
     }//GEN-LAST:event_boutonVellaActionPerformed
 
@@ -1112,6 +1077,7 @@ public class FenPrincipale extends javax.swing.JFrame {
     private String nomAnimal;
     public double latitude;
     public double longitude;
+        // Variables permettant l'affichage
     public int j=0;//nombre d'images
     public boolean points = false;//afficher les points sur la carte
     public boolean trace = false;//afficher le tracer sur la carte
@@ -1149,7 +1115,7 @@ public class FenPrincipale extends javax.swing.JFrame {
     private javax.swing.JButton boutonVella;
     private javax.swing.JButton boutonVictor;
     private javax.swing.JPanel containActs;
-    private javax.swing.JPanel containActsDonnees;
+    private javax.swing.JPanel containAff;
     private javax.swing.JPanel containAnimal;
     private javax.swing.JPanel containChoixAnimal;
     private javax.swing.JLabel jLabel1;

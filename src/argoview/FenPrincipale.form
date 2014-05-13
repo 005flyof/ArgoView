@@ -35,7 +35,7 @@
                           <Component id="containChoixAnimal" alignment="0" min="-2" pref="418" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="containActsDonnees" pref="245" max="32767" attributes="0"/>
+                      <Component id="containAff" pref="245" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -52,7 +52,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="containActs" min="-2" pref="68" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="containActsDonnees" pref="408" max="32767" attributes="0"/>
+                  <Component id="containAff" pref="408" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="containAnimal" pref="259" max="32767" attributes="0"/>
@@ -739,7 +739,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPanel" name="containActsDonnees">
+    <Container class="javax.swing.JPanel" name="containAff">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -763,33 +763,29 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
+                      <Component id="affPts" alignment="0" max="32767" attributes="0"/>
+                      <Component id="affDates" alignment="0" max="32767" attributes="0"/>
+                      <Component id="affTrace" alignment="0" max="32767" attributes="0"/>
+                      <Component id="sliderNbrPoints" pref="213" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="jLabel1" min="-2" pref="50" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
+                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="sliderZoom" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jLabel5" min="-2" pref="21" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jLabel5" min="-2" pref="30" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
-                              <Component id="affPts" alignment="0" max="32767" attributes="0"/>
-                              <Component id="affDates" alignment="0" max="32767" attributes="0"/>
-                              <Component id="affTrace" alignment="0" max="32767" attributes="0"/>
-                              <Component id="sliderNbrPoints" pref="213" max="32767" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="sliderZoom" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -865,7 +861,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="option Zoom"/>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" value="Zoom"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
@@ -897,10 +894,10 @@
                 </Property>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
                   <StringArray count="4">
-                    <StringItem index="0" value="carte"/>
-                    <StringItem index="1" value="terrain"/>
-                    <StringItem index="2" value="satellite"/>
-                    <StringItem index="3" value="satellite et routes"/>
+                    <StringItem index="0" value="Carte"/>
+                    <StringItem index="1" value="Terrain"/>
+                    <StringItem index="2" value="Satellite"/>
+                    <StringItem index="3" value="Satellite et routes"/>
                   </StringArray>
                 </Property>
                 <Property name="selectionMode" type="int" value="0"/>
@@ -919,10 +916,13 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
-            <Property name="text" type="java.lang.String" value="afficher tous les"/>
+            <Property name="text" type="java.lang.String" value="Afficher tous les"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
