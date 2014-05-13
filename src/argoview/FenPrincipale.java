@@ -63,13 +63,6 @@ public class FenPrincipale extends javax.swing.JFrame {
     }
     
     /**
-     * Fonction permettant de modifier le nom de l'animal sélectionné
-     */
-    private void setNom() {
-        
-    }
-    
-    /**
      * Fonction permettant de recharger l'affichage du tableau positions
      */
     private void afficherDonnees() {
@@ -156,9 +149,17 @@ public class FenPrincipale extends javax.swing.JFrame {
      */
     private void initialFolder() {
         String dirName = "img";
+        File del = new File(dirName);
+        
+            // On vide les images du dossier et on supprime le dossier
+        File[] enfants = del.listFiles();
+        for (int i=0; enfants != null && i < enfants.length; i++)
+            enfants[i].delete();
+        del.delete();
+        
+            // On crée le dossier
         File dir = new File(dirName);
-        boolean success = dir.delete();
-        boolean isCreated = dir.mkdirs();
+        dir.mkdirs();
     }
     
     /**
@@ -260,6 +261,11 @@ public class FenPrincipale extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ArgoView");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         containChoixAnimal.setBorder(javax.swing.BorderFactory.createTitledBorder("Choix de l'animal"));
         containChoixAnimal.setPreferredSize(new java.awt.Dimension(200, 0));
@@ -1047,6 +1053,15 @@ public class FenPrincipale extends javax.swing.JFrame {
         nbrPointsAffiche = Double.toString(nbrPointsAff);
         jLabel5.setText(nbrPointsAffiche);
     }//GEN-LAST:event_sliderNbrPointsStateChanged
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+            // On vide le dossier img
+        File del = new File("img");
+        File[] enfants = del.listFiles();
+        for (int i=0; enfants != null && i < enfants.length; i++)
+            enfants[i].delete();
+        del.delete();
+    }//GEN-LAST:event_formWindowClosed
 
     /*
         Variables
