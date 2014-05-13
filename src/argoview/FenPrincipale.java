@@ -671,7 +671,7 @@ public class FenPrincipale extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        containAff.setBorder(javax.swing.BorderFactory.createTitledBorder("Actions sur les données"));
+        containAff.setBorder(javax.swing.BorderFactory.createTitledBorder("Options d'affichage des données"));
         containAff.setPreferredSize(new java.awt.Dimension(200, 0));
 
         affTrace.setText("Afficher le tracé");
@@ -824,7 +824,8 @@ public class FenPrincipale extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        containAff.getAccessibleContext().setAccessibleName("Affichage des données sur les données");
+        containAff.getAccessibleContext().setAccessibleName("");
+        containAff.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
