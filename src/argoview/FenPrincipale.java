@@ -10,7 +10,10 @@ import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -28,9 +31,11 @@ public class FenPrincipale extends javax.swing.JFrame {
         this.nomAnimal = "Aucun animal";
         this.positions = new ArrayList();
         this.positions.add(new DonneeArgos("0000000", "NULL", "0000/00/00", "00:00", "0", "0"));
+        
         nbrPointsAff = sliderNbrPoints.getValue()+1;
         nbrPointsAffiche = Double.toString(nbrPointsAff);
         jLabel5.setText(nbrPointsAffiche);
+        
         lireDonnees();
         afficherDonnees();
         initialFolder();
@@ -66,11 +71,13 @@ public class FenPrincipale extends javax.swing.JFrame {
      * Fonction permettant de recharger l'affichage du tableau positions
      */
     private void afficherDonnees() {
+            // En tête du tableau
         String[] enTetes = new String [] {
                 "Nom de l'animal", "Balise n°", "Précision", "Date", "Heure", "Latitude", "Longitude"
         };
         Object[][] contenu = new Object[positions.size()][enTetes.length];
         
+            // Affichage des positions une à une
         for (int i = 0; i < positions.size(); i++) {
             contenu[i][0] = nomAnimal;
             contenu[i][1] = positions.get(i).getNumBalise();
@@ -130,6 +137,7 @@ public class FenPrincipale extends javax.swing.JFrame {
             contenu[i][6] = positions.get(i).getLongitude();
         }
         
+            // Affichage du modèle
         DefaultTableModel modele = new DefaultTableModel(contenu, enTetes) {
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false
@@ -141,6 +149,18 @@ public class FenPrincipale extends javax.swing.JFrame {
             }
         };
         ptsTable.setModel(modele);
+        
+            // On centre pour plus de design
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        
+        for( int i=0; i < ptsTable.getColumnModel().getColumnCount(); i++ )
+            ptsTable.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
+        
+            // On ajuste la taille des colonnes automatiquement
+        ptsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        ptsTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+        ptsTable.getColumnModel().getColumn(3).setPreferredWidth(125);
     }
     
     
