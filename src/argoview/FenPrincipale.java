@@ -33,7 +33,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         this.positions.add(new DonneeArgos("0000000", "NULL", "0000/00/00", "00:00", "0", "0"));
         
         nbrPointsAff = sliderNbrPoints.getValue()+1;
-        nbrPointsAffiche = Double.toString(nbrPointsAff);
+        nbrPointsAffiche = Integer.toString(nbrPointsAff);
         jLabel5.setText(nbrPointsAffiche);
         
         lireDonnees();
@@ -282,8 +282,8 @@ public class FenPrincipale extends javax.swing.JFrame {
         setTitle("ArgoView");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
-                formWindowClosed(evt);
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
 
@@ -948,10 +948,22 @@ public class FenPrincipale extends javax.swing.JFrame {
          */
         if (points == true){
             for(int i = 0; (i < nbrPoints*nbrPointsAff)&&(i<positions.size()); i=i+nbrPointsAff){
-                    url = url+"&markers=color:red|label:"+(i/nbrPointsAff)+"|"+positions.get(i).getLatitude()
+                if (i/nbrPointsAff < 10){
+                    url = url+"&markers=color:0xff0000|label:"+(i/nbrPointsAff)+"|"+positions.get(i).getLatitude()
                     +","+positions.get(i).getLongitude();
                     System.out.println(i);
-                    }
+                }
+                if (i/nbrPointsAff >= 10 && i/nbrPointsAff < 20){
+                    url = url+"&markers=color:0xFF0060|label:"+((i/nbrPointsAff)-10)+"|"+positions.get(i).getLatitude()
+                    +","+positions.get(i).getLongitude();
+                    System.out.println(i);
+                }
+                if (i/nbrPointsAff >= 20 && i/nbrPointsAff < 30){
+                    url = url+"&markers=color:0xFF00AA|label:"+((i/nbrPointsAff)-20)+"|"+positions.get(i).getLatitude()
+                    +","+positions.get(i).getLongitude();
+                    System.out.println(i);
+                }
+            }
 					
                     System.out.println(url);
         
@@ -969,7 +981,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         //on ferme l'url
         url = url+"&sensor=false";
         //on envoit url et le nombre d'image à 'carte' avant de l'afficher
-        Carte fen = new Carte(url,j);
+        Carte fen = new Carte(url,j,nomAnimal);
         fen.show();
     }//GEN-LAST:event_affDonneesActionPerformed
     
@@ -1071,18 +1083,18 @@ public class FenPrincipale extends javax.swing.JFrame {
             nbrPointsAff = sliderNbrPoints.getValue()+7;
         }
         
-        nbrPointsAffiche = Double.toString(nbrPointsAff);
+        nbrPointsAffiche = Integer.toString(nbrPointsAff);
         jLabel5.setText(nbrPointsAffiche);
     }//GEN-LAST:event_sliderNbrPointsStateChanged
 
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
             // On vide le dossier img
         File del = new File("img");
         File[] enfants = del.listFiles();
         for (int i=0; enfants != null && i < enfants.length; i++)
             enfants[i].delete();
         del.delete();
-    }//GEN-LAST:event_formWindowClosed
+    }//GEN-LAST:event_formWindowClosing
 
     /*
         Variables

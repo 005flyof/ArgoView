@@ -26,8 +26,9 @@ public class Carte extends javax.swing.JFrame {
      * @param url URL de la carte à télécharger
      * @param i du nombre d'images
      */
-    public Carte( String url, int i) {
+    public Carte( String url, int i, String nomAnimal) {
         this.url = url;
+        this.nomAnimal = nomAnimal;
         ijk = i;
         telecharger();
         initComponents();
@@ -51,7 +52,7 @@ public class Carte extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(512, 512));
         setResizable(false);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Carte de l'animal géolocalisé", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Carte de l'animal géolocalisé : "+nomAnimal, javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
         jPanel1.setMaximumSize(new java.awt.Dimension(512, 550));
         jPanel1.setMinimumSize(new java.awt.Dimension(512, 550));
         jPanel1.setPreferredSize(new java.awt.Dimension(512, 550));
@@ -88,6 +89,7 @@ public class Carte extends javax.swing.JFrame {
     String url;//url de l'image à télécharger
     int ijk = 0;//compteur de nombre d'images à enregister
     String nomImage;//variable contenant le nom de l'image à enregister
+    String nomAnimal;
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
