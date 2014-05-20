@@ -34,11 +34,11 @@ public class FenPrincipale extends javax.swing.JFrame {
         
         nbrPointsAff = sliderNbrPoints.getValue()+1;
         nbrPointsAffiche = Integer.toString(nbrPointsAff);
-        jLabel5.setText(nbrPointsAffiche);
+        choixNbPtsLabel2.setText(nbrPointsAffiche);
         
+        initFolder();
         lireDonnees();
         afficherDonnees();
-        initialFolder();
     }
 
     /**
@@ -167,19 +167,49 @@ public class FenPrincipale extends javax.swing.JFrame {
     /**
      * Fonction qui permet de créer le dossier contenant les images
      */
-    private void initialFolder() {
+    private void initFolder() {
+        // On crée le dossier temporaire contenant les images
         String dirName = "img";
-        File del = new File(dirName);
-        
-            // On vide les images du dossier et on supprime le dossier
-        File[] enfants = del.listFiles();
-        for (int i=0; enfants != null && i < enfants.length; i++)
-            enfants[i].delete();
-        del.delete();
-        
-            // On crée le dossier
         File dir = new File(dirName);
-        dir.mkdirs();
+        if ( !dir.mkdirs() )
+            JOptionPane.showMessageDialog(this,
+                    "Impossible de créer le dossier temporaire contenant les images des cartes...",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        
+        // On crée le dossier contenant les positions s'il n'existe pas
+        dirName = "Positions";
+        File pos = new File(dirName);
+        if ( !pos.exists() )
+            if ( !pos.mkdirs() )
+                JOptionPane.showMessageDialog(this,
+                        "Impossible de créer le dossier temporaire contenant les images des cartes...",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);;
+    }
+    
+    /**
+     * Fonction qui permet de vider un dossier récursivement
+     * @param aSupprimer    Fichier/dossier à vider puis supprimer
+     * @param affErr        Booléen déterminant si on affiche ou non les messages d'erreur
+     */
+    private void delRecursif( File aSupprimer, boolean affErr ) {
+        // Si le fichier n'existe pas
+        if ( !aSupprimer.exists() && affErr )
+            JOptionPane.showMessageDialog(this,
+                    "Impossible de supprimer le fichier : " + aSupprimer.getPath(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        
+        // Si l'adresse fait référence à un dossier, on le vide avant de le supprimer
+        if (aSupprimer.isDirectory()) {
+            File[] enfants = aSupprimer.listFiles();
+            for (int i=0; enfants != null && i < enfants.length; i++)
+                delRecursif( enfants[i], affErr );
+        }
+        
+        // On tente de supprimer
+        if ( !aSupprimer.delete() && affErr )
+            JOptionPane.showMessageDialog(this,
+                    "Impossible de supprimer le fichier : " + aSupprimer.getPath(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
     }
     
     /**
@@ -263,20 +293,19 @@ public class FenPrincipale extends javax.swing.JFrame {
         containAff = new javax.swing.JPanel();
         affTrace = new javax.swing.JCheckBox();
         affPts = new javax.swing.JCheckBox();
-        affDates = new javax.swing.JCheckBox();
         sliderZoom = new javax.swing.JSlider();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        list = new javax.swing.JList();
+        zoomLabelInfo = new javax.swing.JLabel();
+        zoomLabelMin = new javax.swing.JLabel();
+        zoomLabelMax = new javax.swing.JLabel();
+        scrollTypeCarte = new javax.swing.JScrollPane();
+        listTypeCarte = new javax.swing.JList();
         sliderNbrPoints = new javax.swing.JSlider();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jSeparator2 = new javax.swing.JSeparator();
-        jSeparator3 = new javax.swing.JSeparator();
+        choixNbPtsLabel1 = new javax.swing.JLabel();
+        choixNbPtsLabel2 = new javax.swing.JLabel();
+        choixNbPtsLabel3 = new javax.swing.JLabel();
+        sepZoomChoixNbPts = new javax.swing.JSeparator();
+        sepInfosAffTypeCarte = new javax.swing.JSeparator();
+        sepTypeCarteZoom = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ArgoView");
@@ -690,29 +719,26 @@ public class FenPrincipale extends javax.swing.JFrame {
             }
         });
 
-        affDates.setText("Afficher les dates");
-        affDates.setBorderPaintedFlat(true);
-
         sliderZoom.setMaximum(11);
         sliderZoom.setMinimum(1);
         sliderZoom.setValue(6);
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Zoom");
+        zoomLabelInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        zoomLabelInfo.setText("Zoom");
 
-        jLabel2.setText("0");
+        zoomLabelMin.setText("0");
 
-        jLabel3.setText("11");
+        zoomLabelMax.setText("11");
 
-        list.setBackground(new java.awt.Color(240, 240, 240));
-        list.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        list.setModel(new javax.swing.AbstractListModel() {
+        listTypeCarte.setBackground(new java.awt.Color(240, 240, 240));
+        listTypeCarte.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        listTypeCarte.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Carte", "Terrain", "Satellite", "Satellite et routes" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        list.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(list);
+        listTypeCarte.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        scrollTypeCarte.setViewportView(listTypeCarte);
 
         sliderNbrPoints.setMaximum(3);
         sliderNbrPoints.setValue(0);
@@ -722,40 +748,39 @@ public class FenPrincipale extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("Afficher tous les");
+        choixNbPtsLabel1.setText("Afficher tous les");
 
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        choixNbPtsLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        jLabel6.setText("points");
+        choixNbPtsLabel3.setText("points");
 
         javax.swing.GroupLayout containAffLayout = new javax.swing.GroupLayout(containAff);
         containAff.setLayout(containAffLayout);
         containAffLayout.setHorizontalGroup(
             containAffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator2)
-            .addComponent(jSeparator3)
-            .addComponent(jSeparator1)
+            .addComponent(sepInfosAffTypeCarte)
+            .addComponent(sepTypeCarteZoom)
+            .addComponent(sepZoomChoixNbPts)
             .addGroup(containAffLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(containAffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(scrollTypeCarte, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(affPts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(affDates, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(affTrace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(sliderNbrPoints, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
                     .addGroup(containAffLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(zoomLabelMin)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(zoomLabelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(69, 69, 69)
-                        .addComponent(jLabel3))
+                        .addComponent(zoomLabelMax))
                     .addComponent(sliderZoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(containAffLayout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addComponent(choixNbPtsLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(choixNbPtsLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6)
+                        .addComponent(choixNbPtsLabel3)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -764,30 +789,28 @@ public class FenPrincipale extends javax.swing.JFrame {
             .addGroup(containAffLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(affPts)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(affDates)
-                .addGap(3, 3, 3)
+                .addGap(29, 29, 29)
                 .addComponent(affTrace)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sepInfosAffTypeCarte, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollTypeCarte, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sepTypeCarteZoom, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(containAffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(zoomLabelMin)
+                    .addComponent(zoomLabelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(zoomLabelMax))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(sliderZoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sepZoomChoixNbPts, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(containAffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(choixNbPtsLabel1)
+                    .addComponent(choixNbPtsLabel3)
+                    .addComponent(choixNbPtsLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sliderNbrPoints, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(117, 117, 117))
@@ -934,7 +957,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         latitude = calcMLat();
         longitude = calcMLon();
         //on définit le type de carte à afficher
-        mapType = list.getSelectedIndex();
+        mapType = listTypeCarte.getSelectedIndex();
         map = map();
         //puis on définit l'url avec tous les parametres
             url = "http://maps.googleapis.com/maps/api/staticmap?center="
@@ -1084,16 +1107,13 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         nbrPointsAffiche = Integer.toString(nbrPointsAff);
-        jLabel5.setText(nbrPointsAffiche);
+        choixNbPtsLabel2.setText(nbrPointsAffiche);
     }//GEN-LAST:event_sliderNbrPointsStateChanged
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
             // On vide le dossier img
         File del = new File("img");
-        File[] enfants = del.listFiles();
-        for (int i=0; enfants != null && i < enfants.length; i++)
-            enfants[i].delete();
-        del.delete();
+        delRecursif(del, true);
     }//GEN-LAST:event_formWindowClosing
 
     /*
@@ -1138,7 +1158,6 @@ public class FenPrincipale extends javax.swing.JFrame {
     private final Color couleurValide = new Color(0, 175, 81);
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox affDates;
     private javax.swing.JButton affDonnees;
     private javax.swing.JCheckBox affPts;
     private javax.swing.JCheckBox affTrace;
@@ -1162,25 +1181,25 @@ public class FenPrincipale extends javax.swing.JFrame {
     private javax.swing.JButton boutonVanille;
     private javax.swing.JButton boutonVella;
     private javax.swing.JButton boutonVictor;
+    private javax.swing.JLabel choixNbPtsLabel1;
+    private javax.swing.JLabel choixNbPtsLabel2;
+    private javax.swing.JLabel choixNbPtsLabel3;
     private javax.swing.JPanel containActs;
     private javax.swing.JPanel containAff;
     private javax.swing.JPanel containAnimal;
     private javax.swing.JPanel containChoixAnimal;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JList list;
+    private javax.swing.JList listTypeCarte;
     private javax.swing.JButton majDonnees;
     private javax.swing.JScrollPane ptsScroll;
     private javax.swing.JTable ptsTable;
+    private javax.swing.JScrollPane scrollTypeCarte;
+    private javax.swing.JSeparator sepInfosAffTypeCarte;
+    private javax.swing.JSeparator sepTypeCarteZoom;
+    private javax.swing.JSeparator sepZoomChoixNbPts;
     private javax.swing.JSlider sliderNbrPoints;
     private javax.swing.JSlider sliderZoom;
+    private javax.swing.JLabel zoomLabelInfo;
+    private javax.swing.JLabel zoomLabelMax;
+    private javax.swing.JLabel zoomLabelMin;
     // End of variables declaration//GEN-END:variables
 }
