@@ -17,14 +17,15 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author membre
+ * @author Dorian Rastel
  */
 public class Carte extends javax.swing.JFrame {
 
     /**
      * Creates new form Carte
-     * @param url URL de la carte à télécharger
-     * @param i du nombre d'images
+     * @param url       URL de la carte à télécharger
+     * @param i         Numéro du nom du fichier contenant l'image
+     * @param nomAnimal Nom de l'animal sélectionné
      */
     public Carte( String url, int i, String nomAnimal) {
         this.url = url;
