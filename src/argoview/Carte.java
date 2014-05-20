@@ -16,7 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Fenêtre affichant la carte
  * @author Dorian Rastel
  */
 public class Carte extends javax.swing.JFrame {
@@ -57,8 +57,6 @@ public class Carte extends javax.swing.JFrame {
         jPanel1.setMaximumSize(new java.awt.Dimension(512, 550));
         jPanel1.setMinimumSize(new java.awt.Dimension(512, 550));
         jPanel1.setPreferredSize(new java.awt.Dimension(512, 550));
-
-        label1.setText("jLabel1");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

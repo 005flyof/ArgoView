@@ -11,6 +11,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
@@ -18,7 +19,16 @@ import javax.swing.JTable;
  * Objet permettant de gérer les différents animaux
  * @author Florent Fayollas
  */
-public class Animal {
+public class Animal { 
+    /*
+        Déclaration des variables
+    */
+    private String nom = new String();
+    private String nomFichier = new String();
+    private String url = new String();
+    private ArrayList<DonneeArgos> positions;
+    private final char separateur = ' ';
+    
     
     /**
      * Constructeur de l'objet Animal
@@ -30,21 +40,12 @@ public class Animal {
         this.setNomFichier(nomFichier);
         this.positions = new ArrayList();
     }
-    
-    /*
-        Déclaration des variables
-    */
-    private String nom = new String();
-    private String nomFichier = new String();
-    private String url = new String();
-    private ArrayList<DonneeArgos> positions;
-    private final char separateur = ' ';
-    private final JTable tableau = new JTable();
 
     /**
      * Permet de lire les données contenus dans "Positions/%nomFichier.txt"
+     * @throws java.lang.Exception  Permet de renvoyer l'erreur, si elle est présente, à la fonction appelante
      */
-    public void lireDonnees() {
+    public void lireDonnees() throws Exception {
         int cpt = 0;    // Variable permettant de ne pas enregistrer les deux premières lignes du fichier de position
         try {
             // On ouvre le fichier
@@ -126,15 +127,19 @@ public class Animal {
         }
         // S'il y a eu une erreur, on l'affiche
         catch (IOException e) {
-            JOptionPane.showMessageDialog(tableau,
-                    "Impossible d'ouvrir le fichier : " + nomFichier + "\n\tErreur d'entée-sortie :\n" + e.toString(),
+            JOptionPane.showMessageDialog(null,
+                    "Impossible d'ouvrir le fichier : " + nomFichier
+                            + "\n\tErreur d'entée-sortie :\n" + e.toString(),
                     "Erreur", JOptionPane.ERROR_MESSAGE);
             System.out.println( e.toString() );
+            throw e;
         } catch (IndexOutOfBoundsException e) {
-            JOptionPane.showMessageDialog(tableau,
-                    "Impossible de charger le fichier : " + nomFichier + "\n\tLe fichier n'est pas conforme :\n" + e.toString(),
+            JOptionPane.showMessageDialog(null,
+                    "Impossible de charger le fichier : " + nomFichier
+                            + "\n\tLe fichier n'est pas conforme :\n" + e.toString(),
                     "Erreur", JOptionPane.ERROR_MESSAGE);
             System.out.println( e.toString() );
+            throw e;
         }
     }
     
@@ -199,20 +204,22 @@ public class Animal {
             // On ferme les flux de sortie
             fichierSortie.flush();
             fichierSortie.close();
-        } catch (MalformedURLException ex) {
-            JOptionPane.showMessageDialog(tableau,
+        } catch (MalformedURLException e) {
+            JOptionPane.showMessageDialog(null,
                     "URL de téléchargement mal formée !",
                     "Erreur", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(Animal.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(tableau,
-                    "Impossible de télécharger le fichier : " + nomFichier + "\n\tErreur d'entée-sortie :\n" + ex.toString(),
+            System.out.println( e.toString() );
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Impossible de télécharger le fichier : " + nomFichier
+                            + "\n\tErreur d'entée-sortie :\n" + e.toString(),
                     "Erreur", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(Animal.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println( e.toString() );
         }
     }
     
     /**
+     * Fonction permettant de récupérer le nom de l'animal
      * @return Renvoie le nom de l'animal
      */
     public String getNom() {
@@ -220,6 +227,7 @@ public class Animal {
     }
 
     /**
+     * Fonction permettant de changer le nom de l'animal
      * @param nom Nom de l'animal
      */
     public void setNom(String nom) {
@@ -227,6 +235,7 @@ public class Animal {
     }
 
     /**
+     * Fonction permettant de récupérer le nom du fichier de positions
      * @return Renvoie le nom du fichier de position à lire
      */
     public String getNomFichier() {
@@ -234,6 +243,7 @@ public class Animal {
     }
     
     /**
+     * Fonction permettant de récupérer l'adresse URL de téléchargement du fichier de positions
      * @return Renvoie l'URL de téléchargement des données
      */
     public String getUrl() {
@@ -241,6 +251,7 @@ public class Animal {
     }
 
     /**
+     * Fonction permettant de modifier le nom du fichier et l'URL
      * @param nomFichier Nom du fichier
      */
     public void setNomFichier(String nomFichier) {
@@ -249,16 +260,10 @@ public class Animal {
     }
 
     /**
-     * @return Renvoie un tableau dynamique des positions successives
+     * Fonction permettant de récupérer le tableau dynamique de positions
+     * @return Renvoie un tableau dynamique des positions
      */
     public ArrayList<DonneeArgos> getPositions() {
         return positions;
-    }
-
-    /**
-     * @return Renvoie le tableau contenant les positions
-     */
-    public JTable getTableau() {
-        return tableau;
     }
 }

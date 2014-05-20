@@ -603,7 +603,7 @@
             <Component class="javax.swing.JTable" name="ptsTable">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="7" rowCount="4">
+                  <Table columnCount="7" rowCount="0">
                     <Column editable="false" title="Nom de l&apos;animal" type="java.lang.Object"/>
                     <Column editable="false" title="Balise n&#xb0;" type="java.lang.Object"/>
                     <Column editable="false" title="Pr&#xe9;cision" type="java.lang.Object"/>
@@ -764,31 +764,40 @@
               <Component id="sepInfosAffTypeCarte" max="32767" attributes="0"/>
               <Component id="sepTypeCarteZoom" alignment="0" max="32767" attributes="0"/>
               <Component id="sepZoomChoixNbPts" alignment="0" max="32767" attributes="0"/>
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="scrollTypeCarte" alignment="1" max="32767" attributes="0"/>
-                      <Component id="affPts" alignment="0" max="32767" attributes="0"/>
-                      <Component id="affTrace" alignment="0" max="32767" attributes="0"/>
-                      <Component id="sliderNbrPoints" pref="213" max="32767" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="zoomLabelMin" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="21" pref="21" max="-2" attributes="0"/>
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="zoomLabelInfo" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
-                          <Component id="zoomLabelMax" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="sliderZoom" max="32767" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="choixNbPtsLabel1" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="scrollTypeCarte" alignment="1" max="32767" attributes="0"/>
+                              <Component id="affPts" alignment="0" max="32767" attributes="0"/>
+                              <Component id="affTrace" alignment="0" max="32767" attributes="0"/>
+                              <Component id="sliderNbrPoints" pref="213" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="zoomLabelMin" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="zoomLabelInfo" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
+                                  <Component id="zoomLabelMax" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="sliderZoom" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="choixNbPtsLabel1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="choixNbPtsLabel2" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="choixNbPtsLabel3" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="choixNbPtsLabel2" min="-2" pref="30" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="choixNbPtsLabel3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -797,7 +806,9 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="affPts" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                   <Component id="affTrace" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="sepInfosAffTypeCarte" min="-2" pref="10" max="-2" attributes="0"/>
@@ -929,6 +940,11 @@
         <Component class="javax.swing.JSeparator" name="sepInfosAffTypeCarte">
         </Component>
         <Component class="javax.swing.JSeparator" name="sepTypeCarteZoom">
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="(30 points maximum affich&#xe9;s)"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

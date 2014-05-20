@@ -10,6 +10,9 @@ import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -30,7 +33,6 @@ public class FenPrincipale extends javax.swing.JFrame {
         
         this.nomAnimal = "Aucun animal";
         this.positions = new ArrayList();
-        this.positions.add(new DonneeArgos("0000000", "NULL", "0000/00/00", "00:00", "0", "0"));
         
         nbrPointsAff = sliderNbrPoints.getValue()+1;
         nbrPointsAffiche = Integer.toString(nbrPointsAff);
@@ -38,33 +40,185 @@ public class FenPrincipale extends javax.swing.JFrame {
         
         initFolder();
         lireDonnees();
-        afficherDonnees();
     }
 
     /**
      * Fonction permettant de charger toutes les positions
      */
     private void lireDonnees() {
-        gaia.lireDonnees();
-        irchad.lireDonnees();
-        teria3.lireDonnees();
-        aquila.lireDonnees();
-        leloki.lireDonnees();
-        toms.lireDonnees();
-        victor.lireDonnees();
-        arcaique.lireDonnees();
-        bandido.lireDonnees();
-        flocon.lireDonnees();
-        liriane.lireDonnees();
-        malys.lireDonnees();
-        neige.lireDonnees();
-        una.lireDonnees();
-        vanille.lireDonnees();
-        ecume.lireDonnees();
-        aura.lireDonnees();
-        aurore.lireDonnees();
-        nora.lireDonnees();
-        vella.lireDonnees();
+        // Variable nécessaire pour savoir s'il faut demander à mettre à jour les fichiers de positions
+        boolean fichiersManquants = false;
+        
+        // Lecture de toutes les positions
+        try {
+            gaia.lireDonnees();
+            boutonGaia.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonGaia.setEnabled(false);
+            fichiersManquants = true;
+        }
+
+        try {
+            irchad.lireDonnees();
+            boutonIrchad.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonIrchad.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            teria3.lireDonnees();
+            boutonTeria3.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonTeria3.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            aquila.lireDonnees();
+            boutonAquila.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonAquila.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            leloki.lireDonnees();
+            boutonLeloki.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonLeloki.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            toms.lireDonnees();
+            boutonToms.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonToms.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            victor.lireDonnees();
+            boutonVictor.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonVictor.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            arcaique.lireDonnees();
+            boutonArcaique.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonArcaique.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            bandido.lireDonnees();
+            boutonBandido.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonBandido.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            flocon.lireDonnees();
+            boutonFlocon.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonFlocon.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            liriane.lireDonnees();
+            boutonLiriane.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonLiriane.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            malys.lireDonnees();
+            boutonMalys.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonMalys.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            neige.lireDonnees();
+            boutonNeige.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonNeige.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            una.lireDonnees();
+            boutonUna.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonUna.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            vanille.lireDonnees();
+            boutonVanille.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonVanille.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            ecume.lireDonnees();
+            boutonEcume.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonEcume.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            aura.lireDonnees();
+            boutonAura.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonAura.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            aurore.lireDonnees();
+            boutonAurore.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonAurore.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            nora.lireDonnees();
+            boutonNora.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonNora.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        try {
+            vella.lireDonnees();
+            boutonVella.setEnabled(true);
+        } catch ( Exception e ) {
+            boutonVella.setEnabled(false);
+            fichiersManquants = true;
+        }
+        
+        // S'il y a des fichiers qui n'ont pas étés chargés, on demande si on télécharge les positions
+        if ( fichiersManquants ) {
+            int rep = JOptionPane.showConfirmDialog(this,
+                            "Certains fichiers n'ont pas pu être chargés."
+                                + "Voulez-vous mettre à jour tous les fichiers de positions ?",
+                            "Téléchargement des données manquantes", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if ( rep == JOptionPane.YES_OPTION )
+                majDonneesActionPerformed(null);
+        }
     }
     
     /**
@@ -179,11 +333,12 @@ public class FenPrincipale extends javax.swing.JFrame {
         // On crée le dossier contenant les positions s'il n'existe pas
         dirName = "Positions";
         File pos = new File(dirName);
-        if ( !pos.exists() )
+        if ( !pos.exists() ) {
             if ( !pos.mkdirs() )
                 JOptionPane.showMessageDialog(this,
                         "Impossible de créer le dossier temporaire contenant les images des cartes...",
-                        "Erreur", JOptionPane.ERROR_MESSAGE);;
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     /**
@@ -193,10 +348,13 @@ public class FenPrincipale extends javax.swing.JFrame {
      */
     private void delRecursif( File aSupprimer, boolean affErr ) {
         // Si le fichier n'existe pas
-        if ( !aSupprimer.exists() && affErr )
+        if ( !aSupprimer.exists() && affErr ) {
             JOptionPane.showMessageDialog(this,
-                    "Impossible de supprimer le fichier : " + aSupprimer.getPath(),
+                    "Impossible de supprimer le fichier : " + aSupprimer.getPath()
+                            + "\nFichier inexistant",
                     "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         
         // Si l'adresse fait référence à un dossier, on le vide avant de le supprimer
         if (aSupprimer.isDirectory()) {
@@ -306,6 +464,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         sepZoomChoixNbPts = new javax.swing.JSeparator();
         sepInfosAffTypeCarte = new javax.swing.JSeparator();
         sepTypeCarteZoom = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ArgoView");
@@ -623,10 +782,7 @@ public class FenPrincipale extends javax.swing.JFrame {
 
         ptsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Nom de l'animal", "Balise n°", "Précision", "Date", "Heure", "Latitude", "Longitude"
@@ -754,6 +910,8 @@ public class FenPrincipale extends javax.swing.JFrame {
 
         choixNbPtsLabel3.setText("points");
 
+        jLabel1.setText("(30 points maximum affichés)");
+
         javax.swing.GroupLayout containAffLayout = new javax.swing.GroupLayout(containAff);
         containAff.setLayout(containAffLayout);
         containAffLayout.setHorizontalGroup(
@@ -764,32 +922,40 @@ public class FenPrincipale extends javax.swing.JFrame {
             .addGroup(containAffLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(containAffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollTypeCarte, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(affPts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(affTrace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sliderNbrPoints, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
                     .addGroup(containAffLayout.createSequentialGroup()
-                        .addComponent(zoomLabelMin)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(zoomLabelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(69, 69, 69)
-                        .addComponent(zoomLabelMax))
-                    .addComponent(sliderZoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(containAffLayout.createSequentialGroup()
-                        .addComponent(choixNbPtsLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(choixNbPtsLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(choixNbPtsLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGroup(containAffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scrollTypeCarte, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(affPts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(affTrace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(sliderNbrPoints, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                            .addGroup(containAffLayout.createSequentialGroup()
+                                .addComponent(zoomLabelMin)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(zoomLabelInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(69, 69, 69)
+                                .addComponent(zoomLabelMax))
+                            .addComponent(sliderZoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(containAffLayout.createSequentialGroup()
+                                .addComponent(choixNbPtsLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(choixNbPtsLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(choixNbPtsLabel3)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         containAffLayout.setVerticalGroup(
             containAffLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containAffLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(affPts)
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addGap(13, 13, 13)
                 .addComponent(affTrace)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(sepInfosAffTypeCarte, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -909,37 +1075,163 @@ public class FenPrincipale extends javax.swing.JFrame {
 
     private void majDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_majDonneesActionPerformed
         majDonnees.setEnabled(false);
-
+        
+        // On crée la fenêtre d'informations sur le téléchargement :
+        fenProgression.show();
+        fenProgression.toFront();
+        
+        int valueProgress = 0, pasProgress = 5;
+        fenProgression.setProgression(valueProgress);
+        
         // Téléchargement des fichiers
         gaia.telechargerFichier();
-        irchad.telechargerFichier();
-        teria3.telechargerFichier();
-        aquila.telechargerFichier();
-        leloki.telechargerFichier();
-        toms.telechargerFichier();
-        victor.telechargerFichier();
-        arcaique.telechargerFichier();
-        bandido.telechargerFichier();
-        flocon.telechargerFichier();
-        liriane.telechargerFichier();
-        malys.telechargerFichier();
-        neige.telechargerFichier();
-        una.telechargerFichier();
-        vanille.telechargerFichier();
-        ecume.telechargerFichier();
-        aura.telechargerFichier();
-        aurore.telechargerFichier();
-        nora.telechargerFichier();
-        vella.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(gaia.getNom());
+        fenProgression.addText("   -> URL : " + gaia.getUrl());
+        fenProgression.addText("");
         
-        JOptionPane.showMessageDialog(this,
+        irchad.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(irchad.getNom());
+        fenProgression.addText("   -> URL : " + irchad.getUrl());
+        fenProgression.addText("");
+        
+        teria3.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(teria3.getNom());
+        fenProgression.addText("   -> URL : " + teria3.getUrl());
+        fenProgression.addText("");
+        
+        aquila.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(aquila.getNom());
+        fenProgression.addText("   -> URL : " + aquila.getUrl());
+        fenProgression.addText("");
+        
+        leloki.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(leloki.getNom());
+        fenProgression.addText("   -> URL : " + leloki.getUrl());
+        fenProgression.addText("");
+        
+        toms.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(toms.getNom());
+        fenProgression.addText("   -> URL : " + toms.getUrl());
+        fenProgression.addText("");
+        
+        victor.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(victor.getNom());
+        fenProgression.addText("   -> URL : " + victor.getUrl());
+        fenProgression.addText("");
+        
+        arcaique.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(arcaique.getNom());
+        fenProgression.addText("   -> URL : " + arcaique.getUrl());
+        fenProgression.addText("");
+        
+        bandido.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(bandido.getNom());
+        fenProgression.addText("   -> URL : " + bandido.getUrl());
+        fenProgression.addText("");
+        
+        flocon.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(flocon.getNom());
+        fenProgression.addText("   -> URL : " + flocon.getUrl());
+        fenProgression.addText("");
+        
+        liriane.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(liriane.getNom());
+        fenProgression.addText("   -> URL : " + liriane.getUrl());
+        fenProgression.addText("");
+        
+        malys.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(malys.getNom());
+        fenProgression.addText("   -> URL : " + malys.getUrl());
+        fenProgression.addText("");
+        
+        neige.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(neige.getNom());
+        fenProgression.addText("   -> URL : " + neige.getUrl());
+        fenProgression.addText("");
+        
+        una.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(una.getNom());
+        fenProgression.addText("   -> URL : " + una.getUrl());
+        fenProgression.addText("");
+        
+        vanille.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(vanille.getNom());
+        fenProgression.addText("   -> URL : " + vanille.getUrl());
+        fenProgression.addText("");
+        
+        ecume.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(ecume.getNom());
+        fenProgression.addText("   -> URL : " + ecume.getUrl());
+        fenProgression.addText("");
+        
+        aura.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(aura.getNom());
+        fenProgression.addText("   -> URL : " + aura.getUrl());
+        fenProgression.addText("");
+        
+        aurore.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(aurore.getNom());
+        fenProgression.addText("   -> URL : " + aurore.getUrl());
+        fenProgression.addText("");
+        
+        nora.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(nora.getNom());
+        fenProgression.addText("   -> URL : " + nora.getUrl());
+        fenProgression.addText("");
+        
+        vella.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(vella.getNom());
+        fenProgression.addText("   -> URL : " + vella.getUrl());
+        fenProgression.addText("");
+
+        JOptionPane.showMessageDialog(fenProgression,
                 "Mise à jour des fichiers de positionnement terminé !",
                 "Mise à jour", JOptionPane.INFORMATION_MESSAGE);
-        
+
         majDonnees.setBackground(couleurValide);
         majDonnees.setText("Données à jour !");
         majDonnees.setEnabled(true);
-        
+
         // Relecture des données
         lireDonnees();
     }//GEN-LAST:event_majDonneesActionPerformed
@@ -1111,7 +1403,7 @@ public class FenPrincipale extends javax.swing.JFrame {
     }//GEN-LAST:event_sliderNbrPointsStateChanged
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-            // On vide le dossier img
+        // On vide le dossier img
         File del = new File("img");
         delRecursif(del, true);
     }//GEN-LAST:event_formWindowClosing
@@ -1140,11 +1432,13 @@ public class FenPrincipale extends javax.swing.JFrame {
     private Animal aurore       = new Animal("Eléphant de mer Autore", "aurore");
     private Animal nora         = new Animal("Eléphant de mer Nora", "nora");
     private Animal vella        = new Animal("Eléphant de mer Vella", "vella");
+    
         // Variable contenant les données à afficher sur le carte et affichées dans le tableau
     private ArrayList<DonneeArgos> positions;
     private String nomAnimal;
     public double latitude;
     public double longitude;
+    
         // Variables permettant l'affichage
     public int j=0;//nombre d'images
     public boolean points = false;//afficher les points sur la carte
@@ -1154,8 +1448,11 @@ public class FenPrincipale extends javax.swing.JFrame {
     public int nbrPoints = 0;//nombre de points à afficher
     public int nbrPointsAff = 1;
     public String nbrPointsAffiche = " ";
+    
+        // Fenêtre de progression du téléchargement
+    ProgressDownload fenProgression = new ProgressDownload();
         // Diverses couleurs utilisées dans le programme
-    private final Color couleurValide = new Color(0, 175, 81);
+    private final Color couleurValide =     new Color(0, 175, 81);
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton affDonnees;
@@ -1188,6 +1485,7 @@ public class FenPrincipale extends javax.swing.JFrame {
     private javax.swing.JPanel containAff;
     private javax.swing.JPanel containAnimal;
     private javax.swing.JPanel containChoixAnimal;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JList listTypeCarte;
     private javax.swing.JButton majDonnees;
     private javax.swing.JScrollPane ptsScroll;
