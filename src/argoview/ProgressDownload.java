@@ -7,28 +7,28 @@
 package argoview;
 
 /**
- * Objet permettant d'afficher une fenêtre avec barre de progression
- * (pour les infos sur le téléchargement)
+ * Objet permettant d'afficher une fenêtre d'informations sur le téléchargement des fichiers de positions
  * @author Florent Fayollas
  */
-public class ProgressDownload extends javax.swing.JFrame {
-
-    private int progression;
+public class ProgressDownload extends javax.swing.JDialog {
     
     /**
-     * Creates new form ProgressDownload
+     * Crée une nouvelle instance de l'objet ProgresDownload
+     * @param parent    Fenêtre parente
+     * @param modal     Défini si ProgressDownload pourra être déselectionné
      */
-    public ProgressDownload() {
-        progression = 0;
+    public ProgressDownload(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
+        pack();
     }
-    
+
     /**
      * Permet de récupérer la progression actuelle
      * @return La progression actuelle
      */
     public int getProgression() {
-        return this.progression;
+        return this.progressBar.getValue();
     }
     
     /**
@@ -36,9 +36,8 @@ public class ProgressDownload extends javax.swing.JFrame {
      * @param progress  Nouvelle progression
      */
     public void setProgression( int progress ) {
-        progression = progress;
-        progressBar.setValue( progression );
-        labelProgress.setText( Integer.toString(progression) + " %" );
+        progressBar.setValue( progress );
+        labelProgress.setText( Integer.toString(progress) + " %" );
     }
     
     /**
@@ -49,6 +48,7 @@ public class ProgressDownload extends javax.swing.JFrame {
         taskOutput.setText( taskOutput.getText() + txt + "\n" );
     }
 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,20 +58,30 @@ public class ProgressDownload extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        scrollTask = new javax.swing.JScrollPane();
-        taskOutput = new javax.swing.JTextArea();
         progressBar = new javax.swing.JProgressBar();
         labelProgress = new javax.swing.JLabel();
+        scrollTask = new javax.swing.JScrollPane();
+        taskOutput = new javax.swing.JTextArea();
+        closeBtn = new javax.swing.JButton();
 
-        setTitle("Progression du téléchargement");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Informations sur le téléchargement");
+        setResizable(false);
+
+        labelProgress.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelProgress.setText("100 %");
 
         taskOutput.setEditable(false);
         taskOutput.setColumns(20);
         taskOutput.setRows(5);
         scrollTask.setViewportView(taskOutput);
 
-        labelProgress.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        labelProgress.setText("100 %");
+        closeBtn.setText("Fermer");
+        closeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -82,27 +92,38 @@ public class ProgressDownload extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(scrollTask)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                        .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelProgress, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(labelProgress, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(168, Short.MAX_VALUE)
+                .addComponent(closeBtn)
+                .addGap(165, 165, 165))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelProgress))
+                    .addComponent(labelProgress)
+                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrollTask, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                .addComponent(scrollTask, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(closeBtn)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void closeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeBtnActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_closeBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton closeBtn;
     private javax.swing.JLabel labelProgress;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JScrollPane scrollTask;

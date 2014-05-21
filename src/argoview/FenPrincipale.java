@@ -1076,9 +1076,9 @@ public class FenPrincipale extends javax.swing.JFrame {
     private void majDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_majDonneesActionPerformed
         majDonnees.setEnabled(false);
         
-        // On crée la fenêtre d'informations sur le téléchargement :
-        fenProgression.show();
-        fenProgression.toFront();
+        // On crée la fenêtre d'informations sur le téléchargement
+        ProgressDownload fenProgression = new ProgressDownload(this, false);
+        fenProgression.setVisible(true);
         
         int valueProgress = 0, pasProgress = 5;
         fenProgression.setProgression(valueProgress);
@@ -1449,8 +1449,6 @@ public class FenPrincipale extends javax.swing.JFrame {
     public int nbrPointsAff = 1;
     public String nbrPointsAffiche = " ";
     
-        // Fenêtre de progression du téléchargement
-    ProgressDownload fenProgression = new ProgressDownload();
         // Diverses couleurs utilisées dans le programme
     private final Color couleurValide =     new Color(0, 175, 81);
     
