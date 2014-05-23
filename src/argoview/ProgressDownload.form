@@ -86,6 +86,9 @@
           </Properties>
         </Component>
         <Container class="javax.swing.JScrollPane" name="scrollTask">
+          <Properties>
+            <Property name="autoscrolls" type="boolean" value="true"/>
+          </Properties>
           <AuxValues>
             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
           </AuxValues>

@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
- * Objet permettant de gérer les différents animaux
- * @author Florent Fayollas
+ * Classe permettant de gérer les différents animaux
+ * @author 005flyof
  */
 public class Animal { 
     /*
@@ -33,25 +33,26 @@ public class Animal {
     private String nom = new String();
     private String nomFichier = new String();
     private String url = new String();
-    private ArrayList<DonneeArgos> positions;
+    private final ArrayList<DonneeArgos> positions;
     private final char separateur = ' ';
     
     
     /**
      * Constructeur de l'objet Animal
-     * @param nom         Nom de l'animal
+     * @param nom         Nom de l'animal (affiché)
      * @param nomFichier  Nom de fichier à ouvrir pour lire les positions
      */
     public Animal ( String nom, String nomFichier ) {
         this.nom = nom;
-        this.setNomFichier(nomFichier);
+        this.recNomFichier(nomFichier);
         this.positions = new ArrayList();
     }
 
+    
     /**
-     * Permet de lire les données contenus dans "Positions/%nomFichier.txt"
-     * @param affErr      Permet d'indiquer à la fonction si on doit afficher les fenêtre d'infos d'erreur ou non
-     * @throws Exception  Permet de renvoyer l'erreur, si elle est présente, à la fonction appelante
+     * Permet de lire les données contenus dans "Positions/%nomFichier%.txt"
+     * @param affErr      Affiche les fenêtre d'infos d'erreur si true
+     * @throws Exception  N'importe quelle erreur lors du chargement du fichier de position
      */
     public void lireDonnees( boolean affErr ) throws Exception {
         try {
@@ -76,10 +77,10 @@ public class Animal {
             throw e;
         }
     }
-    
+
     /**
      * Permet de charger le fichier de positionnement
-     * @throws Exception Permet de renvoyer l'erreur, si elle est présente à la fonction appelante
+     * @throws Exception  N'importe quelle erreur lors du chargement du fichier de position
      */
     private void chargerFichier() throws Exception {
         // On ouvre le fichier
@@ -163,11 +164,12 @@ public class Animal {
         flux.close();
     }
     
+    
     /**
      * Permet de trouver l'id du premier caractère des données suivantes
      * @param chaine    Chaîne à parcourir
      * @param i         ID de début de parcours
-     * @return ID du premier caractère des données suivantes
+     * @return          ID du premier caractère des données suivantes
      */
     private int donneeSuivante( String chaine, int i ) {
         while (chaine.charAt(i) == this.separateur)
@@ -193,7 +195,7 @@ public class Animal {
             byte[] donnees = new byte[taille];
             
             // Pour l’instant aucun octet n’a encore été lu
-            int octetsLus = 0;
+            int octetsLus;
 
             // Octets de déplacement, et octets déjà lus.
             int deplacement = 0;
@@ -238,50 +240,60 @@ public class Animal {
         }
     }
     
+    
     /**
-     * Fonction permettant de récupérer le nom de l'animal
-     * @return Renvoie le nom de l'animal
+     * Permet de modifier le nom du fichier et l'URL
+     * @param nomFichier Nouveau nom pour le fichier
      */
-    public String getNom() {
-        return nom;
+    public void setNomFichier( String nomFichier ) {
+        recNomFichier(nomFichier);
     }
-
     /**
-     * Fonction permettant de changer le nom de l'animal
-     * @param nom Nom de l'animal
+     * Permet de modifier le nom du fichier et l'URL
+     * @param nomFichier Nouveau nom pour le fichier
      */
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    /**
-     * Fonction permettant de récupérer le nom du fichier de positions
-     * @return Renvoie le nom du fichier de position à lire
-     */
-    public String getNomFichier() {
-        return nomFichier;
+    private void recNomFichier( String nomFichier ) {
+        this.nomFichier = "Positions/" + nomFichier + ".txt";
+        this.url = "argonautica.jason.oceanobs.com/documents/argonautica/2013-2014/" + nomFichier + ".txt";
     }
     
     /**
-     * Fonction permettant de récupérer l'adresse URL de téléchargement du fichier de positions
-     * @return Renvoie l'URL de téléchargement des données
+     * Permet de récupérer l'adresse URL de téléchargement du fichier de positions
+     * @return URL de téléchargement des données
      */
     public String getUrl() {
         return url;
     }
 
+    
     /**
-     * Fonction permettant de modifier le nom du fichier et l'URL
-     * @param nomFichier Nom du fichier
+     * Permet de récupérer le nom (affiché) de l'animal
+     * @return Nom de l'animal
      */
-    public void setNomFichier(String nomFichier) {
-        this.nomFichier = "Positions/" + nomFichier + ".txt";
-        this.url = "argonautica.jason.oceanobs.com/documents/argonautica/2013-2014/" + nomFichier + ".txt";
+    public String getNom() {
+        return nom;
+    }
+    
+    /**
+     * Permet de changer le nom (affiché) de l'animal
+     * @param nom Nouveau nom de l'animal
+     */
+    public void setNom( String nom ) {
+        this.nom = nom;
     }
 
     /**
-     * Fonction permettant de récupérer le tableau dynamique de positions
-     * @return Renvoie un tableau dynamique des positions
+     * Permet de récupérer le nom du fichier de positions
+     * @return Nom du fichier de position à lire
+     */
+    public String getNomFichier() {
+        return nomFichier;
+    }
+    
+    
+    /**
+     * Permet de récupérer le tableau dynamique de positions
+     * @return Tableau dynamique des positions
      */
     public ArrayList<DonneeArgos> getPositions() {
         return positions;

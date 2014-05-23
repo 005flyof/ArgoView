@@ -20,10 +20,19 @@ package argoview;
 import java.util.GregorianCalendar;
 
 /**
- * Objet permettant de gérer les données Argos enregistrées pour chaque animal
- * @author Florent Fayollas
+ * Classe permettant de gérer les données Argos enregistrées pour chaque animal
+ * @author 005flyof
  */
-public class DonneeArgos {
+public class DonneeArgos {    
+    /*
+        Déclaration des variables
+    */
+    private String numBalise = new String();
+    private String precision = new String();
+    private GregorianCalendar date = new GregorianCalendar();
+    private double latitude = 0;
+    private double longitude = 0;
+    
     
     /**
      * Constructeur de l'objet contenant les données Argos
@@ -46,6 +55,7 @@ public class DonneeArgos {
         int heures = 0;
         int minutes = 0;
         
+        // On extrait la date et l'heure
         try {
             annee   = Integer.parseInt(date.substring(0, 4));
             mois    = Integer.parseInt(date.substring(5, 7)) - 1;
@@ -58,6 +68,7 @@ public class DonneeArgos {
         
         this.date = new GregorianCalendar(annee, mois, jour, heures, minutes);
         
+        // On extrait les latitude et longitude
         try {
             this.latitude  = Double.parseDouble(latitude);
             this.longitude = Double.parseDouble(longitude);
@@ -65,83 +76,112 @@ public class DonneeArgos {
             System.out.println("Impossible de charger les nombres : " + e.toString());
         }
     }
-    
-    /*
-        Déclaration des variables
-    */
-    private String numBalise = new String();
-    private String precision = new String();
-    private GregorianCalendar date = new GregorianCalendar();
-    private double latitude = 0;
-    private double longitude = 0;
+
 
     /**
-     * @return Renvoie le numéro de la balise
+     * Permet de récupérer le numéro de la balise
+     * @return Numéro de la balise
      */
     public String getNumBalise() {
         return numBalise;
     }
 
     /**
-     * @param numBalise Le numéro de la balise à modifier
+     * Permet de modifier le numéro de la balise
+     * @param numBalise Numéro de la balise à modifier
      */
-    public void setNumBalise(String numBalise) {
+    public void setNumBalise( String numBalise ) {
         this.numBalise = numBalise;
     }
 
+    
     /**
-     * @return Renvoie la précision
+     * Permet de récupérer la précision
+     * @return Précision du positionnement
      */
     public String getPrecision() {
         return precision;
     }
-
     /**
-     * @param precision Précision du postitionnement
+     * Permet de récupérer la précision pour l'afficher de manière compréhensible
+     * @return Précision du positionnement pour affichage
      */
-    public void setPrecision(String precision) {
+    public String getPrecisionAff() {
+        // On renvoie des mots compréhensibles (en fonction des infos données sur le site officiel)
+        switch (this.precision) {
+            case "3":
+                return "Très bonne";
+            case "2":
+                return "Bonne";
+            case "1":
+                return "Convenable";
+            case "0":
+                return "Moyenne";
+            case "A":
+                return "Potable";
+            case "B":
+                return "Médiocre";
+            default:
+                return "-";
+        }
+    }
+    
+    /**
+     * Permet de modifier la précisier
+     * @param precision Nouvelle précision
+     */
+    public void setPrecision( String precision ) {
         this.precision = precision;
     }
 
+    
     /**
-     * @return Renvoie la date de mesure de position
+     * Permet de récupérer la date de la position
+     * @return Date de mesure de position
      */
     public GregorianCalendar getDate() {
         return date;
     }
 
     /**
-     * @param date Date de mesure de position
+     * Permet de modifier la date de la position
+     * @param date Nouvelle date de mesure de position
      */
-    public void setDate(GregorianCalendar date) {
+    public void setDate( GregorianCalendar date ) {
         this.date = date;
     }
 
+    
     /**
-     * @return Renvoie la latitude de la position
+     * Permet de récupérer la latitude
+     * @return Latitude de la position
      */
     public double getLatitude() {
         return latitude;
     }
 
     /**
-     * @param latitude Latitude de la position
+     * Permet de modifier la latitude
+     * @param latitude Nouvelle latitude de la position
      */
-    public void setLatitude(double latitude) {
+    public void setLatitude( double latitude ) {
         this.latitude = latitude;
     }
 
+    
     /**
-     * @return Renvoie la longitude de la position
+     * Permet de récupérer la longitude
+     * @return Longitude de la position
      */
     public double getLongitude() {
         return longitude;
     }
 
     /**
-     * @param longitude Longitude de la position
+     * Permet de modifier la longitude
+     * @param longitude Nouvelle longitude de la position
      */
-    public void setLongitude(double longitude) {
+    public void setLongitude( double longitude ) {
         this.longitude = longitude;
     }
 }

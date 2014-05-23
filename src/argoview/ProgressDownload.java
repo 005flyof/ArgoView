@@ -18,8 +18,8 @@
 package argoview;
 
 /**
- * Objet permettant d'afficher une fenêtre d'informations sur le téléchargement des fichiers de positions
- * @author Florent Fayollas
+ * Classe permettant d'afficher une fenêtre d'informations sur le téléchargement des fichiers de positions
+ * @author 005flyof
  */
 public class ProgressDownload extends javax.swing.JDialog {
     
@@ -53,7 +53,7 @@ public class ProgressDownload extends javax.swing.JDialog {
     
     /**
      * Permet d'ajouter du texte au champ de texte
-     * @param txt   Texte à ajouter (ligne sautée à la fin)
+     * @param txt   Texte à ajouter (ligne sautée à la fin de ce dernier)
      */
     public void addText( String txt ) {
         taskOutput.setText( taskOutput.getText() + txt + "\n" );
@@ -82,6 +82,8 @@ public class ProgressDownload extends javax.swing.JDialog {
 
         labelProgress.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         labelProgress.setText("100 %");
+
+        scrollTask.setAutoscrolls(true);
 
         taskOutput.setEditable(false);
         taskOutput.setColumns(20);

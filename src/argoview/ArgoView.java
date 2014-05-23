@@ -18,15 +18,16 @@
 package argoview;
 
 /**
- *
- * @author Florent Fayollas
+ * Classe principale contenant la fonction principale 
+ * @author 005flyof & delta3200
  */
 public class ArgoView {
 
     /**
-     * @param args the command line arguments
+     * Fonction main : lancée lors de l'ouverture du programme
+     * @param args Arguments passés par la ligne de commande
      */
-    public static void main(String[] args) {
+    public static void main( String[] args ) {
         FenPrincipale fenetre = new FenPrincipale();
         fenetre.setVisible(true);
     }

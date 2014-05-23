@@ -28,17 +28,24 @@ import java.util.logging.Logger;
 
 /**
  * Fenêtre affichant la carte
- * @author Dorian Rastel
+ * @author delta32000
  */
 public class Carte extends javax.swing.JFrame {
+    /*
+        Variables
+    */
+    String url;//url de l'image à télécharger
+    int ijk = 0;//compteur de nombre d'images à enregister
+    String nomImage;//variable contenant le nom de l'image à enregister
+    String nomAnimal;
 
     /**
-     * Creates new form Carte
+     * Crée une nouvelle instance de la fenêtre affichant la carte
      * @param url       URL de la carte à télécharger
      * @param i         Numéro du nom du fichier contenant l'image
      * @param nomAnimal Nom de l'animal sélectionné
      */
-    public Carte( String url, int i, String nomAnimal) {
+    public Carte( String url, int i, String nomAnimal ) {
         this.url = url;
         this.nomAnimal = nomAnimal;
         ijk = i;
@@ -46,6 +53,73 @@ public class Carte extends javax.swing.JFrame {
         initComponents();
         label1.setIcon(new ImageIcon(nomImage));
     }
+    
+    
+    /**
+     * Télécharge l'image de la carte
+     */
+    private void telecharger() {
+        try {
+            //on compte le nombre d'image à enregister
+            nomImage = "img\\img"+ijk+".png";
+            System.out.println(nomImage);
+            // On crée les variables pour télécharger le fichier
+            URL adresse = new URL(url);
+            URLConnection connexion = adresse.openConnection();
+            int taille = connexion.getContentLength();
+
+            // On crée un flux d’entrée pour lire le fichier
+            InputStream brut = connexion.getInputStream();
+            InputStream entree = new BufferedInputStream(brut);
+
+            // On crée un tableau pour enregistrer les octets bruts
+            byte[] donnees = new byte[taille];
+            
+            // Pour l’instant aucun octet n’a encore été lu
+            int octetsLus;
+
+            // Octets de déplacement, et octets déjà lus.
+            int deplacement = 0;
+            float dejaLu = 0;
+
+            // On boucle pour lire tous les octets 1 à 1
+            while(deplacement < taille)
+            {
+                octetsLus = entree.read(donnees, deplacement, donnees.length - deplacement);
+
+                // Petit calcul: mise à jour du nombre total d’octets lus par ajout au nombre d’octets lus au cours des précédents passages au nombre d’octets lus pendant ce passage
+                dejaLu = dejaLu + octetsLus;
+
+                // Si on est à la fin du fichier, on sort de la boucle
+                if  (octetsLus == -1)
+                    break;
+
+                // se cadrer à un endroit précis du fichier pour lire les octets suivants, c’est le déplacement
+                deplacement += octetsLus;
+            }
+            // On ferme le fichier ouvert en ligne
+            entree.close();
+
+            // Enregistrement
+            FileOutputStream fichierSortie = new FileOutputStream(nomImage);
+            fichierSortie.write(donnees);
+
+            // On ferme les flux de sortie
+            fichierSortie.flush();
+            fichierSortie.close();
+        } catch (MalformedURLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "URL de téléchargement mal formée !",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(Animal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Impossible de télécharger le fichier :\n\tErreur d'entée-sortie :\n" + ex.toString(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(Animal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -95,77 +169,9 @@ public class Carte extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    String url;//url de l'image à télécharger
-    int ijk = 0;//compteur de nombre d'images à enregister
-    String nomImage;//variable contenant le nom de l'image à enregister
-    String nomAnimal;
-    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel label1;
     // End of variables declaration//GEN-END:variables
-
-    private void telecharger() {
-        try {
-            //on compte le nombre d'image à enregister
-            nomImage = "img\\img"+ijk+".png";
-            System.out.println(nomImage);
-            // On crée les variables pour télécharger le fichier
-            URL adresse = new URL(url);
-            URLConnection connexion = adresse.openConnection();
-            int taille = connexion.getContentLength();
-
-            // On crée un flux d’entrée pour lire le fichier
-            InputStream brut = connexion.getInputStream();
-            InputStream entree = new BufferedInputStream(brut);
-
-            // On crée un tableau pour enregistrer les octets bruts
-            byte[] donnees = new byte[taille];
-            
-            // Pour l’instant aucun octet n’a encore été lu
-            int octetsLus = 0;
-
-            // Octets de déplacement, et octets déjà lus.
-            int deplacement = 0;
-            float dejaLu = 0;
-
-            // On boucle pour lire tous les octets 1 à 1
-            while(deplacement < taille)
-            {
-                octetsLus = entree.read(donnees, deplacement, donnees.length - deplacement);
-
-                // Petit calcul: mise à jour du nombre total d’octets lus par ajout au nombre d’octets lus au cours des précédents passages au nombre d’octets lus pendant ce passage
-                dejaLu = dejaLu + octetsLus;
-
-                // Si on est à la fin du fichier, on sort de la boucle
-                if  (octetsLus == -1)
-                    break;
-
-                // se cadrer à un endroit précis du fichier pour lire les octets suivants, c’est le déplacement
-                deplacement += octetsLus;
-            }
-            // On ferme le fichier ouvert en ligne
-            entree.close();
-
-            // Enregistrement
-            FileOutputStream fichierSortie = new FileOutputStream(nomImage);
-            fichierSortie.write(donnees);
-
-            // On ferme les flux de sortie
-            fichierSortie.flush();
-            fichierSortie.close();
-        } catch (MalformedURLException ex) {
-            JOptionPane.showMessageDialog(this,
-                    "URL de téléchargement mal formée !",
-                    "Erreur", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(Animal.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Impossible de télécharger le fichier :\n\tErreur d'entée-sortie :\n" + ex.toString(),
-                    "Erreur", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(Animal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 }

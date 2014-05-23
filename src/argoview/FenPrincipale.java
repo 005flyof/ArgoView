@@ -28,13 +28,55 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
- * @author Florent Fayollas
+ * Classe permettant de tout gérer et d'afficher la fenêtre principale
+ * @author 005flyof & delta32000
  */
 public class FenPrincipale extends javax.swing.JFrame {
-
+    /*
+        Variables
+    */
+        // Variables contenant les animaux
+    private final Animal gaia         = new Animal("Baleine à bosse Gaia", "gaia");
+    private final Animal irchad       = new Animal("Baleine à bosse Irchad", "irchad");
+    private final Animal teria3       = new Animal("Baleine à bosse Teria3", "teria3");
+    private final Animal aquila       = new Animal("Manchot royal Aquila", "aquila");
+    private final Animal leloki       = new Animal("Manchot royal Leloki", "leloki");
+    private final Animal toms         = new Animal("Manchot royal Toms", "toms");
+    private final Animal victor       = new Animal("Manchot royal Victor", "victor");
+    private final Animal arcaique     = new Animal("Ours polaire Arcaique", "arcaique");
+    private final Animal bandido      = new Animal("Ours polaire Bandido", "bandido");
+    private final Animal flocon       = new Animal("Ours polaire Flocon", "flocon");
+    private final Animal liriane      = new Animal("Ours polaire Liriane", "liriane");
+    private final Animal malys        = new Animal("Ours polaire Malys", "malys");
+    private final Animal neige        = new Animal("Ours polaire Neige", "neige");
+    private final Animal una          = new Animal("Ours polaire Una", "una");
+    private final Animal vanille      = new Animal("Ours polaire Vanille", "vanille");
+    private final Animal ecume        = new Animal("Tortue Ecume", "ecume");
+    private final Animal aura         = new Animal("Eléphant de mer Aura", "aura");
+    private final Animal aurore       = new Animal("Eléphant de mer Autore", "aurore");
+    private final Animal nora         = new Animal("Eléphant de mer Nora", "nora");
+    private final Animal vella        = new Animal("Eléphant de mer Vella", "vella");
+    
+        // Variable contenant les données à afficher sur le carte et affichées dans le tableau
+    private ArrayList<DonneeArgos> positions;
+    private String nomAnimal;
+    
+        // Variables permettant l'affichage
+    public int j=0;                     // Nnombre d'images
+    public boolean points = false;      // Afficher les points sur la carte
+    public boolean trace = false;       // Afficher le tracer sur la carte
+    public int mapType = 3;             // Type de carte choisie par l'utilisateur, default=hybrid
+    public String map;                  // Type de carte en string (pour l'URL)
+    public int nbrPoints = 0;           // Nombre de points à afficher
+    public int nbrPointsAff = 1;
+    public String nbrPointsAffiche = " ";
+    
+        // Diverses couleurs utilisées dans le programme
+    private final Color couleurValide =     new Color(0, 175, 81);
+    
+    
     /**
-     * Creates new form FenPrincipale
+     * Constructeur de la classe FenPrincipale
      */
     public FenPrincipale() {
         initComponents();
@@ -50,9 +92,11 @@ public class FenPrincipale extends javax.swing.JFrame {
         lireDonnees( false );
     }
 
+    
     /**
-     * Fonction permettant de charger toutes les positions
-     * @param affErr  Permet d'indiquer si on doit notifier des erreurs de lecture ou non
+     * Permet de charger toutes les positions depuis les fichiers enregistrés
+     * Cette fonction propose de télécharger tous les fichiers si l'un d'eux ne peut pas être chargé
+     * @param affErr  Notifier des erreurs de lecture ou non (par boîtes de dialogue)
      */
     private void lireDonnees( boolean affErr ) {
         // Variable nécessaire pour savoir s'il faut demander à mettre à jour les fichiers de positions
@@ -231,7 +275,7 @@ public class FenPrincipale extends javax.swing.JFrame {
     }
     
     /**
-     * Permet de télécharger les fichiers de positionnement
+     * Permet de télécharger tous les fichiers de positionnement
      * @param fenProgression Fenêtre de progression à modifier
      */
     private void download(ProgressDownload fenProgression) {
@@ -392,7 +436,7 @@ public class FenPrincipale extends javax.swing.JFrame {
     }
 
     /**
-     * Fonction permettant de recharger l'affichage du tableau positions
+     * Permet de recharger l'affichage du tableau positions
      */
     private void afficherDonnees() {
             // En tête du tableau
@@ -405,7 +449,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         for (int i = 0; i < positions.size(); i++) {
             contenu[i][0] = nomAnimal;
             contenu[i][1] = positions.get(i).getNumBalise();
-            contenu[i][2] = positions.get(i).getPrecision();
+            contenu[i][2] = positions.get(i).getPrecisionAff();
             String date = (positions.get(i).getDate().get(Calendar.DAY_OF_MONTH) < 10 ? "0" : "")
                     + positions.get(i).getDate().get(Calendar.DAY_OF_MONTH) + " ";
             switch ( positions.get(i).getDate().get(Calendar.MONTH) ) {
@@ -489,7 +533,9 @@ public class FenPrincipale extends javax.swing.JFrame {
     
     
     /**
-     * Fonction qui permet de créer le dossier contenant les images
+     * Permet de créer les dossiers :
+     *      - celui qui contiendra les images et qui est temporaire
+     *      - celui qui contient les fichiers de positions (s'il n'existe pas déjà)
      */
     private void initFolder() {
         // On crée le dossier temporaire contenant les images
@@ -511,15 +557,16 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
     }
     
+    
     /**
-     * Fonction qui permet de vider un dossier récursivement
+     * Permet de vider un dossier récursivement
      * @param aSupprimer    Fichier/dossier à vider puis supprimer
-     * @param affErr        Booléen déterminant si on affiche ou non les messages d'erreur
+     * @param affErr        Affiche les messages d'erreur (true)
      */
-    private void delRecursif( File aSupprimer, boolean affErr ) {
+    public static void delRecursif( File aSupprimer, boolean affErr ) {
         // Si le fichier n'existe pas
         if ( !aSupprimer.exists() && affErr ) {
-            JOptionPane.showMessageDialog(this,
+            JOptionPane.showMessageDialog(null,
                     "Impossible de supprimer le fichier : " + aSupprimer.getPath()
                             + "\nFichier inexistant",
                     "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -535,39 +582,38 @@ public class FenPrincipale extends javax.swing.JFrame {
         
         // On tente de supprimer
         if ( !aSupprimer.delete() && affErr )
-            JOptionPane.showMessageDialog(this,
+            JOptionPane.showMessageDialog(null,
                     "Impossible de supprimer le fichier : " + aSupprimer.getPath(),
                     "Erreur", JOptionPane.ERROR_MESSAGE);
     }
     
+    
     /**
-     * Fonction qui permet de calculer la moyenne des latitudes
+     * Permet de calculer la moyenne des latitudes
      */
     private double calcMLat () {
        double add = 0;
-       double result = 0;
        for (int i = 0; i < nbrPoints; i++) {
            add = add + positions.get(i).getLatitude();
        }
-       result = add / nbrPoints;
+       double result = add / nbrPoints;
        return (result);
     }
     
     /**
-     * Fonction qui permet de calculer la moyenne des longitudes
+     * Permet de calculer la moyenne des longitudes
      */
     private double calcMLon () {
        double add = 0;
-       double result = 0;
        for (int i = 0; i < nbrPoints; i++) {
            add = add + positions.get(i).getLongitude();
        }
-       result = add / nbrPoints;
+       double result = add / nbrPoints;
        return (result);
     }
-    
+
     /**
-     * Fonction qui permet de définir le type de carte à afficher
+     * Permet de définir le type de carte à afficher
      */
     private String map () {
         if (mapType == 0)
@@ -581,6 +627,75 @@ public class FenPrincipale extends javax.swing.JFrame {
         
         return (map);
     }
+    
+    /**
+     * Permet d'afficher la carte en fonction de l'animal sélectionné
+     */
+    private void afficherCarte() {
+        //nombre d'image à enregister
+        j++; 
+        //définition des variables
+        String url;
+        double latitude,longitude;
+        // On limite le nombre de positions pour réduir le lien URL
+        if (positions.size() > 30){ nbrPoints = 30;}
+        else if (positions.size() <= 30){ nbrPoints = positions.size();}
+        //on définit la moyenne des coordonnées
+        latitude = calcMLat();
+        longitude = calcMLon();
+        //on définit le type de carte à afficher
+        mapType = listTypeCarte.getSelectedIndex();
+        map = map();
+        //puis on définit l'url avec tous les parametres
+            url = "http://maps.googleapis.com/maps/api/staticmap?center="
+                    +Double.toString(latitude)
+                    +","+Double.toString(longitude)
+                    +"&zoom="+sliderZoom.getValue()
+                    +"&size=512x512&maptype=";
+            url = url+map;
+        
+        /**
+         * Fonction qui ajoute des markers dans l'url
+         */
+        if (points == true){
+            for(int i = 0; (i < nbrPoints*nbrPointsAff)&&(i<positions.size()); i=i+nbrPointsAff){
+                if (i/nbrPointsAff < 10){
+                    url = url+"&markers=color:0xff0000|label:"+(i/nbrPointsAff)+"|"+positions.get(i).getLatitude()
+                    +","+positions.get(i).getLongitude();
+                    System.out.println(i);
+                }
+                if (i/nbrPointsAff >= 10 && i/nbrPointsAff < 20){
+                    url = url+"&markers=color:0xFF0060|label:"+((i/nbrPointsAff)-10)+"|"+positions.get(i).getLatitude()
+                    +","+positions.get(i).getLongitude();
+                    System.out.println(i);
+                }
+                if (i/nbrPointsAff >= 20 && i/nbrPointsAff < 30){
+                    url = url+"&markers=color:0xFF00AA|label:"+((i/nbrPointsAff)-20)+"|"+positions.get(i).getLatitude()
+                    +","+positions.get(i).getLongitude();
+                    System.out.println(i);
+                }
+            }
+					
+                    System.out.println(url);
+        
+        }
+        /**
+         * fonction qui ajoute une trace entre chaque markers
+         */
+        if (trace == true) {
+            url = url+"&path=color:red";
+            for (int i = 0; (i < nbrPoints*nbrPointsAff)&&(i<positions.size()); i=i+nbrPointsAff){
+                url = url+"|"+positions.get(i).getLatitude()
+                         +","+positions.get(i).getLongitude();
+            }
+        }
+        //on ferme l'url
+        url = url+"&sensor=false";
+        //on envoit url et le nombre d'image à 'carte' avant de l'afficher
+        Carte fen = new Carte(url,j,nomAnimal);
+        fen.setVisible(true);
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1254,67 +1369,7 @@ public class FenPrincipale extends javax.swing.JFrame {
     }//GEN-LAST:event_majDonneesActionPerformed
     
     private void affDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_affDonneesActionPerformed
-        //nombre d'image à enregister
-        j++; 
-        //définition des variables
-        String url = new String();
-        double latitude,longitude;
-        // On limite le nombre de positions pour réduir le lien URL
-        if (positions.size() > 30){ nbrPoints = 30;}
-        else if (positions.size() <= 30){ nbrPoints = positions.size();}
-        //on définit la moyenne des coordonnées
-        latitude = calcMLat();
-        longitude = calcMLon();
-        //on définit le type de carte à afficher
-        mapType = listTypeCarte.getSelectedIndex();
-        map = map();
-        //puis on définit l'url avec tous les parametres
-            url = "http://maps.googleapis.com/maps/api/staticmap?center="
-                    +Double.toString(latitude)
-                    +","+Double.toString(longitude)
-                    +"&zoom="+sliderZoom.getValue()
-                    +"&size=512x512&maptype=";
-            url = url+map;
-        /**
-         * Fonction qui ajoute des markers dans l'url
-         */
-        if (points == true){
-            for(int i = 0; (i < nbrPoints*nbrPointsAff)&&(i<positions.size()); i=i+nbrPointsAff){
-                if (i/nbrPointsAff < 10){
-                    url = url+"&markers=color:0xff0000|label:"+(i/nbrPointsAff)+"|"+positions.get(i).getLatitude()
-                    +","+positions.get(i).getLongitude();
-                    System.out.println(i);
-                }
-                if (i/nbrPointsAff >= 10 && i/nbrPointsAff < 20){
-                    url = url+"&markers=color:0xFF0060|label:"+((i/nbrPointsAff)-10)+"|"+positions.get(i).getLatitude()
-                    +","+positions.get(i).getLongitude();
-                    System.out.println(i);
-                }
-                if (i/nbrPointsAff >= 20 && i/nbrPointsAff < 30){
-                    url = url+"&markers=color:0xFF00AA|label:"+((i/nbrPointsAff)-20)+"|"+positions.get(i).getLatitude()
-                    +","+positions.get(i).getLongitude();
-                    System.out.println(i);
-                }
-            }
-					
-                    System.out.println(url);
-        
-        }
-        /**
-         * fonction qui ajoute une trace entre chaque markers
-         */
-        if (trace == true) {
-            url = url+"&path=color:red";
-            for (int i = 0; (i < nbrPoints*nbrPointsAff)&&(i<positions.size()); i=i+nbrPointsAff){
-                url = url+"|"+positions.get(i).getLatitude()
-                         +","+positions.get(i).getLongitude();
-            }
-        }
-        //on ferme l'url
-        url = url+"&sensor=false";
-        //on envoit url et le nombre d'image à 'carte' avant de l'afficher
-        Carte fen = new Carte(url,j,nomAnimal);
-        fen.show();
+        afficherCarte();
     }//GEN-LAST:event_affDonneesActionPerformed
     
     private void boutonFloconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonFloconActionPerformed
@@ -1425,50 +1480,6 @@ public class FenPrincipale extends javax.swing.JFrame {
         delRecursif(del, true);
     }//GEN-LAST:event_formWindowClosing
 
-    /*
-        Variables
-    */
-        // Variables contenant les animaux
-    private Animal gaia         = new Animal("Baleine à bosse Gaia", "gaia");
-    private Animal irchad       = new Animal("Baleine à bosse Irchad", "irchad");
-    private Animal teria3       = new Animal("Baleine à bosse Teria3", "teria3");
-    private Animal aquila       = new Animal("Manchot royal Aquila", "aquila");
-    private Animal leloki       = new Animal("Manchot royal Leloki", "leloki");
-    private Animal toms         = new Animal("Manchot royal Toms", "toms");
-    private Animal victor       = new Animal("Manchot royal Victor", "victor");
-    private Animal arcaique     = new Animal("Ours polaire Arcaique", "arcaique");
-    private Animal bandido      = new Animal("Ours polaire Bandido", "bandido");
-    private Animal flocon       = new Animal("Ours polaire Flocon", "flocon");
-    private Animal liriane      = new Animal("Ours polaire Liriane", "liriane");
-    private Animal malys        = new Animal("Ours polaire Malys", "malys");
-    private Animal neige        = new Animal("Ours polaire Neige", "neige");
-    private Animal una          = new Animal("Ours polaire Una", "una");
-    private Animal vanille      = new Animal("Ours polaire Vanille", "vanille");
-    private Animal ecume        = new Animal("Tortue Ecume", "ecume");
-    private Animal aura         = new Animal("Eléphant de mer Aura", "aura");
-    private Animal aurore       = new Animal("Eléphant de mer Autore", "aurore");
-    private Animal nora         = new Animal("Eléphant de mer Nora", "nora");
-    private Animal vella        = new Animal("Eléphant de mer Vella", "vella");
-    
-        // Variable contenant les données à afficher sur le carte et affichées dans le tableau
-    private ArrayList<DonneeArgos> positions;
-    private String nomAnimal;
-    public double latitude;
-    public double longitude;
-    
-        // Variables permettant l'affichage
-    public int j=0;//nombre d'images
-    public boolean points = false;//afficher les points sur la carte
-    public boolean trace = false;//afficher le tracer sur la carte
-    public int mapType = 3;//type de map choisi par l'utilisateur, default=hybrid
-    public String map;//mapType en string
-    public int nbrPoints = 0;//nombre de points à afficher
-    public int nbrPointsAff = 1;
-    public String nbrPointsAffiche = " ";
-    
-        // Diverses couleurs utilisées dans le programme
-    private final Color couleurValide =     new Color(0, 175, 81);
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton affDonnees;
     private javax.swing.JCheckBox affPts;
