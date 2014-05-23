@@ -9,11 +9,7 @@ package argoview;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 
 /**
  * Objet permettant de gérer les différents animaux
@@ -43,104 +39,117 @@ public class Animal {
 
     /**
      * Permet de lire les données contenus dans "Positions/%nomFichier.txt"
-     * @throws java.lang.Exception  Permet de renvoyer l'erreur, si elle est présente, à la fonction appelante
+     * @param affErr      Permet d'indiquer à la fonction si on doit afficher les fenêtre d'infos d'erreur ou non
+     * @throws Exception  Permet de renvoyer l'erreur, si elle est présente, à la fonction appelante
      */
-    public void lireDonnees() throws Exception {
-        int cpt = 0;    // Variable permettant de ne pas enregistrer les deux premières lignes du fichier de position
+    public void lireDonnees( boolean affErr ) throws Exception {
         try {
-            // On ouvre le fichier
-            InputStream flux = new FileInputStream(nomFichier);
-            InputStreamReader fluxEntree = new InputStreamReader(flux);
-            BufferedReader buffer = new BufferedReader(fluxEntree);
-            String ligne;
-            
-            // Tant que l'on peut lire une ligne
-            while ( (ligne = buffer.readLine()) != null ) {
-                int i = 0;
-                
-                // Numéro de balise
-                String numBalise = "";
-                while (ligne.charAt(i) != this.separateur) {
-                    numBalise += ligne.charAt(i);
-                    i++;
-                }
-                // On passe aux données suivantes
-                i = donneeSuivante(ligne, i);
-                
-                // Précision
-                String precision = "";
-                while (ligne.charAt(i) != ' ') {
-                    precision += ligne.charAt(i);
-                    i++;
-                }
-                // On passe aux données suivantes
-                i = donneeSuivante(ligne, i);
-                
-                // Date
-                String date = "";
-                while (ligne.charAt(i) != ' ') {
-                    date += ligne.charAt(i);
-                    i++;
-                }
-                // On passe aux données suivantes
-                i = donneeSuivante(ligne, i);
-                
-                // Heure
-                String heure = "";
-                while (ligne.charAt(i) != ' ') {
-                    heure += ligne.charAt(i);
-                    i++;
-                }
-                // On passe aux données suivantes
-                i = donneeSuivante(ligne, i);
-                
-                // Latitude
-                String latitude = "";
-                while (ligne.charAt(i) != ' ') {
-                    latitude += ligne.charAt(i);
-                    i++;
-                }
-                // On passe aux données suivantes
-                i = donneeSuivante(ligne, i);
-                
-                // Longitude
-                String longitude = "";
-                while (ligne.charAt(i) != ' ') {
-                    longitude += ligne.charAt(i);
-                    i++;
-                }
-                
-                // On traite les données
-                if (cpt != 0 && cpt != 1)
-                    this.positions.add(
-                            new DonneeArgos(
-                                    numBalise, precision,
-                                    date, heure,
-                                    latitude, longitude));
-                cpt++;
-                
-            }
-            // On ferme le fichier
-            buffer.close();
-            fluxEntree.close();
-            flux.close();
+            chargerFichier();
         }
         // S'il y a eu une erreur, on l'affiche
         catch (IOException e) {
-            JOptionPane.showMessageDialog(null,
-                    "Impossible d'ouvrir le fichier : " + nomFichier
-                            + "\n\tErreur d'entée-sortie :\n" + e.toString(),
-                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            if (affErr)
+                JOptionPane.showMessageDialog(null,
+                        "Impossible d'ouvrir le fichier : " + nomFichier
+                                + "\n\tErreur d'entée-sortie :\n" + e.toString(),
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
             System.out.println( e.toString() );
             throw e;
         } catch (IndexOutOfBoundsException e) {
-            JOptionPane.showMessageDialog(null,
-                    "Impossible de charger le fichier : " + nomFichier
-                            + "\n\tLe fichier n'est pas conforme :\n" + e.toString(),
-                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            if (affErr)
+                JOptionPane.showMessageDialog(null,
+                        "Impossible de charger le fichier : " + nomFichier
+                                + "\n\tLe fichier n'est pas conforme :\n" + e.toString(),
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
             System.out.println( e.toString() );
             throw e;
         }
+    }
+    
+    /**
+     * Permet de charger le fichier de positionnement
+     * @throws Exception Permet de renvoyer l'erreur, si elle est présente à la fonction appelante
+     */
+    private void chargerFichier() throws Exception {
+        // On ouvre le fichier
+        InputStream flux = new FileInputStream(nomFichier);
+        InputStreamReader fluxEntree = new InputStreamReader(flux);
+        BufferedReader buffer = new BufferedReader(fluxEntree);
+        String ligne;
+
+        // Variable permettant de ne pas enregistrer les deux premières lignes du fichier de position
+        int cpt = 0;
+
+        // Tant que l'on peut lire une ligne
+        while ( (ligne = buffer.readLine()) != null ) {
+            int i = 0;
+
+            // Numéro de balise
+            String numBalise = "";
+            while (ligne.charAt(i) != this.separateur) {
+                numBalise += ligne.charAt(i);
+                i++;
+            }
+            // On passe aux données suivantes
+            i = donneeSuivante(ligne, i);
+
+            // Précision
+            String precision = "";
+            while (ligne.charAt(i) != ' ') {
+                precision += ligne.charAt(i);
+                i++;
+            }
+            // On passe aux données suivantes
+            i = donneeSuivante(ligne, i);
+
+            // Date
+            String date = "";
+            while (ligne.charAt(i) != ' ') {
+                date += ligne.charAt(i);
+                i++;
+            }
+            // On passe aux données suivantes
+            i = donneeSuivante(ligne, i);
+
+            // Heure
+            String heure = "";
+            while (ligne.charAt(i) != ' ') {
+                heure += ligne.charAt(i);
+                i++;
+            }
+            // On passe aux données suivantes
+            i = donneeSuivante(ligne, i);
+
+            // Latitude
+            String latitude = "";
+            while (ligne.charAt(i) != ' ') {
+                latitude += ligne.charAt(i);
+                i++;
+            }
+            // On passe aux données suivantes
+            i = donneeSuivante(ligne, i);
+
+            // Longitude
+            String longitude = "";
+            while (ligne.charAt(i) != ' ') {
+                longitude += ligne.charAt(i);
+                i++;
+            }
+
+            // On traite les données
+            if (cpt != 0 && cpt != 1)
+                this.positions.add(
+                        new DonneeArgos(
+                                numBalise, precision,
+                                date, heure,
+                                latitude, longitude));
+            cpt++;
+
+        }
+        // On ferme le fichier
+        buffer.close();
+        fluxEntree.close();
+        flux.close();
     }
     
     /**

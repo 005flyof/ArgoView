@@ -17,7 +17,7 @@ public class ArgoView {
      */
     public static void main(String[] args) {
         FenPrincipale fenetre = new FenPrincipale();
-        fenetre.show();
+        fenetre.setVisible(true);
     }
     
 }

@@ -10,9 +10,6 @@ import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -39,19 +36,20 @@ public class FenPrincipale extends javax.swing.JFrame {
         choixNbPtsLabel2.setText(nbrPointsAffiche);
         
         initFolder();
-        lireDonnees();
+        lireDonnees( false );
     }
 
     /**
      * Fonction permettant de charger toutes les positions
+     * @param affErr  Permet d'indiquer si on doit notifier des erreurs de lecture ou non
      */
-    private void lireDonnees() {
+    private void lireDonnees( boolean affErr ) {
         // Variable nécessaire pour savoir s'il faut demander à mettre à jour les fichiers de positions
         boolean fichiersManquants = false;
         
         // Lecture de toutes les positions
         try {
-            gaia.lireDonnees();
+            gaia.lireDonnees(affErr);
             boutonGaia.setEnabled(true);
         } catch ( Exception e ) {
             boutonGaia.setEnabled(false);
@@ -59,7 +57,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
 
         try {
-            irchad.lireDonnees();
+            irchad.lireDonnees(affErr);
             boutonIrchad.setEnabled(true);
         } catch ( Exception e ) {
             boutonIrchad.setEnabled(false);
@@ -67,7 +65,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            teria3.lireDonnees();
+            teria3.lireDonnees(affErr);
             boutonTeria3.setEnabled(true);
         } catch ( Exception e ) {
             boutonTeria3.setEnabled(false);
@@ -75,7 +73,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            aquila.lireDonnees();
+            aquila.lireDonnees(affErr);
             boutonAquila.setEnabled(true);
         } catch ( Exception e ) {
             boutonAquila.setEnabled(false);
@@ -83,7 +81,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            leloki.lireDonnees();
+            leloki.lireDonnees(affErr);
             boutonLeloki.setEnabled(true);
         } catch ( Exception e ) {
             boutonLeloki.setEnabled(false);
@@ -91,7 +89,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            toms.lireDonnees();
+            toms.lireDonnees(affErr);
             boutonToms.setEnabled(true);
         } catch ( Exception e ) {
             boutonToms.setEnabled(false);
@@ -99,7 +97,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            victor.lireDonnees();
+            victor.lireDonnees(affErr);
             boutonVictor.setEnabled(true);
         } catch ( Exception e ) {
             boutonVictor.setEnabled(false);
@@ -107,7 +105,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            arcaique.lireDonnees();
+            arcaique.lireDonnees(affErr);
             boutonArcaique.setEnabled(true);
         } catch ( Exception e ) {
             boutonArcaique.setEnabled(false);
@@ -115,7 +113,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            bandido.lireDonnees();
+            bandido.lireDonnees(affErr);
             boutonBandido.setEnabled(true);
         } catch ( Exception e ) {
             boutonBandido.setEnabled(false);
@@ -123,7 +121,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            flocon.lireDonnees();
+            flocon.lireDonnees(affErr);
             boutonFlocon.setEnabled(true);
         } catch ( Exception e ) {
             boutonFlocon.setEnabled(false);
@@ -131,7 +129,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            liriane.lireDonnees();
+            liriane.lireDonnees(affErr);
             boutonLiriane.setEnabled(true);
         } catch ( Exception e ) {
             boutonLiriane.setEnabled(false);
@@ -139,7 +137,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            malys.lireDonnees();
+            malys.lireDonnees(affErr);
             boutonMalys.setEnabled(true);
         } catch ( Exception e ) {
             boutonMalys.setEnabled(false);
@@ -147,7 +145,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            neige.lireDonnees();
+            neige.lireDonnees(affErr);
             boutonNeige.setEnabled(true);
         } catch ( Exception e ) {
             boutonNeige.setEnabled(false);
@@ -155,7 +153,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            una.lireDonnees();
+            una.lireDonnees(affErr);
             boutonUna.setEnabled(true);
         } catch ( Exception e ) {
             boutonUna.setEnabled(false);
@@ -163,7 +161,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            vanille.lireDonnees();
+            vanille.lireDonnees(affErr);
             boutonVanille.setEnabled(true);
         } catch ( Exception e ) {
             boutonVanille.setEnabled(false);
@@ -171,7 +169,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            ecume.lireDonnees();
+            ecume.lireDonnees(affErr);
             boutonEcume.setEnabled(true);
         } catch ( Exception e ) {
             boutonEcume.setEnabled(false);
@@ -179,7 +177,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            aura.lireDonnees();
+            aura.lireDonnees(affErr);
             boutonAura.setEnabled(true);
         } catch ( Exception e ) {
             boutonAura.setEnabled(false);
@@ -187,7 +185,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            aurore.lireDonnees();
+            aurore.lireDonnees(affErr);
             boutonAurore.setEnabled(true);
         } catch ( Exception e ) {
             boutonAurore.setEnabled(false);
@@ -195,7 +193,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            nora.lireDonnees();
+            nora.lireDonnees(affErr);
             boutonNora.setEnabled(true);
         } catch ( Exception e ) {
             boutonNora.setEnabled(false);
@@ -203,7 +201,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
         
         try {
-            vella.lireDonnees();
+            vella.lireDonnees(affErr);
             boutonVella.setEnabled(true);
         } catch ( Exception e ) {
             boutonVella.setEnabled(false);
@@ -221,6 +219,167 @@ public class FenPrincipale extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Permet de télécharger les fichiers de positionnement
+     * @param fenProgression Fenêtre de progression à modifier
+     */
+    private void download(ProgressDownload fenProgression) {
+        int valueProgress = 0, pasProgress = 5;
+        fenProgression.setProgression(valueProgress);
+        
+        // Téléchargement des fichiers
+        gaia.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(gaia.getNom());
+        fenProgression.addText("   -> URL : " + gaia.getUrl());
+        fenProgression.addText("");
+        
+        irchad.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(irchad.getNom());
+        fenProgression.addText("   -> URL : " + irchad.getUrl());
+        fenProgression.addText("");
+        
+        teria3.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(teria3.getNom());
+        fenProgression.addText("   -> URL : " + teria3.getUrl());
+        fenProgression.addText("");
+        
+        aquila.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(aquila.getNom());
+        fenProgression.addText("   -> URL : " + aquila.getUrl());
+        fenProgression.addText("");
+        
+        leloki.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(leloki.getNom());
+        fenProgression.addText("   -> URL : " + leloki.getUrl());
+        fenProgression.addText("");
+        
+        toms.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(toms.getNom());
+        fenProgression.addText("   -> URL : " + toms.getUrl());
+        fenProgression.addText("");
+        
+        victor.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(victor.getNom());
+        fenProgression.addText("   -> URL : " + victor.getUrl());
+        fenProgression.addText("");
+        
+        arcaique.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(arcaique.getNom());
+        fenProgression.addText("   -> URL : " + arcaique.getUrl());
+        fenProgression.addText("");
+        
+        bandido.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(bandido.getNom());
+        fenProgression.addText("   -> URL : " + bandido.getUrl());
+        fenProgression.addText("");
+        
+        flocon.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(flocon.getNom());
+        fenProgression.addText("   -> URL : " + flocon.getUrl());
+        fenProgression.addText("");
+        
+        liriane.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(liriane.getNom());
+        fenProgression.addText("   -> URL : " + liriane.getUrl());
+        fenProgression.addText("");
+        
+        malys.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(malys.getNom());
+        fenProgression.addText("   -> URL : " + malys.getUrl());
+        fenProgression.addText("");
+        
+        neige.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(neige.getNom());
+        fenProgression.addText("   -> URL : " + neige.getUrl());
+        fenProgression.addText("");
+        
+        una.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(una.getNom());
+        fenProgression.addText("   -> URL : " + una.getUrl());
+        fenProgression.addText("");
+        
+        vanille.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(vanille.getNom());
+        fenProgression.addText("   -> URL : " + vanille.getUrl());
+        fenProgression.addText("");
+        
+        ecume.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(ecume.getNom());
+        fenProgression.addText("   -> URL : " + ecume.getUrl());
+        fenProgression.addText("");
+        
+        aura.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(aura.getNom());
+        fenProgression.addText("   -> URL : " + aura.getUrl());
+        fenProgression.addText("");
+        
+        aurore.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(aurore.getNom());
+        fenProgression.addText("   -> URL : " + aurore.getUrl());
+        fenProgression.addText("");
+        
+        nora.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(nora.getNom());
+        fenProgression.addText("   -> URL : " + nora.getUrl());
+        fenProgression.addText("");
+        
+        vella.telechargerFichier();
+        valueProgress += pasProgress;
+        fenProgression.setProgression(valueProgress);
+        fenProgression.addText(vella.getNom());
+        fenProgression.addText("   -> URL : " + vella.getUrl());
+        fenProgression.addText("");
+
+        JOptionPane.showMessageDialog(fenProgression,
+                "Mise à jour des fichiers de positionnement terminé !",
+                "Mise à jour", JOptionPane.INFORMATION_MESSAGE);
+
+        majDonnees.setBackground(couleurValide);
+        majDonnees.setText("Données à jour !");
+        majDonnees.setEnabled(true);
+
+        // Relecture des données
+        lireDonnees(true);
+    }
+
     /**
      * Fonction permettant de recharger l'affichage du tableau positions
      */
@@ -1080,160 +1239,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         ProgressDownload fenProgression = new ProgressDownload(this, false);
         fenProgression.setVisible(true);
         
-        int valueProgress = 0, pasProgress = 5;
-        fenProgression.setProgression(valueProgress);
-        
-        // Téléchargement des fichiers
-        gaia.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(gaia.getNom());
-        fenProgression.addText("   -> URL : " + gaia.getUrl());
-        fenProgression.addText("");
-        
-        irchad.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(irchad.getNom());
-        fenProgression.addText("   -> URL : " + irchad.getUrl());
-        fenProgression.addText("");
-        
-        teria3.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(teria3.getNom());
-        fenProgression.addText("   -> URL : " + teria3.getUrl());
-        fenProgression.addText("");
-        
-        aquila.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(aquila.getNom());
-        fenProgression.addText("   -> URL : " + aquila.getUrl());
-        fenProgression.addText("");
-        
-        leloki.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(leloki.getNom());
-        fenProgression.addText("   -> URL : " + leloki.getUrl());
-        fenProgression.addText("");
-        
-        toms.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(toms.getNom());
-        fenProgression.addText("   -> URL : " + toms.getUrl());
-        fenProgression.addText("");
-        
-        victor.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(victor.getNom());
-        fenProgression.addText("   -> URL : " + victor.getUrl());
-        fenProgression.addText("");
-        
-        arcaique.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(arcaique.getNom());
-        fenProgression.addText("   -> URL : " + arcaique.getUrl());
-        fenProgression.addText("");
-        
-        bandido.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(bandido.getNom());
-        fenProgression.addText("   -> URL : " + bandido.getUrl());
-        fenProgression.addText("");
-        
-        flocon.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(flocon.getNom());
-        fenProgression.addText("   -> URL : " + flocon.getUrl());
-        fenProgression.addText("");
-        
-        liriane.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(liriane.getNom());
-        fenProgression.addText("   -> URL : " + liriane.getUrl());
-        fenProgression.addText("");
-        
-        malys.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(malys.getNom());
-        fenProgression.addText("   -> URL : " + malys.getUrl());
-        fenProgression.addText("");
-        
-        neige.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(neige.getNom());
-        fenProgression.addText("   -> URL : " + neige.getUrl());
-        fenProgression.addText("");
-        
-        una.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(una.getNom());
-        fenProgression.addText("   -> URL : " + una.getUrl());
-        fenProgression.addText("");
-        
-        vanille.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(vanille.getNom());
-        fenProgression.addText("   -> URL : " + vanille.getUrl());
-        fenProgression.addText("");
-        
-        ecume.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(ecume.getNom());
-        fenProgression.addText("   -> URL : " + ecume.getUrl());
-        fenProgression.addText("");
-        
-        aura.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(aura.getNom());
-        fenProgression.addText("   -> URL : " + aura.getUrl());
-        fenProgression.addText("");
-        
-        aurore.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(aurore.getNom());
-        fenProgression.addText("   -> URL : " + aurore.getUrl());
-        fenProgression.addText("");
-        
-        nora.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(nora.getNom());
-        fenProgression.addText("   -> URL : " + nora.getUrl());
-        fenProgression.addText("");
-        
-        vella.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(vella.getNom());
-        fenProgression.addText("   -> URL : " + vella.getUrl());
-        fenProgression.addText("");
-
-        JOptionPane.showMessageDialog(fenProgression,
-                "Mise à jour des fichiers de positionnement terminé !",
-                "Mise à jour", JOptionPane.INFORMATION_MESSAGE);
-
-        majDonnees.setBackground(couleurValide);
-        majDonnees.setText("Données à jour !");
-        majDonnees.setEnabled(true);
-
-        // Relecture des données
-        lireDonnees();
+        download(fenProgression);
     }//GEN-LAST:event_majDonneesActionPerformed
     
     private void affDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_affDonneesActionPerformed
