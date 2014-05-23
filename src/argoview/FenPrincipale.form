@@ -851,6 +851,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="affPts">
           <Properties>
+            <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Afficher les points"/>
             <Property name="borderPaintedFlat" type="boolean" value="true"/>
           </Properties>

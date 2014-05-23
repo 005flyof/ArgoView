@@ -24,6 +24,8 @@ import java.util.Calendar;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -31,11 +33,12 @@ import javax.swing.table.DefaultTableModel;
  * Classe permettant de tout gérer et d'afficher la fenêtre principale
  * @author 005flyof & delta32000
  */
-public class FenPrincipale extends javax.swing.JFrame {
+public class FenPrincipale extends javax.swing.JFrame implements ListSelectionListener {
     /*
         Variables
     */
         // Variables contenant les animaux
+    private Animal animalSelect;
     private final Animal gaia         = new Animal("Baleine à bosse Gaia", "gaia");
     private final Animal irchad       = new Animal("Baleine à bosse Irchad", "irchad");
     private final Animal teria3       = new Animal("Baleine à bosse Teria3", "teria3");
@@ -58,18 +61,19 @@ public class FenPrincipale extends javax.swing.JFrame {
     private final Animal vella        = new Animal("Eléphant de mer Vella", "vella");
     
         // Variable contenant les données à afficher sur le carte et affichées dans le tableau
-    private ArrayList<DonneeArgos> positions;
+    private ArrayList<DonneeArgos> positionsAff;
     private String nomAnimal;
     
         // Variables permettant l'affichage
-    public int j=0;                     // Nnombre d'images
-    public boolean points = false;      // Afficher les points sur la carte
-    public boolean trace = false;       // Afficher le tracer sur la carte
-    public int mapType = 3;             // Type de carte choisie par l'utilisateur, default=hybrid
-    public String map;                  // Type de carte en string (pour l'URL)
-    public int nbrPoints = 0;           // Nombre de points à afficher
-    public int nbrPointsAff = 1;
-    public String nbrPointsAffiche = " ";
+    private ArrayList<DonneeArgos> positions;
+    private int j=0;                     // Nnombre d'images
+    private boolean points = true;      // Afficher les points sur la carte
+    private boolean trace = false;       // Afficher le tracer sur la carte
+    private int mapType = 3;             // Type de carte choisie par l'utilisateur, default=hybrid
+    private String map;                  // Type de carte en string (pour l'URL)
+    private int nbrPoints = 0;           // Nombre de points à afficher
+    private int nbrPointsAff = 1;
+    private String nbrPointsAffiche = " ";
     
         // Diverses couleurs utilisées dans le programme
     private final Color couleurValide =     new Color(0, 175, 81);
@@ -83,6 +87,7 @@ public class FenPrincipale extends javax.swing.JFrame {
         
         this.nomAnimal = "Aucun animal";
         this.positions = new ArrayList();
+        this.positionsAff = new ArrayList();
         
         nbrPointsAff = sliderNbrPoints.getValue()+1;
         nbrPointsAffiche = Integer.toString(nbrPointsAff);
@@ -439,20 +444,24 @@ public class FenPrincipale extends javax.swing.JFrame {
      * Permet de recharger l'affichage du tableau positions
      */
     private void afficherDonnees() {
+        // On initialise l'écouteur de sélection
+        ptsTable.getSelectionModel().addListSelectionListener( this );
+        
+        // Puis on détermine le tableau
             // En tête du tableau
         String[] enTetes = new String [] {
                 "Nom de l'animal", "Balise n°", "Précision", "Date", "Heure", "Latitude", "Longitude"
         };
-        Object[][] contenu = new Object[positions.size()][enTetes.length];
+        Object[][] contenu = new Object[positionsAff.size()][enTetes.length];
         
             // Affichage des positions une à une
-        for (int i = 0; i < positions.size(); i++) {
+        for (int i = 0; i < positionsAff.size(); i++) {
             contenu[i][0] = nomAnimal;
-            contenu[i][1] = positions.get(i).getNumBalise();
-            contenu[i][2] = positions.get(i).getPrecisionAff();
-            String date = (positions.get(i).getDate().get(Calendar.DAY_OF_MONTH) < 10 ? "0" : "")
-                    + positions.get(i).getDate().get(Calendar.DAY_OF_MONTH) + " ";
-            switch ( positions.get(i).getDate().get(Calendar.MONTH) ) {
+            contenu[i][1] = positionsAff.get(i).getNumBalise();
+            contenu[i][2] = positionsAff.get(i).getPrecisionAff();
+            String date = (positionsAff.get(i).getDate().get(Calendar.DAY_OF_MONTH) < 10 ? "0" : "")
+                    + positionsAff.get(i).getDate().get(Calendar.DAY_OF_MONTH) + " ";
+            switch ( positionsAff.get(i).getDate().get(Calendar.MONTH) ) {
                 case Calendar.JANUARY:
                     date += "janvier";
                     break;
@@ -494,15 +503,15 @@ public class FenPrincipale extends javax.swing.JFrame {
                     break;
             }
             date += " ";
-            date += positions.get(i).getDate().get(Calendar.YEAR);
+            date += positionsAff.get(i).getDate().get(Calendar.YEAR);
             contenu[i][3] = date;
-            contenu[i][4] = (positions.get(i).getDate().get(Calendar.HOUR_OF_DAY) < 10 ? "0" : "")
-                    + positions.get(i).getDate().get(Calendar.HOUR_OF_DAY)
+            contenu[i][4] = (positionsAff.get(i).getDate().get(Calendar.HOUR_OF_DAY) < 10 ? "0" : "")
+                    + positionsAff.get(i).getDate().get(Calendar.HOUR_OF_DAY)
                     + ":"
-                    + (positions.get(i).getDate().get(Calendar.MINUTE) < 10 ? "0" : "")
-                    + positions.get(i).getDate().get(Calendar.MINUTE);
-            contenu[i][5] = positions.get(i).getLatitude();
-            contenu[i][6] = positions.get(i).getLongitude();
+                    + (positionsAff.get(i).getDate().get(Calendar.MINUTE) < 10 ? "0" : "")
+                    + positionsAff.get(i).getDate().get(Calendar.MINUTE);
+            contenu[i][5] = positionsAff.get(i).getLatitude();
+            contenu[i][6] = positionsAff.get(i).getLongitude();
         }
         
             // Affichage du modèle
@@ -529,6 +538,51 @@ public class FenPrincipale extends javax.swing.JFrame {
         ptsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         ptsTable.getColumnModel().getColumn(0).setPreferredWidth(150);
         ptsTable.getColumnModel().getColumn(3).setPreferredWidth(125);
+    }
+    
+    /**
+     * Permet de savoir ce qui a été sélectionné dans le tableau d'affichage des données de positionnement
+     * @param event Evénement sucitant l'appel de cette fonction
+     */
+    @Override
+    public void valueChanged( ListSelectionEvent event )
+    {
+        // On vérifie que la sélection a bien été effectuée sur le tableau
+        if ( event.getSource() == ptsTable.getSelectionModel() && event.getFirstIndex() >= 0 )
+        {
+            // On détermine la première ligne sélectionnée
+            int[] ligneSelect = ptsTable.getSelectedRows();
+            
+            // Si trop de points sont sélectionnés, erreur
+            if (ligneSelect.length > 30) {
+                JOptionPane.showMessageDialog(this,
+                        "Trop de points sélectionnés !\n(30 points max.)",
+                        "Sélection", JOptionPane.WARNING_MESSAGE);
+            }
+            // On enregistre dans positions les valeurs sélectionnées s'il y en a
+            //      sinon, on enregistre le tableau entier
+            else if ( ligneSelect.length == 0 )
+                positions.equals(animalSelect.getPositions().clone());
+            else {
+                positions = new ArrayList();
+                for (int i = 0; i < ligneSelect.length; i++) {
+                    positions.add(positionsAff.get(i));
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * Permet de changer l'animal sélectionné
+     * @param nouvelAnimal Nouvel animal à enregistrer et afficher
+     */
+    private void selectAnimalChange( Animal nouvelAnimal ) {
+        animalSelect = nouvelAnimal;
+        positions = animalSelect.getPositions();
+        positionsAff = animalSelect.getPositions();
+        nomAnimal = animalSelect.getNom();
+        afficherDonnees();
     }
     
     
@@ -1152,6 +1206,7 @@ public class FenPrincipale extends javax.swing.JFrame {
             }
         });
 
+        affPts.setSelected(true);
         affPts.setText("Afficher les points");
         affPts.setBorderPaintedFlat(true);
         affPts.addActionListener(new java.awt.event.ActionListener() {
@@ -1305,57 +1360,39 @@ public class FenPrincipale extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void boutonGaiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonGaiaActionPerformed
-        positions = gaia.getPositions();
-        nomAnimal = gaia.getNom();
-        afficherDonnees();
+        selectAnimalChange(gaia);
     }//GEN-LAST:event_boutonGaiaActionPerformed
 
     private void boutonIrchadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonIrchadActionPerformed
-        positions = irchad.getPositions();
-        nomAnimal = irchad.getNom();
-        afficherDonnees();
+        selectAnimalChange(irchad);
     }//GEN-LAST:event_boutonIrchadActionPerformed
 
     private void boutonTeria3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonTeria3ActionPerformed
-        positions = teria3.getPositions();
-        nomAnimal = teria3.getNom();
-        afficherDonnees();
+        selectAnimalChange(teria3);
     }//GEN-LAST:event_boutonTeria3ActionPerformed
 
     private void boutonAquilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAquilaActionPerformed
-        positions = aquila.getPositions();
-        nomAnimal = aquila.getNom();
-        afficherDonnees();
+        selectAnimalChange(aquila);
     }//GEN-LAST:event_boutonAquilaActionPerformed
 
     private void boutonLelokiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonLelokiActionPerformed
-        positions = leloki.getPositions();
-        nomAnimal = leloki.getNom();
-        afficherDonnees();
+        selectAnimalChange(leloki);
     }//GEN-LAST:event_boutonLelokiActionPerformed
 
     private void boutonTomsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonTomsActionPerformed
-        positions = toms.getPositions();
-        nomAnimal = toms.getNom();
-        afficherDonnees();
+        selectAnimalChange(toms);
     }//GEN-LAST:event_boutonTomsActionPerformed
 
     private void boutonVictorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVictorActionPerformed
-        positions = victor.getPositions();
-        nomAnimal = victor.getNom();
-        afficherDonnees();
+        selectAnimalChange(victor);
     }//GEN-LAST:event_boutonVictorActionPerformed
 
     private void boutonBandidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonBandidoActionPerformed
-        positions = bandido.getPositions();
-        nomAnimal = bandido.getNom();
-        afficherDonnees();
+        selectAnimalChange(bandido);
     }//GEN-LAST:event_boutonBandidoActionPerformed
 
     private void boutonArcaiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonArcaiqueActionPerformed
-        positions = arcaique.getPositions();
-        nomAnimal = arcaique.getNom();
-        afficherDonnees();
+        selectAnimalChange(arcaique);
     }//GEN-LAST:event_boutonArcaiqueActionPerformed
 
     private void majDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_majDonneesActionPerformed
@@ -1373,69 +1410,47 @@ public class FenPrincipale extends javax.swing.JFrame {
     }//GEN-LAST:event_affDonneesActionPerformed
     
     private void boutonFloconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonFloconActionPerformed
-        positions = flocon.getPositions();
-        nomAnimal = flocon.getNom();
-        afficherDonnees();
+        selectAnimalChange(flocon);
     }//GEN-LAST:event_boutonFloconActionPerformed
 
     private void boutonMalysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonMalysActionPerformed
-        positions = malys.getPositions();
-        nomAnimal = malys.getNom();
-        afficherDonnees();
+        selectAnimalChange(malys);
     }//GEN-LAST:event_boutonMalysActionPerformed
 
     private void boutonEcumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonEcumeActionPerformed
-        positions = ecume.getPositions();
-        nomAnimal = ecume.getNom();
-        afficherDonnees();
+        selectAnimalChange(ecume);
     }//GEN-LAST:event_boutonEcumeActionPerformed
 
     private void boutonVanilleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVanilleActionPerformed
-        positions = vanille.getPositions();
-        nomAnimal = vanille.getNom();
-        afficherDonnees();
+        selectAnimalChange(vanille);
     }//GEN-LAST:event_boutonVanilleActionPerformed
 
     private void boutonLirianeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonLirianeActionPerformed
-        positions = liriane.getPositions();
-        nomAnimal = liriane.getNom();
-        afficherDonnees();
+        selectAnimalChange(liriane);
     }//GEN-LAST:event_boutonLirianeActionPerformed
 
     private void boutonUnaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonUnaActionPerformed
-        positions = una.getPositions();
-        nomAnimal = una.getNom();
-        afficherDonnees();
+        selectAnimalChange(una);
     }//GEN-LAST:event_boutonUnaActionPerformed
 
     private void boutonNeigeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNeigeActionPerformed
-        positions = neige.getPositions();
-        nomAnimal = neige.getNom();
-        afficherDonnees();
+        selectAnimalChange(neige);
     }//GEN-LAST:event_boutonNeigeActionPerformed
 
     private void boutonNoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNoraActionPerformed
-        positions = nora.getPositions();
-        nomAnimal = nora.getNom();
-        afficherDonnees();
+        selectAnimalChange(nora);
     }//GEN-LAST:event_boutonNoraActionPerformed
 
     private void boutonAuraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuraActionPerformed
-        positions = aura.getPositions();
-        nomAnimal = aura.getNom();
-        afficherDonnees();
+        selectAnimalChange(aura);
     }//GEN-LAST:event_boutonAuraActionPerformed
 
     private void boutonAuroreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuroreActionPerformed
-        positions = aurore.getPositions();
-        nomAnimal = aurore.getNom();
-        afficherDonnees();
+        selectAnimalChange(aurore);
     }//GEN-LAST:event_boutonAuroreActionPerformed
 
     private void boutonVellaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVellaActionPerformed
-        positions = vella.getPositions();
-        nomAnimal = vella.getNom();
-        afficherDonnees();
+        selectAnimalChange(vella);
     }//GEN-LAST:event_boutonVellaActionPerformed
 
     private void affPtsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_affPtsActionPerformed
