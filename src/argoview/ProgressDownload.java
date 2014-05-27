@@ -57,6 +57,7 @@ public class ProgressDownload extends javax.swing.JDialog {
      */
     public void addText( String txt ) {
         taskOutput.setText( taskOutput.getText() + txt + "\n" );
+        scrollTask.getVerticalScrollBar().setValue(scrollTask.getVerticalScrollBar().getMaximum());
     }
 
     
