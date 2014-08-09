@@ -173,7 +173,9 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
                                 if (animal.getElementsByTagName("URLmodif").item(0).getAttributes().getNamedItem("modif").getNodeValue().equals("true"))
                                     url = animal.getElementsByTagName("URLmodif").item(0).getTextContent();
                                 else
-                                    url = URL_base + fichier;
+                                    url = URL_base
+                                            + animal.getElementsByTagName("fichier").item(0).getTextContent() + "."
+                                            + animal.getElementsByTagName("fichier").item(0).getAttributes().getNamedItem("ext").getNodeValue();
                                 
                                 this.animaux.add(new Animal(nom, fichier, url));
                             }

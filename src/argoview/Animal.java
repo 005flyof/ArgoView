@@ -60,6 +60,7 @@ public class Animal {
     public Animal ( String nom, String nomFichier, String URL ) {
         this.nom = nom;
         this.nomFichier = nomFichier;
+        this.url = URL;
         this.positions = new ArrayList();
     }
 
