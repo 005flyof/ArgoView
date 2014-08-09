@@ -1,0 +1,145 @@
+<?xml version = "1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!DOCTYPE config [
+<!ELEMENT config (download, affichage, listeAnimaux)>
+    <!ELEMENT download										(URL)>
+        <!ELEMENT URL											(#PCDATA)>
+    <!ELEMENT affichage				   					 EMPTY>
+    <!ELEMENT listeAnimaux 		    				(animal+)>
+        <!ELEMENT animal									(fichier, nomAnimal, URLmodif)>
+                <!ELEMENT fichier					(#PCDATA)>
+                <!ELEMENT nomAnimal			  (#PCDATA)>
+                <!ELEMENT URLmodif				(#PCDATA)>
+    
+    <!ATTLIST fichier								ext				CDATA								  #REQUIRED>
+    <!ATTLIST URLmodif						  modif			(true | false)				#REQUIRED>
+
+]>
+
+<config>
+    <download>
+        <URL>http://argonautica.jason.oceanobs.com/documents/argonautica/2013-2014/</URL>
+    </download>
+    <affichage />
+    <listeAnimaux>
+        <animal>
+            <fichier ext="txt">gaia</fichier>
+            <nomAnimal>Baleine à bosse Gaia</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">irchad</fichier>
+            <nomAnimal>Baleine à bosse Irchad</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">teria3</fichier>
+            <nomAnimal>Baleine à bosse Teria3</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">aquila</fichier>
+            <nomAnimal>Manchot royal Aquila</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">leloki</fichier>
+            <nomAnimal>Manchot royal Leloki</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">toms</fichier>
+            <nomAnimal>Manchot royal Toms</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">victor</fichier>
+            <nomAnimal>Manchot royal Victor</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">arcaique</fichier>
+            <nomAnimal>Ours polaire Arcaique</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">bandido</fichier>
+            <nomAnimal>Ours polaire Bandido</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">flocon</fichier>
+            <nomAnimal>Ours polaire Flocon</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">liriane</fichier>
+            <nomAnimal>Ours polaire Liriane</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">malys</fichier>
+            <nomAnimal>Ours polaire Malys</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">neige</fichier>
+            <nomAnimal>Ours polaire Neige</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">una</fichier>
+            <nomAnimal>Ours polaire Una</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">vanille</fichier>
+            <nomAnimal>Ours polaire Vanille</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">ecume</fichier>
+            <nomAnimal>Torue Ecume</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">aura</fichier>
+            <nomAnimal>Eléphant de mer Aura</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">aurore</fichier>
+            <nomAnimal>Eléphant de mer Aurore</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">nora</fichier>
+            <nomAnimal>Eléphant de mer Nora</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+        
+        <animal>
+            <fichier ext="txt">vella</fichier>
+            <nomAnimal>Eléphant de mer Vella</nomAnimal>
+            <URLmodif modif="false"></URLmodif>
+        </animal>
+    </listeAnimaux>
+</config>

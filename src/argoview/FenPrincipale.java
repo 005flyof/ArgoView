@@ -18,9 +18,14 @@
 package argoview;
 
 import java.awt.Color;
+
 import java.io.File;
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Vector;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -28,6 +33,18 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import org.xml.sax.SAXException;
+
 
 /**
  * Classe permettant de tout gérer et d'afficher la fenêtre principale
@@ -37,8 +54,11 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
     /*
         Variables
     */
+        // Variables contenant l'adresse de téléchargement de base des fichiers d'animaux
+    String URL_base;
         // Variables contenant les animaux
     private Animal animalSelect;
+    private Vector<Animal> animaux = new Vector<Animal>();
     private final Animal gaia         = new Animal("Baleine à bosse Gaia", "gaia");
     private final Animal irchad       = new Animal("Baleine à bosse Irchad", "irchad");
     private final Animal teria3       = new Animal("Baleine à bosse Teria3", "teria3");
@@ -67,7 +87,7 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
         // Variables permettant l'affichage
     private ArrayList<DonneeArgos> positions;
     private int j=0;                     // Nnombre d'images
-    private boolean points = true;      // Afficher les points sur la carte
+    private boolean points = true;       // Afficher les points sur la carte
     private boolean trace = false;       // Afficher le tracer sur la carte
     private int mapType = 3;             // Type de carte choisie par l'utilisateur, default=hybrid
     private String map;                  // Type de carte en string (pour l'URL)
@@ -93,10 +113,91 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
         nbrPointsAffiche = Integer.toString(nbrPointsAff);
         choixNbPtsLabel2.setText(nbrPointsAffiche);
         
+        initParam();
+        
         initFolder();
         lireDonnees( false );
     }
 
+    
+    /**
+     * Permet de charger les paramètres depuis le fichier de configuration XML
+     */
+    private void initParam() {
+        // Variables d'erreur
+        String errMsg = "";
+        boolean err = false;
+        
+        try {
+            // On charge le fichier XML
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                // Parseur
+            DocumentBuilder builder = factory.newDocumentBuilder();
+                // Document
+            Document document = builder.parse(new File("config.ArgoView.xml"));
+            
+            // Vérification de la validité de l'élément racine
+            final Element racine = document.getDocumentElement();
+            if (!racine.getNodeName().equalsIgnoreCase("config")) {
+                err = true;
+                errMsg = "Racine invalide.";
+            }
+            else {
+                // Extraction des paramètres
+                final NodeList racineNoeuds = racine.getChildNodes();
+                for (int i = 0; i < racineNoeuds.getLength(); i++) {
+                    if (racineNoeuds.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                        // Paramètres de téléchargement
+                        if (racineNoeuds.item(i).getNodeName().equals("download")) {
+                            Element download = (Element) racineNoeuds.item(i);
+                            Element URL = (Element) download.getElementsByTagName("URL").item(0);
+
+                            URL_base = URL.getTextContent();
+                        }
+
+                        // Paramètres d'affichage
+                        else if (racineNoeuds.item(i).getNodeName().equals("affichage")) {
+                            Element affichage = (Element) racineNoeuds.item(i);
+                        }
+
+                        // Liste des animaux
+                        else if (racineNoeuds.item(i).getNodeName().equals("listeAnimaux")) {
+                            Element listeAnimaux = (Element) racineNoeuds.item(i);
+                            NodeList animaux = listeAnimaux.getElementsByTagName("animal");
+
+                            for (int j = 0; j < animaux.getLength(); j++) {
+                                Element animal = (Element) animaux.item(j);
+                                
+                                String nom = animal.getElementsByTagName("nomAnimal").item(0).getTextContent();
+                                System.out.println(nom);
+                                
+                                String fichier = animal.getElementsByTagName("fichier").item(0).getTextContent() + "."
+                                        + animal.getElementsByTagName("fichier").item(0).getAttributes().getNamedItem("ext").getNodeValue();
+                                System.out.println(fichier);
+                                
+                                String url = "";
+                                if (animal.getElementsByTagName("URLmodif").item(0).getAttributes().getNamedItem("modif").getNodeValue().equals("true"))
+                                    url = animal.getElementsByTagName("URLmodif").item(0).getTextContent();
+                                else
+                                    url = URL_base + fichier;
+                                System.out.println(url);
+                                
+                                this.animaux.add(new Animal(nom, fichier, url));
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            System.out.println("Impossible de charger le fichier de configuration !");
+        }
+        
+        if (err)
+            JOptionPane.showMessageDialog(this,
+                    "Fichier de configuration invalide pour la raison suivante :\n" + errMsg,
+                    "Erreur de configuration", JOptionPane.ERROR_MESSAGE);
+    }
+    
     
     /**
      * Permet de charger toutes les positions depuis les fichiers enregistrés

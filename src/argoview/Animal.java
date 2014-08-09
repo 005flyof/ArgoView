@@ -41,10 +41,25 @@ public class Animal {
      * Constructeur de l'objet Animal
      * @param nom         Nom de l'animal (affiché)
      * @param nomFichier  Nom de fichier à ouvrir pour lire les positions
+     * @deprecated Utiliser le nouveau constructeur car celui là n'est pas flexible pour un paramétrage simpl
      */
     public Animal ( String nom, String nomFichier ) {
         this.nom = nom;
-        this.recNomFichier(nomFichier);
+        this.nomFichier = "Positions/" + nomFichier + ".txt";
+        this.url = "http://argonautica.jason.oceanobs.com/documents/argonautica/2013-2014/" + nomFichier + ".txt";
+        this.positions = new ArrayList();
+    }
+    
+    
+    /**
+     * Constructeur de l'objet Animal
+     * @param nom         Nom de l'animal (affiché)
+     * @param nomFichier  Nom de fichier à ouvrir pour lire les positions
+     * @param URL         URL de téléchargement du fichier de positions
+     */
+    public Animal ( String nom, String nomFichier, String URL ) {
+        this.nom = nom;
+        this.nomFichier = nomFichier;
         this.positions = new ArrayList();
     }
 
@@ -183,7 +198,7 @@ public class Animal {
     public void telechargerFichier() {
         try {
             // On crée les variables pour télécharger le fichier
-            URL adresse = new URL("http://" + url);
+            URL adresse = new URL(url);
             URLConnection connexion = adresse.openConnection();
             int taille = connexion.getContentLength();
 
@@ -242,20 +257,21 @@ public class Animal {
     
     
     /**
-     * Permet de modifier le nom du fichier et l'URL
+     * Permet de récupérer le nom du fichier de positions
+     * @return Nom du fichier de position à lire
+     */
+    public String getNomFichier() {
+        return nomFichier;
+    }
+    
+    /**
+     * Permet de modifier le nom du fichier
      * @param nomFichier Nouveau nom pour le fichier
      */
     public void setNomFichier( String nomFichier ) {
-        recNomFichier(nomFichier);
+        this.nomFichier = nomFichier;
     }
-    /**
-     * Permet de modifier le nom du fichier et l'URL
-     * @param nomFichier Nouveau nom pour le fichier
-     */
-    private void recNomFichier( String nomFichier ) {
-        this.nomFichier = "Positions/" + nomFichier + ".txt";
-        this.url = "argonautica.jason.oceanobs.com/documents/argonautica/2013-2014/" + nomFichier + ".txt";
-    }
+
     
     /**
      * Permet de récupérer l'adresse URL de téléchargement du fichier de positions
@@ -263,6 +279,14 @@ public class Animal {
      */
     public String getUrl() {
         return url;
+    }
+    
+    /**
+     * Permet de modifier l'URL de téléchargement du fichier de position
+     * @param URL Nouvelle adresse URL pour le fichier
+     */
+    public void setURL( String URL ) {
+        this.url = URL;
     }
 
     
@@ -280,14 +304,6 @@ public class Animal {
      */
     public void setNom( String nom ) {
         this.nom = nom;
-    }
-
-    /**
-     * Permet de récupérer le nom du fichier de positions
-     * @return Nom du fichier de position à lire
-     */
-    public String getNomFichier() {
-        return nomFichier;
     }
     
     

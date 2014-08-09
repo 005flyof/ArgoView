@@ -26,3 +26,4 @@ Améliorations à venir
       - enregistrement des paramètres d'affichages
       - en vue du passage à l'année 2015 : ajout d'un paramètre d'adresse de téléchargement des fichiers de positions
   * possibilité d'ajouter des animaux pour qui ont pourrait afficher les positions
+  * création automatique d'un XML basique si non existant au démarrage
