@@ -18,6 +18,7 @@
 package argoview;
 
 import java.awt.Color;
+import java.awt.GridLayout;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
+import javax.swing.GroupLayout.Group;
+import javax.swing.JButton;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -58,7 +61,12 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
     String URL_base;
         // Variables contenant les animaux
     private Animal animalSelect;
-    private Vector<Animal> animaux = new Vector<Animal>();
+    private final Vector<Animal> animaux = new Vector<Animal>();
+    
+        // Variable contenant les boutons d'affichages des animaux
+    private final Vector<JButton> boutons = new Vector<JButton>();
+    
+        // Vieilles variables d'animaux
     private final Animal gaia         = new Animal("Baleine à bosse Gaia", "gaia");
     private final Animal irchad       = new Animal("Baleine à bosse Irchad", "irchad");
     private final Animal teria3       = new Animal("Baleine à bosse Teria3", "teria3");
@@ -114,6 +122,7 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
         choixNbPtsLabel2.setText(nbrPointsAffiche);
         
         initParam();
+        initBoutons();
         
         initFolder();
         lireDonnees( false );
@@ -169,18 +178,15 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
                                 Element animal = (Element) animaux.item(j);
                                 
                                 String nom = animal.getElementsByTagName("nomAnimal").item(0).getTextContent();
-                                System.out.println(nom);
                                 
                                 String fichier = animal.getElementsByTagName("fichier").item(0).getTextContent() + "."
                                         + animal.getElementsByTagName("fichier").item(0).getAttributes().getNamedItem("ext").getNodeValue();
-                                System.out.println(fichier);
                                 
                                 String url = "";
                                 if (animal.getElementsByTagName("URLmodif").item(0).getAttributes().getNamedItem("modif").getNodeValue().equals("true"))
                                     url = animal.getElementsByTagName("URLmodif").item(0).getTextContent();
                                 else
                                     url = URL_base + fichier;
-                                System.out.println(url);
                                 
                                 this.animaux.add(new Animal(nom, fichier, url));
                             }
@@ -198,6 +204,40 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
                     "Erreur de configuration", JOptionPane.ERROR_MESSAGE);
     }
     
+    /**
+     * Permet de générer les boutons
+     */
+    private void initBoutons() {
+        // Création des boutons
+        for (int i = 0; i < this.animaux.size(); i++) {
+            this.boutons.add(i, new JButton() );
+            this.boutons.get(i).setBackground(java.awt.Color.white);
+            this.boutons.get(i).setText("***" + this.animaux.get(i).getNom() + "***");
+            this.boutons.get(i).setMaximumSize(new java.awt.Dimension(200, 23));
+            this.boutons.get(i).setMinimumSize(new java.awt.Dimension(200, 23));
+            this.boutons.get(i).setPreferredSize(new java.awt.Dimension(200, 23));
+            this.boutons.get(i).addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    boutonActionPerformed(evt);
+                }
+            });
+        }
+        
+        // Affichage des boutons
+        containChoixAnimal.setLayout( new GridLayout((this.animaux.size() / 2) + 1, 2, 18, 18));
+        for (int i = 0; i < this.boutons.size(); i++) {
+            containChoixAnimal.add(this.boutons.get(i));
+        }
+    }
+    
+    private void boutonActionPerformed(java.awt.event.ActionEvent evt) {
+        selectAnimalChange(this.animaux.get(this.boutons.indexOf(evt.getSource())));
+        JOptionPane.showMessageDialog(this,
+                this.animaux.get(this.boutons.indexOf(evt.getSource())).getNom(),
+                "TEST !!!", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
     
     /**
      * Permet de charger toutes les positions depuis les fichiers enregistrés
@@ -207,6 +247,16 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
     private void lireDonnees( boolean affErr ) {
         // Variable nécessaire pour savoir s'il faut demander à mettre à jour les fichiers de positions
         boolean fichiersManquants = false;
+        
+        for (int i = 0; i < this.animaux.size(); i++) {
+            try {
+                this.animaux.get(i).lireDonnees(affErr);
+                this.boutons.get(i).setEnabled(true);
+            } catch ( Exception e ) {
+                this.boutons.get(i).setEnabled(false);
+                fichiersManquants = true;
+            }
+        }
         
         // Lecture de toutes les positions
         try {
