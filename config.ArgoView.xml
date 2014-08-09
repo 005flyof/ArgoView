@@ -1,9 +1,10 @@
 <?xml version = "1.0" encoding="UTF-8" standalone="yes" ?>
 
 <!DOCTYPE config [
-<!ELEMENT config (download, affichage, listeAnimaux)>
-    <!ELEMENT download										(URL)>
+<!ELEMENT config (fichierPositionsBasique, affichage, listeAnimaux)>
+    <!ELEMENT fichierPositionsBasique			(URL, dossierEnregistrement)>
         <!ELEMENT URL											(#PCDATA)>
+        <!ELEMENT dossierEnregistrement		(#PCDATA)>
     <!ELEMENT affichage				   					 EMPTY>
     <!ELEMENT listeAnimaux 		    				(animal+)>
         <!ELEMENT animal									(fichier, nomAnimal, URLmodif)>
@@ -17,9 +18,10 @@
 ]>
 
 <config>
-    <download>
+    <fichierPositionsBasique>
         <URL>http://argonautica.jason.oceanobs.com/documents/argonautica/2013-2014/</URL>
-    </download>
+        <dossierEnregistrement>Positions/</dossierEnregistrement>
+    </fichierPositionsBasique>
     <affichage />
     <listeAnimaux>
         <animal>

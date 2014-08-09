@@ -18,6 +18,8 @@
 package argoview;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import java.io.File;
@@ -26,11 +28,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
-import javax.swing.GroupLayout.Group;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -57,36 +61,16 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
     /*
         Variables
     */
-        // Variables contenant l'adresse de téléchargement de base des fichiers d'animaux
+        // Variables contenant les bases des fichiers
     String URL_base;
+    String dossier_base;
+    
         // Variables contenant les animaux
     private Animal animalSelect;
     private final Vector<Animal> animaux = new Vector<Animal>();
     
         // Variable contenant les boutons d'affichages des animaux
     private final Vector<JButton> boutons = new Vector<JButton>();
-    
-        // Vieilles variables d'animaux
-    private final Animal gaia         = new Animal("Baleine à bosse Gaia", "gaia");
-    private final Animal irchad       = new Animal("Baleine à bosse Irchad", "irchad");
-    private final Animal teria3       = new Animal("Baleine à bosse Teria3", "teria3");
-    private final Animal aquila       = new Animal("Manchot royal Aquila", "aquila");
-    private final Animal leloki       = new Animal("Manchot royal Leloki", "leloki");
-    private final Animal toms         = new Animal("Manchot royal Toms", "toms");
-    private final Animal victor       = new Animal("Manchot royal Victor", "victor");
-    private final Animal arcaique     = new Animal("Ours polaire Arcaique", "arcaique");
-    private final Animal bandido      = new Animal("Ours polaire Bandido", "bandido");
-    private final Animal flocon       = new Animal("Ours polaire Flocon", "flocon");
-    private final Animal liriane      = new Animal("Ours polaire Liriane", "liriane");
-    private final Animal malys        = new Animal("Ours polaire Malys", "malys");
-    private final Animal neige        = new Animal("Ours polaire Neige", "neige");
-    private final Animal una          = new Animal("Ours polaire Una", "una");
-    private final Animal vanille      = new Animal("Ours polaire Vanille", "vanille");
-    private final Animal ecume        = new Animal("Tortue Ecume", "ecume");
-    private final Animal aura         = new Animal("Eléphant de mer Aura", "aura");
-    private final Animal aurore       = new Animal("Eléphant de mer Autore", "aurore");
-    private final Animal nora         = new Animal("Eléphant de mer Nora", "nora");
-    private final Animal vella        = new Animal("Eléphant de mer Vella", "vella");
     
         // Variable contenant les données à afficher sur le carte et affichées dans le tableau
     private ArrayList<DonneeArgos> positionsAff;
@@ -157,11 +141,13 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
                 for (int i = 0; i < racineNoeuds.getLength(); i++) {
                     if (racineNoeuds.item(i).getNodeType() == Node.ELEMENT_NODE) {
                         // Paramètres de téléchargement
-                        if (racineNoeuds.item(i).getNodeName().equals("download")) {
+                        if (racineNoeuds.item(i).getNodeName().equals("fichierPositionsBasique")) {
                             Element download = (Element) racineNoeuds.item(i);
                             Element URL = (Element) download.getElementsByTagName("URL").item(0);
+                            Element dossier = (Element) download.getElementsByTagName("dossierEnregistrement").item(0);
 
                             URL_base = URL.getTextContent();
+                            dossier_base = dossier.getTextContent();
                         }
 
                         // Paramètres d'affichage
@@ -179,7 +165,8 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
                                 
                                 String nom = animal.getElementsByTagName("nomAnimal").item(0).getTextContent();
                                 
-                                String fichier = animal.getElementsByTagName("fichier").item(0).getTextContent() + "."
+                                String fichier = dossier_base
+                                        + animal.getElementsByTagName("fichier").item(0).getTextContent() + "."
                                         + animal.getElementsByTagName("fichier").item(0).getAttributes().getNamedItem("ext").getNodeValue();
                                 
                                 String url = "";
@@ -195,7 +182,8 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            System.out.println("Impossible de charger le fichier de configuration !");
+            err = true;
+            errMsg = "Impossible de charger le fichier de configuration !";
         }
         
         if (err)
@@ -212,10 +200,10 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
         for (int i = 0; i < this.animaux.size(); i++) {
             this.boutons.add(i, new JButton() );
             this.boutons.get(i).setBackground(java.awt.Color.white);
-            this.boutons.get(i).setText("***" + this.animaux.get(i).getNom() + "***");
-            this.boutons.get(i).setMaximumSize(new java.awt.Dimension(200, 23));
-            this.boutons.get(i).setMinimumSize(new java.awt.Dimension(200, 23));
-            this.boutons.get(i).setPreferredSize(new java.awt.Dimension(200, 23));
+            this.boutons.get(i).setText(this.animaux.get(i).getNom());
+            this.boutons.get(i).setMaximumSize(new java.awt.Dimension(190, 23));
+            this.boutons.get(i).setMinimumSize(new java.awt.Dimension(190, 23));
+            this.boutons.get(i).setPreferredSize(new java.awt.Dimension(190, 23));
             this.boutons.get(i).addActionListener(new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -225,17 +213,26 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
         }
         
         // Affichage des boutons
-        containChoixAnimal.setLayout( new GridLayout((this.animaux.size() / 2) + 1, 2, 18, 18));
-        for (int i = 0; i < this.boutons.size(); i++) {
-            containChoixAnimal.add(this.boutons.get(i));
-        }
+        JPanel conteneur = new JPanel();
+        conteneur.setLayout( new GridLayout(this.animaux.size() / 2, 2, 10, 10));
+        
+        for (int i = 0; i < this.boutons.size(); i++)
+            conteneur.add(this.boutons.get(i));
+        conteneur.setPreferredSize( new Dimension(370, 33 * this.boutons.size() / 2) );
+        
+        JPanel createurMarges = new JPanel();
+        createurMarges.setLayout( new FlowLayout(FlowLayout.CENTER, 10, 10) );
+        createurMarges.add(conteneur);
+        
+        JScrollPane scrollChoixAnimal = new JScrollPane(createurMarges);
+        
+        containChoixAnimal.setLayout( new BoxLayout(containChoixAnimal, 1));
+//        containChoixAnimal.setLayout( new FlowLayout(FlowLayout.CENTER, 10, 5) );
+        containChoixAnimal.add(scrollChoixAnimal);
     }
     
     private void boutonActionPerformed(java.awt.event.ActionEvent evt) {
         selectAnimalChange(this.animaux.get(this.boutons.indexOf(evt.getSource())));
-        JOptionPane.showMessageDialog(this,
-                this.animaux.get(this.boutons.indexOf(evt.getSource())).getNom(),
-                "TEST !!!", JOptionPane.INFORMATION_MESSAGE);
     }
     
     
@@ -248,6 +245,7 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
         // Variable nécessaire pour savoir s'il faut demander à mettre à jour les fichiers de positions
         boolean fichiersManquants = false;
         
+        // Lecture de toutes les positions
         for (int i = 0; i < this.animaux.size(); i++) {
             try {
                 this.animaux.get(i).lireDonnees(affErr);
@@ -256,167 +254,6 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
                 this.boutons.get(i).setEnabled(false);
                 fichiersManquants = true;
             }
-        }
-        
-        // Lecture de toutes les positions
-        try {
-            gaia.lireDonnees(affErr);
-            boutonGaia.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonGaia.setEnabled(false);
-            fichiersManquants = true;
-        }
-
-        try {
-            irchad.lireDonnees(affErr);
-            boutonIrchad.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonIrchad.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            teria3.lireDonnees(affErr);
-            boutonTeria3.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonTeria3.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            aquila.lireDonnees(affErr);
-            boutonAquila.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonAquila.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            leloki.lireDonnees(affErr);
-            boutonLeloki.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonLeloki.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            toms.lireDonnees(affErr);
-            boutonToms.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonToms.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            victor.lireDonnees(affErr);
-            boutonVictor.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonVictor.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            arcaique.lireDonnees(affErr);
-            boutonArcaique.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonArcaique.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            bandido.lireDonnees(affErr);
-            boutonBandido.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonBandido.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            flocon.lireDonnees(affErr);
-            boutonFlocon.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonFlocon.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            liriane.lireDonnees(affErr);
-            boutonLiriane.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonLiriane.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            malys.lireDonnees(affErr);
-            boutonMalys.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonMalys.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            neige.lireDonnees(affErr);
-            boutonNeige.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonNeige.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            una.lireDonnees(affErr);
-            boutonUna.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonUna.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            vanille.lireDonnees(affErr);
-            boutonVanille.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonVanille.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            ecume.lireDonnees(affErr);
-            boutonEcume.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonEcume.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            aura.lireDonnees(affErr);
-            boutonAura.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonAura.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            aurore.lireDonnees(affErr);
-            boutonAurore.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonAurore.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            nora.lireDonnees(affErr);
-            boutonNora.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonNora.setEnabled(false);
-            fichiersManquants = true;
-        }
-        
-        try {
-            vella.lireDonnees(affErr);
-            boutonVella.setEnabled(true);
-        } catch ( Exception e ) {
-            boutonVella.setEnabled(false);
-            fichiersManquants = true;
         }
         
         // S'il y a des fichiers qui n'ont pas étés chargés, on demande si on télécharge les positions
@@ -439,146 +276,15 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
         fenProgression.setProgression(valueProgress);
         
         // Téléchargement des fichiers
-        gaia.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(gaia.getNom());
-        fenProgression.addText("   -> URL : " + gaia.getUrl());
-        fenProgression.addText("");
+        for (int i = 0; i < this.animaux.size(); i++) {
+            this.animaux.get(i).telechargerFichier();
+            valueProgress += pasProgress;
+            fenProgression.setProgression(valueProgress);
+            fenProgression.addText(this.animaux.get(i).getNom());
+            fenProgression.addText("   -> URL : " + this.animaux.get(i).getUrl());
+            fenProgression.addText("");
+        }
         
-        irchad.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(irchad.getNom());
-        fenProgression.addText("   -> URL : " + irchad.getUrl());
-        fenProgression.addText("");
-        
-        teria3.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(teria3.getNom());
-        fenProgression.addText("   -> URL : " + teria3.getUrl());
-        fenProgression.addText("");
-        
-        aquila.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(aquila.getNom());
-        fenProgression.addText("   -> URL : " + aquila.getUrl());
-        fenProgression.addText("");
-        
-        leloki.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(leloki.getNom());
-        fenProgression.addText("   -> URL : " + leloki.getUrl());
-        fenProgression.addText("");
-        
-        toms.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(toms.getNom());
-        fenProgression.addText("   -> URL : " + toms.getUrl());
-        fenProgression.addText("");
-        
-        victor.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(victor.getNom());
-        fenProgression.addText("   -> URL : " + victor.getUrl());
-        fenProgression.addText("");
-        
-        arcaique.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(arcaique.getNom());
-        fenProgression.addText("   -> URL : " + arcaique.getUrl());
-        fenProgression.addText("");
-        
-        bandido.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(bandido.getNom());
-        fenProgression.addText("   -> URL : " + bandido.getUrl());
-        fenProgression.addText("");
-        
-        flocon.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(flocon.getNom());
-        fenProgression.addText("   -> URL : " + flocon.getUrl());
-        fenProgression.addText("");
-        
-        liriane.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(liriane.getNom());
-        fenProgression.addText("   -> URL : " + liriane.getUrl());
-        fenProgression.addText("");
-        
-        malys.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(malys.getNom());
-        fenProgression.addText("   -> URL : " + malys.getUrl());
-        fenProgression.addText("");
-        
-        neige.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(neige.getNom());
-        fenProgression.addText("   -> URL : " + neige.getUrl());
-        fenProgression.addText("");
-        
-        una.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(una.getNom());
-        fenProgression.addText("   -> URL : " + una.getUrl());
-        fenProgression.addText("");
-        
-        vanille.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(vanille.getNom());
-        fenProgression.addText("   -> URL : " + vanille.getUrl());
-        fenProgression.addText("");
-        
-        ecume.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(ecume.getNom());
-        fenProgression.addText("   -> URL : " + ecume.getUrl());
-        fenProgression.addText("");
-        
-        aura.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(aura.getNom());
-        fenProgression.addText("   -> URL : " + aura.getUrl());
-        fenProgression.addText("");
-        
-        aurore.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(aurore.getNom());
-        fenProgression.addText("   -> URL : " + aurore.getUrl());
-        fenProgression.addText("");
-        
-        nora.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(nora.getNom());
-        fenProgression.addText("   -> URL : " + nora.getUrl());
-        fenProgression.addText("");
-        
-        vella.telechargerFichier();
-        valueProgress += pasProgress;
-        fenProgression.setProgression(valueProgress);
-        fenProgression.addText(vella.getNom());
-        fenProgression.addText("   -> URL : " + vella.getUrl());
-        fenProgression.addText("");
-
         JOptionPane.showMessageDialog(fenProgression,
                 "Mise à jour des fichiers de positionnement terminé !",
                 "Mise à jour", JOptionPane.INFORMATION_MESSAGE);
@@ -912,26 +618,6 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
     private void initComponents() {
 
         containChoixAnimal = new javax.swing.JPanel();
-        boutonGaia = new javax.swing.JButton();
-        boutonIrchad = new javax.swing.JButton();
-        boutonTeria3 = new javax.swing.JButton();
-        boutonAquila = new javax.swing.JButton();
-        boutonLeloki = new javax.swing.JButton();
-        boutonToms = new javax.swing.JButton();
-        boutonVictor = new javax.swing.JButton();
-        boutonBandido = new javax.swing.JButton();
-        boutonArcaique = new javax.swing.JButton();
-        boutonFlocon = new javax.swing.JButton();
-        boutonMalys = new javax.swing.JButton();
-        boutonEcume = new javax.swing.JButton();
-        boutonVanille = new javax.swing.JButton();
-        boutonLiriane = new javax.swing.JButton();
-        boutonUna = new javax.swing.JButton();
-        boutonNeige = new javax.swing.JButton();
-        boutonNora = new javax.swing.JButton();
-        boutonAura = new javax.swing.JButton();
-        boutonAurore = new javax.swing.JButton();
-        boutonVella = new javax.swing.JButton();
         containAnimal = new javax.swing.JPanel();
         ptsScroll = new javax.swing.JScrollPane();
         ptsTable = new javax.swing.JTable();
@@ -968,303 +654,15 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
         containChoixAnimal.setBorder(javax.swing.BorderFactory.createTitledBorder("Choix de l'animal"));
         containChoixAnimal.setPreferredSize(new java.awt.Dimension(200, 0));
 
-        boutonGaia.setBackground(java.awt.Color.white);
-        boutonGaia.setText("Baleine à bosse Gaïa");
-        boutonGaia.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonGaia.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonGaia.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonGaia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonGaiaActionPerformed(evt);
-            }
-        });
-
-        boutonIrchad.setBackground(java.awt.Color.white);
-        boutonIrchad.setText("Baleine à bosse Irchad");
-        boutonIrchad.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonIrchad.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonIrchad.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonIrchad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonIrchadActionPerformed(evt);
-            }
-        });
-
-        boutonTeria3.setBackground(java.awt.Color.white);
-        boutonTeria3.setText("Baleine à bosse Teria3");
-        boutonTeria3.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonTeria3.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonTeria3.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonTeria3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonTeria3ActionPerformed(evt);
-            }
-        });
-
-        boutonAquila.setBackground(java.awt.Color.white);
-        boutonAquila.setText("Manchot royal Aquila");
-        boutonAquila.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonAquila.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonAquila.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonAquila.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonAquilaActionPerformed(evt);
-            }
-        });
-
-        boutonLeloki.setBackground(java.awt.Color.white);
-        boutonLeloki.setText("Manchot royal Leloki");
-        boutonLeloki.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonLeloki.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonLeloki.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonLeloki.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonLelokiActionPerformed(evt);
-            }
-        });
-
-        boutonToms.setBackground(java.awt.Color.white);
-        boutonToms.setText("Manchot royal Toms");
-        boutonToms.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonToms.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonToms.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonToms.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonTomsActionPerformed(evt);
-            }
-        });
-
-        boutonVictor.setBackground(java.awt.Color.white);
-        boutonVictor.setText("Manchot royal Victor");
-        boutonVictor.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonVictor.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonVictor.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonVictor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonVictorActionPerformed(evt);
-            }
-        });
-
-        boutonBandido.setBackground(java.awt.Color.white);
-        boutonBandido.setText("Ours polaire Bandido");
-        boutonBandido.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonBandido.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonBandido.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonBandido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonBandidoActionPerformed(evt);
-            }
-        });
-
-        boutonArcaique.setBackground(java.awt.Color.white);
-        boutonArcaique.setText("Ours polaire Arcaique");
-        boutonArcaique.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonArcaique.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonArcaique.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonArcaique.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonArcaiqueActionPerformed(evt);
-            }
-        });
-
-        boutonFlocon.setBackground(java.awt.Color.white);
-        boutonFlocon.setText("Ours polaire Flocon");
-        boutonFlocon.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonFlocon.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonFlocon.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonFlocon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonFloconActionPerformed(evt);
-            }
-        });
-
-        boutonMalys.setBackground(java.awt.Color.white);
-        boutonMalys.setText("Ours polaire Malys");
-        boutonMalys.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonMalys.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonMalys.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonMalys.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonMalysActionPerformed(evt);
-            }
-        });
-
-        boutonEcume.setBackground(java.awt.Color.white);
-        boutonEcume.setText("Tortue Ecume");
-        boutonEcume.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonEcume.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonEcume.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonEcume.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonEcumeActionPerformed(evt);
-            }
-        });
-
-        boutonVanille.setBackground(java.awt.Color.white);
-        boutonVanille.setText("Ours polaire Vanille");
-        boutonVanille.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonVanille.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonVanille.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonVanille.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonVanilleActionPerformed(evt);
-            }
-        });
-
-        boutonLiriane.setBackground(java.awt.Color.white);
-        boutonLiriane.setText("Ours polaire Liriane");
-        boutonLiriane.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonLiriane.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonLiriane.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonLiriane.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonLirianeActionPerformed(evt);
-            }
-        });
-
-        boutonUna.setBackground(java.awt.Color.white);
-        boutonUna.setText("Ours polaire Una");
-        boutonUna.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonUna.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonUna.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonUna.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonUnaActionPerformed(evt);
-            }
-        });
-
-        boutonNeige.setBackground(java.awt.Color.white);
-        boutonNeige.setText("Ours polaire Neige");
-        boutonNeige.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonNeige.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonNeige.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonNeige.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonNeigeActionPerformed(evt);
-            }
-        });
-
-        boutonNora.setBackground(java.awt.Color.white);
-        boutonNora.setText("Eléphant de mer Nora");
-        boutonNora.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonNora.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonNora.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonNora.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonNoraActionPerformed(evt);
-            }
-        });
-
-        boutonAura.setBackground(java.awt.Color.white);
-        boutonAura.setText("Eléphant de mer Aura");
-        boutonAura.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonAura.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonAura.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonAura.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonAuraActionPerformed(evt);
-            }
-        });
-
-        boutonAurore.setBackground(java.awt.Color.white);
-        boutonAurore.setText("Eléphant de mer Aurore");
-        boutonAurore.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonAurore.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonAurore.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonAurore.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonAuroreActionPerformed(evt);
-            }
-        });
-
-        boutonVella.setBackground(java.awt.Color.white);
-        boutonVella.setText("Eléphant de mer Vella");
-        boutonVella.setMaximumSize(new java.awt.Dimension(200, 23));
-        boutonVella.setMinimumSize(new java.awt.Dimension(200, 23));
-        boutonVella.setPreferredSize(new java.awt.Dimension(200, 23));
-        boutonVella.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boutonVellaActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout containChoixAnimalLayout = new javax.swing.GroupLayout(containChoixAnimal);
         containChoixAnimal.setLayout(containChoixAnimalLayout);
         containChoixAnimalLayout.setHorizontalGroup(
             containChoixAnimalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(containChoixAnimalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(containChoixAnimalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(boutonGaia, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonTeria3, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonAquila, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonLeloki, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonToms, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonVictor, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonArcaique, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonBandido, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonIrchad, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonFlocon, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(containChoixAnimalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(boutonLiriane, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonNeige, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonUna, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonVanille, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonEcume, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonAura, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonAurore, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonNora, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonMalys, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boutonVella, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(0, 406, Short.MAX_VALUE)
         );
         containChoixAnimalLayout.setVerticalGroup(
             containChoixAnimalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(containChoixAnimalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(containChoixAnimalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(containChoixAnimalLayout.createSequentialGroup()
-                        .addComponent(boutonLiriane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonMalys, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonNeige, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonUna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonVanille, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonEcume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonAura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonAurore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonNora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(containChoixAnimalLayout.createSequentialGroup()
-                        .addComponent(boutonGaia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonIrchad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonTeria3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonAquila, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonLeloki, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonToms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonVictor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonArcaique, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(boutonBandido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(containChoixAnimalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(boutonFlocon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(boutonVella, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 11, Short.MAX_VALUE))
+            .addGap(0, 306, Short.MAX_VALUE)
         );
 
         containAnimal.setBorder(javax.swing.BorderFactory.createTitledBorder("Données de positionnement relatives à l'animal"));
@@ -1510,42 +908,6 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void boutonGaiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonGaiaActionPerformed
-        selectAnimalChange(gaia);
-    }//GEN-LAST:event_boutonGaiaActionPerformed
-
-    private void boutonIrchadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonIrchadActionPerformed
-        selectAnimalChange(irchad);
-    }//GEN-LAST:event_boutonIrchadActionPerformed
-
-    private void boutonTeria3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonTeria3ActionPerformed
-        selectAnimalChange(teria3);
-    }//GEN-LAST:event_boutonTeria3ActionPerformed
-
-    private void boutonAquilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAquilaActionPerformed
-        selectAnimalChange(aquila);
-    }//GEN-LAST:event_boutonAquilaActionPerformed
-
-    private void boutonLelokiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonLelokiActionPerformed
-        selectAnimalChange(leloki);
-    }//GEN-LAST:event_boutonLelokiActionPerformed
-
-    private void boutonTomsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonTomsActionPerformed
-        selectAnimalChange(toms);
-    }//GEN-LAST:event_boutonTomsActionPerformed
-
-    private void boutonVictorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVictorActionPerformed
-        selectAnimalChange(victor);
-    }//GEN-LAST:event_boutonVictorActionPerformed
-
-    private void boutonBandidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonBandidoActionPerformed
-        selectAnimalChange(bandido);
-    }//GEN-LAST:event_boutonBandidoActionPerformed
-
-    private void boutonArcaiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonArcaiqueActionPerformed
-        selectAnimalChange(arcaique);
-    }//GEN-LAST:event_boutonArcaiqueActionPerformed
-
     private void majDonneesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_majDonneesActionPerformed
         majDonnees.setEnabled(false);
         
@@ -1560,50 +922,6 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
         afficherCarte();
     }//GEN-LAST:event_affDonneesActionPerformed
     
-    private void boutonFloconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonFloconActionPerformed
-        selectAnimalChange(flocon);
-    }//GEN-LAST:event_boutonFloconActionPerformed
-
-    private void boutonMalysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonMalysActionPerformed
-        selectAnimalChange(malys);
-    }//GEN-LAST:event_boutonMalysActionPerformed
-
-    private void boutonEcumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonEcumeActionPerformed
-        selectAnimalChange(ecume);
-    }//GEN-LAST:event_boutonEcumeActionPerformed
-
-    private void boutonVanilleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVanilleActionPerformed
-        selectAnimalChange(vanille);
-    }//GEN-LAST:event_boutonVanilleActionPerformed
-
-    private void boutonLirianeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonLirianeActionPerformed
-        selectAnimalChange(liriane);
-    }//GEN-LAST:event_boutonLirianeActionPerformed
-
-    private void boutonUnaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonUnaActionPerformed
-        selectAnimalChange(una);
-    }//GEN-LAST:event_boutonUnaActionPerformed
-
-    private void boutonNeigeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNeigeActionPerformed
-        selectAnimalChange(neige);
-    }//GEN-LAST:event_boutonNeigeActionPerformed
-
-    private void boutonNoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonNoraActionPerformed
-        selectAnimalChange(nora);
-    }//GEN-LAST:event_boutonNoraActionPerformed
-
-    private void boutonAuraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuraActionPerformed
-        selectAnimalChange(aura);
-    }//GEN-LAST:event_boutonAuraActionPerformed
-
-    private void boutonAuroreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonAuroreActionPerformed
-        selectAnimalChange(aurore);
-    }//GEN-LAST:event_boutonAuroreActionPerformed
-
-    private void boutonVellaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boutonVellaActionPerformed
-        selectAnimalChange(vella);
-    }//GEN-LAST:event_boutonVellaActionPerformed
-
     private void affPtsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_affPtsActionPerformed
         if(points == false){
             points = true;
@@ -1650,26 +968,6 @@ public class FenPrincipale extends javax.swing.JFrame implements ListSelectionLi
     private javax.swing.JButton affDonnees;
     private javax.swing.JCheckBox affPts;
     private javax.swing.JCheckBox affTrace;
-    private javax.swing.JButton boutonAquila;
-    private javax.swing.JButton boutonArcaique;
-    private javax.swing.JButton boutonAura;
-    private javax.swing.JButton boutonAurore;
-    private javax.swing.JButton boutonBandido;
-    private javax.swing.JButton boutonEcume;
-    private javax.swing.JButton boutonFlocon;
-    private javax.swing.JButton boutonGaia;
-    private javax.swing.JButton boutonIrchad;
-    private javax.swing.JButton boutonLeloki;
-    private javax.swing.JButton boutonLiriane;
-    private javax.swing.JButton boutonMalys;
-    private javax.swing.JButton boutonNeige;
-    private javax.swing.JButton boutonNora;
-    private javax.swing.JButton boutonTeria3;
-    private javax.swing.JButton boutonToms;
-    private javax.swing.JButton boutonUna;
-    private javax.swing.JButton boutonVanille;
-    private javax.swing.JButton boutonVella;
-    private javax.swing.JButton boutonVictor;
     private javax.swing.JLabel choixNbPtsLabel1;
     private javax.swing.JLabel choixNbPtsLabel2;
     private javax.swing.JLabel choixNbPtsLabel3;

@@ -28,8 +28,12 @@ public class ArgoView {
      * @param args Arguments passés par la ligne de commande
      */
     public static void main( String[] args ) {
-        FenPrincipale fenetre = new FenPrincipale();
-        fenetre.setVisible(true);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new FenPrincipale().setVisible(true);
+            }
+        });
     }
     
 }
